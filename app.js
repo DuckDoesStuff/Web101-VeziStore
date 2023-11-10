@@ -7,8 +7,13 @@ const logger = require('morgan');
 // Need to add routing in here
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
 const app = express();
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

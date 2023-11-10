@@ -2,8 +2,12 @@
   "name": "midterm",
   "version": "0.0.0",
   "private": true,
+  "main" : "app.js",
+  "engines": {
+    "node": "16.17.0"
+  },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
