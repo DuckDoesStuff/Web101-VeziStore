@@ -3,20 +3,29 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const exphbs = require('express-handlebars');
 
 const app = express();
 
 const port = process.env.PORT || 3000;
+
+// view engine setup
+const hbs = exphbs.create({
+  extname: '.hbs',
+  defaultLayout: 'layout',
+  layoutsDir: path.join(__dirname, 'views'),
+  helpers: {
+    eq: function (v1, v2) {
+      return v1 === v2;
+    },
+  }
+});
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,12 +36,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Need to add routing in here
 const indexRouter = require('./routes/index');
-const catetoryRouter = require('./routes/category');
+const categoryRouter = require('./routes/category');
 const usersRouter = require('./routes/users');
 
 app.use('/', indexRouter);
 app.use('/home', indexRouter);
-app.use('/category', catetoryRouter);
+app.use('/category', categoryRouter);
 app.use('/users', usersRouter);
 
 

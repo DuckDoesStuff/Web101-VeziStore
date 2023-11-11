@@ -2,7 +2,7 @@
   "name": "midterm",
   "version": "0.0.0",
   "private": true,
-  "main" : "app.js",
+  "main": "app.js",
   "engines": {
     "node": "16.17.0"
   },
@@ -13,6 +13,8 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-handlebars": "^7.1.2",
+    "handlebars-helpers": "^0.10.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1"
