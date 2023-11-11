@@ -4,9 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-// Need to add routing in here
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -28,8 +25,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+// Need to add routing in here
+const indexRouter = require('./routes/index');
+const catetoryRouter = require('./routes/category');
+const usersRouter = require('./routes/users');
+
 app.use('/', indexRouter);
+app.use('/home', indexRouter);
+app.use('/category', catetoryRouter);
 app.use('/users', usersRouter);
+
+
+
 
 
 
