@@ -4,19 +4,23 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const exphbs = require('express-handlebars');
+const handlebars = require('handlebars');
 
 const app = express();
 
 const port = process.env.PORT || 3000;
-
 // view engine setup
 const hbs = exphbs.create({
   extname: '.hbs',
   defaultLayout: 'layout',
   layoutsDir: path.join(__dirname, 'views'),
+  partialsDir: path.join(__dirname, 'views/partials'),
   helpers: {
     eq: function (v1, v2) {
       return v1 === v2;
+    },
+    lowercase: function (str) {
+      return str.toLowerCase();
     },
   }
 });
@@ -37,11 +41,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Need to add routing in here
 const indexRouter = require('./routes/index');
 const categoryRouter = require('./routes/category');
+const productRouter = require('./routes/product-detail');
 const usersRouter = require('./routes/users');
 
 app.use('/', indexRouter);
 app.use('/home', indexRouter);
-app.use('/category', categoryRouter);
+app.use('/product-detail', productRouter);
+app.use('/:category', categoryRouter);
 app.use('/users', usersRouter);
 
 

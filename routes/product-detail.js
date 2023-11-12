@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const css_files = [
+const css_files =[
   'assets/plugins/fancybox/source/jquery.fancybox.css',
   'assets/plugins/owl.carousel/assets/owl.carousel.css',
   'assets/plugins/uniform/css/uniform.default.css',
@@ -22,7 +22,6 @@ const js_files = [
   'assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
   'assets/plugins/uniform/jquery.uniform.min.js',
   'assets/plugins/rateit/src/jquery.rateit.js',
-  'http://code.jquery.com/ui/1.10.3/jquery-ui.js',
   'assets/corporate/scripts/layout.js'
 ]
 
@@ -57,22 +56,9 @@ function generateData(category, type = null) {
   };
 }
 
-/* Default category is Woman. */
 router.get('/', function(req, res, next) {
   const data = generateData('Woman');
-  res.render('category', data);
-});
-
-router.get('/:name', function(req, res, next) {
-  const data = generateData(req.params.name);
-
-  res.render('category', data);
-});
-
-router.get('/:name/:type', function(req, res, next) {
-  const data = generateData(req.params.name, req.params.type);
-
-  res.render('category', data);
+  res.render('product-detail', data);
 });
 
 module.exports = router;
