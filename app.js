@@ -30,6 +30,10 @@ const hbs = exphbs.create({
   }
 });
 
+
+
+
+
 // Setup view engine for both admin and normal routing
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
@@ -45,6 +49,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
+
+
 // Normal routing
 const indexRouter = require('./routes/index');
 const categoryRouter = require('./routes/category');
@@ -58,6 +65,10 @@ app.use('/product-detail/', productRouter);
 app.use('/category/', categoryRouter);
 app.use('/shop-cart', cartRouter);
 app.use('/mywishlist', wishlistRouter);
+
+
+
+
 
 
 // Subdomain admin routing
