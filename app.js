@@ -42,22 +42,22 @@ admin.engine('hbs', hbs.engine);
 admin.set('view engine', 'hbs');
 
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, "public")));
 
 
 
 
 // Normal routing
-const indexRouter = require('./routes/index');
-const categoryRouter = require('./routes/category');
+const indexRouter = require("./routes/index");
+const categoryRouter = require("./routes/category");
 const productRouter = require('./routes/product-detail');
 const cartRouter = require('./routes/shop-cart');
-const wishlistRouter = require('./routes/user-wishlist');
+const wishlistRouter = require("./routes/user-wishlist");
+const usersDashboardRouter = require("./routes/admin/users-dashboard");
 
 app.use('/', indexRouter);
 app.use('/home', indexRouter);
@@ -100,19 +100,18 @@ app.listen(port, () => {
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+    next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    // render the error page
+    res.status(err.status || 500);
+    res.render("error");
 });
 
 module.exports = app;
