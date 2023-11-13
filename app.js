@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const exphbs = require('express-handlebars');
-const handlebars = require('handlebars');
 
 const app = express();
 
@@ -27,9 +26,6 @@ const hbs = exphbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -42,14 +38,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 const indexRouter = require('./routes/index');
 const categoryRouter = require('./routes/category');
 const productRouter = require('./routes/product-detail');
+const cartRouter = require('./routes/shop-cart');
+const wishlistRouter = require('./routes/user-wishlist');
 
 app.use('/', indexRouter);
 app.use('/home', indexRouter);
 app.use('/product-detail/', productRouter);
 app.use('/category/', categoryRouter);
+app.use('/shop-cart', cartRouter);
+app.use('/mywishlist', wishlistRouter);
+
+
+// admin. subdomain routing
+
+// admin.get('/', function(req, res, next) {
+//   res.send("hiii");
+// });
 
 
 
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 
 
