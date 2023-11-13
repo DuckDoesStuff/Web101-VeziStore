@@ -25,7 +25,7 @@ const js_files = [
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files});
+  res.render('shopHome', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files});
 });
 
 module.exports = router;

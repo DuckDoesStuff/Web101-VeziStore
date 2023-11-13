@@ -29,12 +29,12 @@ const js_files = [
 // Define the common data structure
 const categoriesData = [
   {
-    name: 'Man',
-    types: ["T-Shirts", "Shirts", "Bottoms", "Outterwear", "Footwear"]
-  },
-  {
     name: 'Woman',
     types: ["Tops", "Dresses", "Activewear", "Accessories", "Footwear"]
+  },
+  {
+    name: 'Man',
+    types: ["T-Shirts", "Shirts", "Bottoms", "Outterwear", "Footwear"]
   },
   {
     name: 'Kids',
@@ -60,19 +60,19 @@ function generateData(category, type = null) {
 /* Default category is Woman. */
 router.get('/', function(req, res, next) {
   const data = generateData('Woman');
-  res.render('category', data);
+  res.render('productCategory', data);
 });
 
 router.get('/:name', function(req, res, next) {
   const data = generateData(req.params.name);
 
-  res.render('category', data);
+  res.render('productCategory', data);
 });
 
 router.get('/:name/:type', function(req, res, next) {
   const data = generateData(req.params.name, req.params.type);
 
-  res.render('category', data);
+  res.render('productCategory', data);
 });
 
 module.exports = router;
