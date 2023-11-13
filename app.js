@@ -4,11 +4,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const exphbs = require('express-handlebars');
+const vhost = require('vhost');
 
 const app = express();
+const admin = express();
+
+app.use(vhost('admin.*', admin));
 
 const port = process.env.PORT || 3000;
-// view engine setup
+
+
+// View engine configuration
 const hbs = exphbs.create({
   extname: '.hbs',
   defaultLayout: 'layout',
@@ -23,8 +29,13 @@ const hbs = exphbs.create({
     },
   }
 });
+
+// Setup view engine for both admin and normal routing
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
+
+admin.engine('hbs', hbs.engine);
+admin.set('view engine', 'hbs');
 
 
 app.use(logger('dev'));
@@ -34,7 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// Need to add routing in here
+// Normal routing
 const indexRouter = require('./routes/index');
 const categoryRouter = require('./routes/category');
 const productRouter = require('./routes/product-detail');
@@ -49,20 +60,33 @@ app.use('/shop-cart', cartRouter);
 app.use('/mywishlist', wishlistRouter);
 
 
-// admin. subdomain routing
+// Subdomain admin routing
 
-// admin.get('/', function(req, res, next) {
-//   res.send("hiii");
-// });
+admin.get('/', function(req, res, next) {
+  res.send("This is an admin subdomain only page");
+});
+
+admin.get('/dashboard', function(req, res, next) {
+  res.send("Admin dashboard");
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
