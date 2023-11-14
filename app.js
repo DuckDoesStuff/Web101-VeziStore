@@ -9,7 +9,7 @@ const vhost = require("vhost");
 const app = express();
 const admin = express();
 
-app.use(vhost("admin.*", admin));
+app.use(vhost("admin.vezi.store", admin));
 
 const port = process.env.PORT || 3000;
 
