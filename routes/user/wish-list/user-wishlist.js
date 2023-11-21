@@ -24,10 +24,10 @@ const js_files = [
 	'assets/plugins/rateit/src/jquery.rateit.js',
 	'http://code.jquery.com/ui/1.10.3/jquery-ui.js',
 	'assets/corporate/scripts/layout.js',
-];
-
+]
+;
 router.get('/', function(req, res, next) {
-	res.render('shopCart', {title: 'Shopping cart | Shop UI', css_files: css_files, js_files: js_files})
+	res.render('user/wishlist/userWishlist', {title: 'Wishlist | Shop UI', css_files: css_files, js_files: js_files});
 });
 
 module.exports = router;

@@ -31,7 +31,7 @@ router.get("/", function (req, res, next) {
     //     css_files: css_files,
     //     js_files: js_files,
     // });
-    res.render("admin/products-dashboard");
+    res.render("admin/users-dashboard/users-dashboard");
 });
 
 module.exports = router;

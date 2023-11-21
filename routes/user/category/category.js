@@ -60,19 +60,19 @@ function generateData(category, type = null) {
 /* Default category is Woman. */
 router.get('/', function(req, res, next) {
   const data = generateData('Woman');
-  res.render('productCategory', data);
+  res.render('user/category/productCategory', data);
 });
 
 router.get('/:name', function(req, res, next) {
   const data = generateData(req.params.name);
 
-  res.render('productCategory', data);
+  res.render('user/category/productCategory', data);
 });
 
 router.get('/:name/:type', function(req, res, next) {
   const data = generateData(req.params.name, req.params.type);
 
-  res.render('productCategory', data);
+  res.render('user/category/productCategory', data);
 });
 
 module.exports = router;

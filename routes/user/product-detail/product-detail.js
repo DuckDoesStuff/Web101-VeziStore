@@ -58,7 +58,7 @@ function generateData(category, type = null) {
 
 router.get('/', function(req, res, next) {
   const data = generateData('Woman');
-  res.render('productDetail', data);
+  res.render('user/product-detail/productDetail', data);
 });
 
 module.exports = router;

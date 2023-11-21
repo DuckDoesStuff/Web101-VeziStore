@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", function (req, res, next) {
-    res.render("admin/product-create");
+    res.render("admin/product-info/product-info");
 });
 
 module.exports = router;
