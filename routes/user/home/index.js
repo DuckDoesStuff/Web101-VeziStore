@@ -23,9 +23,24 @@ const js_files = [
   'assets/pages/scripts/bs-carousel.js'
 ]
 
+const categoriesData = [
+  {
+    name: 'Woman',
+    types: ["Tops", "Dresses", "Activewear", "Accessories", "Footwear"]
+  },
+  {
+    name: 'Man',
+    types: ["T-Shirts", "Shirts", "Bottoms", "Outterwear", "Footwear"]
+  },
+  {
+    name: 'Kids',
+    types: ["Sleepwear", "School", "Activity", "Summer"]
+  }
+];
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('user/home/shopHome', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files});
+  res.render('user/home/shopHome', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files, categories:categoriesData});
 });
 
 module.exports = router;
