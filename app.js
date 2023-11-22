@@ -63,6 +63,8 @@ const categoryRouter = require("./routes/user/category/category");
 const productRouter = require("./routes/user/product-detail/product-detail");
 const cartRouter = require("./routes/user/shop-cart/shop-cart");
 const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
+const signInRouter = require("./routes/user/sign-in/sign-in");
+const signUpRouter = require("./routes/user/sign-up/sign-up");
 
 // Admin router
 const usersDashboardRouter = require("./routes/admin/users-dashboard/users-dashboard");
@@ -72,7 +74,6 @@ const orderInfoRouter = require("./routes/admin/order-info/order-info");
 const productCreateRouter = require("./routes/admin/product-create/product-create");
 const productInfoRouter = require("./routes/admin/product-info/product-info");
 
-
 // Normal routing
 
 app.use("/", indexRouter);
@@ -81,6 +82,8 @@ app.use("/product-detail/", productRouter);
 app.use("/category/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
+app.use("/sign-in", signInRouter);
+app.use("/sign-up", signUpRouter);
 
 // Subdomain admin routing
 admin.use("/", usersDashboardRouter);
@@ -92,21 +95,14 @@ admin.use("/order-info", orderInfoRouter);
 admin.use("/product-create", productCreateRouter);
 admin.use("/product-info", productInfoRouter);
 
-
-
-
-
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
 });
-
-
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -114,7 +110,7 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
     // render the error page
-    
+
     res.status(err.status || 500);
     res.render("error");
 });
