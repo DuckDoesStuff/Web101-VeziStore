@@ -1,9 +1,5 @@
-<div id="spinner"
-    class="show position-fixed translate-middle w-50 vh-50 top-50 start-50 d-flex align-items-center justify-content-center">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>
+{{> spinner}}
+{{#with order_info}}
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -14,42 +10,39 @@
                 <thead>
                     <tr class="text-dark">
                         <th scope="col">Product ID</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Tag</th>
-                        <th scope="col">Amount</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Total</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each product}}
+                    {{#with this}}
                     <tr>
-                        <td>P123456</td>
-                        <td>BERRY LACE DRESS 2</td>
-                        <td>$29</td>
-                        <td>1</td>
-                        <td>$29</td>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>${{price}}</td>
+                        <td>{{amount}}</td>
+                        <td>${{total}}</td>
                     </tr>
-                    <tr>
-                        <td>P123457</td>
-                        <td>BERRY LACE DRESS 3</td>
-                        <td>$29</td>
-                        <td>2</td>
-                        <td>$58</td>
-                    </tr>
+                    {{/with}}
+                    {{/each}}
                 </tbody>
             </table>
             <div class="container-fluid text-end pt-4">
                 <div class="row">
-                    <h6 class="col-md-auto"> Price</h6>
-                    <h6 class="col"> $87</h6>
+                    <h6 class="col-md-auto"> Total product</h6>
+                    <h6 class="col"> ${{total_product}}</h6>
                 </div>
                 <div class="row">
                     <h6 class="col-md-auto"> Discount</h6>
-                    <h6 class="col"> $37</h6>
+                    <h6 class="col"> ${{discount}}</h6>
                 </div>
                 <hr>
                 <div class="row">
-                    <h6 class="col-md-auto"> Total price</h6>
-                    <h6 class="col"> $50</h6>
+                    <h6 class="col-md-auto"> Total order</h6>
+                    <h6 class="col"> ${{total_order}}</h6>
                 </div>
                 
             </div>
@@ -60,33 +53,34 @@
                 <div class="row mb-0">
                     <h6 class="col-sm-2 text-gray">Order ID</h6>
                     <div class="col-lg-10">
-                        <h6 class="mb-4">G472630</h6>
+                        <h6 class="mb-4">{{id}}</h6>
                     </div>
                 </div>
                 <div class="row mb-0">
                     <h6 class="col-sm-2 text-gray">Date</h6>
                     <div class="col-lg-10">
-                        <h6 class="mb-4">11/10/2023</h6>
+                        <h6 class="mb-4">{{date}}</h6>
                     </div>
                 </div>
                 <div class="row mb-0">
-                    <h6 class="col-sm-2 text-gray">Receiver</h6>
+                    <h6 class="col-sm-2 text-gray">Customer</h6>
                     <div class="col-lg-10">
-                        <h6 class="mb-4">nhung1899</h6>
+                        <h6 class="mb-4">{{username}}</h6>
                     </div>
                 </div>
                 <div class="row mb-0">
                     <h6 class="col-sm-2 text-gray">Phone number</h6>
                     <div class="col-lg-10">
-                        <h6 class="mb-4">01234567890</h6>
+                        <h6 class="mb-4">{{phone}}</h6>
                     </div>
                 </div>
                 <div class="row mb-0">
                     <h6 class="col-sm-2 text-gray">Address</h6>
                     <div class="col-lg-10">
-                        <h6 class="mb-4">79 Au Co P.14 Q.11 TP.HCM</h6>
+                        <h6 class="mb-4">{{address}}</h6>
                     </div>
                 </div>
             </div>
         </div>
 </div>
+{{/with}}

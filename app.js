@@ -14,6 +14,7 @@ const app = express();
 const admin = express();
 
 app.use(vhost("admin.vezi.store", admin));
+app.use(vhost("admin.*", admin));
 
 const port = process.env.PORT || 3000;
 
@@ -67,16 +68,16 @@ const categoryRouter = require("./routes/user/category/category");
 const productRouter = require("./routes/user/product-detail/product-detail");
 const cartRouter = require("./routes/user/shop-cart/shop-cart");
 const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
-const signInRouter = require("./routes/user/sign-in/sign-in");
-const signUpRouter = require("./routes/user/sign-up/sign-up");
+const signInRouter = require("./routes/user/account/sign-in");
+const signUpRouter = require("./routes/user/account/sign-up");
 
 // Admin router
-const usersDashboardRouter = require("./routes/admin/users-dashboard/users-dashboard");
-const productsDashboardRouter = require("./routes/admin/products-dashboard/products-dashboard");
-const userInfoRouter = require("./routes/admin/user-info/user-info");
+const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
+const productsDashboardRouter = require("./routes/admin/product/product-dashboard");
+const userInfoRouter = require("./routes/admin/account/user-info");
 const orderInfoRouter = require("./routes/admin/order-info/order-info");
-const productCreateRouter = require("./routes/admin/product-create/product-create");
-const productInfoRouter = require("./routes/admin/product-info/product-info");
+const productCreateRouter = require("./routes/admin/product/product-create");
+const productInfoRouter = require("./routes/admin/product/product-info");
 
 // Normal routing
 
