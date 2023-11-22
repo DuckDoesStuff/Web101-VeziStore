@@ -5,6 +5,10 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const exphbs = require("express-handlebars");
 const vhost = require("vhost");
+const db = require("./db");
+
+db();
+
 
 const app = express();
 const admin = express();
@@ -15,33 +19,33 @@ const port = process.env.PORT || 3000;
 
 // View engine configuration
 const hbs = exphbs.create({
-    extname: ".hbs",
-    defaultLayout: "layout",
-    layoutsDir: path.join(__dirname, "views/user"),
-    partialsDir: path.join(__dirname, "views/user/partials"),
-    helpers: {
-        eq: function (v1, v2) {
-            return v1 === v2;
-        },
-        lowercase: function (str) {
-            return str.toLowerCase();
-        },
-    },
+	extname: ".hbs",
+	defaultLayout: "layout",
+	layoutsDir: path.join(__dirname, "views/user"),
+	partialsDir: path.join(__dirname, "views/user/partials"),
+	helpers: {
+		eq: function (v1, v2) {
+			return v1 === v2;
+		},
+		lowercase: function (str) {
+			return str.toLowerCase();
+		},
+	},
 });
 
 const adminHbs = exphbs.create({
-    extname: ".hbs",
-    defaultLayout: "admin-layout",
-    layoutsDir: path.join(__dirname, "views/admin"),
-    partialsDir: path.join(__dirname, "views/admin/partials"),
-    helpers: {
-        eq: function (v1, v2) {
-            return v1 === v2;
-        },
-        lowercase: function (str) {
-            return str.toLowerCase();
-        },
-    },
+	extname: ".hbs",
+	defaultLayout: "admin-layout",
+	layoutsDir: path.join(__dirname, "views/admin"),
+	partialsDir: path.join(__dirname, "views/admin/partials"),
+	helpers: {
+		eq: function (v1, v2) {
+			return v1 === v2;
+		},
+		lowercase: function (str) {
+			return str.toLowerCase();
+		},
+	},
 });
 
 // Setup view engine for both admin and normal routing
@@ -72,7 +76,6 @@ const orderInfoRouter = require("./routes/admin/order-info/order-info");
 const productCreateRouter = require("./routes/admin/product-create/product-create");
 const productInfoRouter = require("./routes/admin/product-info/product-info");
 
-
 // Normal routing
 
 app.use("/", indexRouter);
@@ -92,31 +95,24 @@ admin.use("/order-info", orderInfoRouter);
 admin.use("/product-create", productCreateRouter);
 admin.use("/product-info", productInfoRouter);
 
-
-
-
-
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+	console.log(`Server is running on port ${port}`);
 });
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+	next(createError(404));
 });
-
-
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
-    // render the error page
-    
-    res.status(err.status || 500);
-    res.render("error");
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get("env") === "development" ? err : {};
+	// render the error page
+
+	res.status(err.status || 500);
+	res.render("error");
 });
 
 module.exports = app;
