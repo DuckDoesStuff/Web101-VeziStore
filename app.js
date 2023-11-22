@@ -67,6 +67,8 @@ const categoryRouter = require("./routes/user/category/category");
 const productRouter = require("./routes/user/product-detail/product-detail");
 const cartRouter = require("./routes/user/shop-cart/shop-cart");
 const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
+const signInRouter = require("./routes/user/sign-in/sign-in");
+const signUpRouter = require("./routes/user/sign-up/sign-up");
 
 // Admin router
 const usersDashboardRouter = require("./routes/admin/users-dashboard/users-dashboard");
@@ -84,6 +86,8 @@ app.use("/product-detail/", productRouter);
 app.use("/category/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
+app.use("/sign-in", signInRouter);
+app.use("/sign-up", signUpRouter);
 
 // Subdomain admin routing
 admin.use("/", usersDashboardRouter);
