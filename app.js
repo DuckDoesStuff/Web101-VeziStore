@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const exphbs = require("express-handlebars");
 const vhost = require("vhost");
-const db = require("./db");
+const db = require("./src/db");
 
 db();
 

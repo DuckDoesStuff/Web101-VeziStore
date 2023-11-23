@@ -21,11 +21,17 @@ const js_files = [
   'assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
   'assets/corporate/scripts/layout.js',
   'assets/pages/scripts/bs-carousel.js'
-]
+];
+
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('user/home/shopHome', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files});
+  res.render('user/home/shopHome', {
+              title: 'Vezi Store', 
+              css_files: css_files, 
+              js_files: js_files
+          });
 });
 
 module.exports = router;
