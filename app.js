@@ -58,10 +58,11 @@ admin.set("view engine", "hbs");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+admin.use(express.urlencoded({ extended: true }));
 // Normal router
 const indexRouter = require("./routes/user/home/index");
 const categoryRouter = require("./routes/user/category/category");

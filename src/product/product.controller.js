@@ -43,8 +43,8 @@ const getReviewByID = async (id) => {
 	return review;
 }
 
-const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color, rating, description, information, review) => {
-	const newProduct = new Product({
+const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color=[], rating=0, description, information, review=[]) => {
+	const newProduct = new Product.create({
 		name: name,
 		image: image,
 		price: price,

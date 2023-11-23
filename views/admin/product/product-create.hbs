@@ -15,21 +15,19 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">CREATE PRODUCT</h6>
-        <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Thumbnail</label>
-            <input required class="form-control" type="file" id="formFileMultiple" multiple>
-        </div>
-        
-        <form class="row mb-3" action="/product-create" method="post">
-            <label for="name" class="col-sm-2 col-form-label">Product name</label>
-            <input required type="text" class="form-control col-sm-10" id="name" name="name" placeholder="a">
-
-            
-            <div class="row justify-content-center">
-                <input class="btn btn-success col-4 align-self-center" type="submit"></input>
+        <form id="product-info" class="row mb-3" action="/product-create" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Thumbnail</label>
+                <input required class="form-control" type="file" id="formFileMultiple" name="files" multiple>
             </div>
 
-            {{!-- <label for="price" class="col-sm-2 col-form-label">Price</label>
+            <label for="name" class="col-sm-2 col-form-label">Product name</label>
+            <div class="col-sm-10">
+                <input required type="text" class="form-control col-sm-10" id="name" name="name">
+            </div>
+
+
+            <label for="price" class="col-sm-2 col-form-label">Price</label>
             <div class="col-sm-10">
                 <input required type="number" class="form-control" id="price" name="price">
             </div>
@@ -43,11 +41,11 @@
             <div class="col-sm-10">
                 <div class="row text-start">
                     <div class="col">
-                        <input type="checkbox" class="form-check-input me-2">
+                        <input value="L" name="size" type="checkbox" class="form-check-input me-2">
                         <label class="form-check-label me-4">L</label>
-                        <input type="checkbox" class="form-check-input me-2">
+                        <input value="M" name="size" type="checkbox" class="form-check-input me-2">
                         <label class="form-check-label me-4">M</label>
-                        <input type="checkbox" class="form-check-input me-2">
+                        <input value="S" name="size" type="checkbox" class="form-check-input me-2">
                         <label class="form-check-label me-4">S</label>
                     </div>
                 </div>
@@ -63,9 +61,9 @@
                 <select required class="form-select form-control"
                     aria-label="Floating label select example" name="category">
                     <option selected>Choose category</option>
-                    <option value="1">Woman</option>
-                    <option value="2">Man</option>
-                    <option value="3">Kid</option>
+                    <option value="Woman">Woman</option>
+                    <option value="Man">Man</option>
+                    <option value="Kid">Kid</option>
                 </select>
             </div>
 
@@ -74,18 +72,18 @@
                 <select required class="form-select form-control"
                     aria-label="Floating label select example" name="subcategory">
                     <option selected>Choose subcategory</option>
-                    <option value="1">T-Shirts</option>
-                    <option value="2">Shirts</option>
-                    <option value="3">Bottoms</option>
-                    <option value="4">Outterwear</option>
-                    <option value="5">Footwear</option>
-                    <option value="6">Tops</option>
-                    <option value="7">Dresses</option>
-                    <option value="8">Accessories</option>
-                    <option value="9">Sleepwear</option>
-                    <option value="10">School</option>
-                    <option value="11">Activity</option>
-                    <option value="12">Summer</option>
+                    <option value="T-Shirts">T-Shirts</option>
+                    <option value="Shirts">Shirts</option>
+                    <option value="Bottoms">Bottoms</option>
+                    <option value="Outterwear">Outterwear</option>
+                    <option value="Footwear">Footwear</option>
+                    <option value="Tops">Tops</option>
+                    <option value="Dresses">Dresses</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Sleepwear">Sleepwear</option>
+                    <option value="School">School</option>
+                    <option value="Activity">Activity</option>
+                    <option value="Summer">Summer</option>
                 </select>
             </div>
 
@@ -109,10 +107,12 @@
                         <label for="information" class="form-control-label">Information here</label>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
         </form>
-        
+        <div class="row justify-content-center">
+            <input class="btn btn-success col-4 align-self-center" type="submit" form="product-info"></input>
+        </div>
 
     </div>
 </div>
