@@ -31,14 +31,11 @@ router.post("/", upload.array('files'), async (req, res, next) => {
     // Need to reduce file size later
 
     const base64Files = files.map((file, index) => {
-        return {
-            base64: file.buffer.toString('base64'),
-        };
+        return file.buffer.toString('base64');
     });
     productController.createProduct(name, base64Files, price, discount, availability, category, subcategory, size, color, rating, description, information, review)
     .then((product) => {
-        categoryController.addProductToCategory(category, product._id);
-        categoryController.addProductToSubcategory(subcategory, product._id);
+        categoryController.addProductToCategoryAndSubcategory(category, subcategory, product._id)
         res.redirect("/");
     })
     .catch((err) => {

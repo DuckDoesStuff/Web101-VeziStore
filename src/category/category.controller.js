@@ -1,5 +1,5 @@
-const Category = require('./category.model');
-const Subcategory = require('./category.model');
+const Category = require('./category.model').Category;
+const Subcategory = require('./category.model').Subcategory;
 
 const getAllCategory = async () => {
 	const categories = await Category.find();

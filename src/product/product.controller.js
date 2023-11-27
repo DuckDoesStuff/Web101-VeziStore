@@ -1,13 +1,13 @@
-const Product = require('./product.model');
-const Review = require('./product.model');
+const Product = require('./product.model').Product;
+const Review = require('./product.model').Review;
 
 const getAllProduct = async () => {
-		const products = await Product.find();
+		const products = await Product.find().lean();
 		return products;
 }
 
 const getProductById = async (id) => {
-		const product = await Product.findById(id);
+		const product = await Product.findById(id).lean();
 		return product;
 }
 
@@ -44,7 +44,7 @@ const getReviewByID = async (id) => {
 }
 
 const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color=[], rating=0, description, information, review=[]) => {
-	const newProduct = new Product.create({
+	const newProduct = new Product({
 		name: name,
 		image: image,
 		price: price,
@@ -59,7 +59,7 @@ const createProduct = async (name, image, price, discount, availability, categor
 		information: information,
 		review: review
 	});
-	await newProduct.save();
+	return await newProduct.save();
 }
 
 const createReview = async (username, date, rating, review) => {

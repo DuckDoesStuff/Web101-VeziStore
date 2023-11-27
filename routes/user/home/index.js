@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../../../src/product/product.controller');
 
 const css_files = [
   'assets/pages/css/animate.css',
@@ -23,15 +24,28 @@ const js_files = [
   'assets/pages/scripts/bs-carousel.js'
 ];
 
-
+const generateData = async () => {
+  const products = await productController.getAllProduct();
+  const result = {
+    title: 'Vezi Store | Home',
+    css_files: css_files,
+    js_files: js_files,
+    products: {... products}
+  };
+  console.log("Product list: ", result.products);
+  return result;
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('user/home/shopHome', {
-              title: 'Vezi Store', 
-              css_files: css_files, 
-              js_files: js_files
-          });
+  generateData()
+    .then(data => {
+      res.render('user/home/shopHome', data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
