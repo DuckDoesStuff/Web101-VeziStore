@@ -30,6 +30,9 @@ const hbs = exphbs.create({
 		lowercase: function (str) {
 			return str.toLowerCase();
 		},
+		subtract: (price, discount) => {
+			return price - discount;
+		}
 	},
 });
 

@@ -32,7 +32,6 @@ const generateData = async () => {
     js_files: js_files,
     products: {... products}
   };
-  console.log("Product list: ", result.products);
   return result;
 }
 

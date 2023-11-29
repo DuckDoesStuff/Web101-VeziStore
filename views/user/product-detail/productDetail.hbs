@@ -19,27 +19,25 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6">
 							<div class="product-main-image">
-								<img src="{{productDetail.image}}" alt="Cool green dress with red bell"
-									class="img-responsive" data-BigImgsrc="assets/pages/img/products/model7.jpg">
+								<img src="data:image/png;base64, {{productDetail.image.[0]}}" alt="Cool green dress with red bell"
+									class="img-responsive" data-BigImgsrc="data:image/png;base64, {{productDetail.image.[0]}}">
 							</div>
 							<div class="product-other-images">
-								<a href="assets/pages/img/products/model3.jpg" class="fancybox-button" rel="photos-lib"><img
-										alt="Berry Lace Dress" src="assets/pages/img/products/model3.jpg"></a>
-								<a href="assets/pages/img/products/model4.jpg" class="fancybox-button" rel="photos-lib"><img
-										alt="Berry Lace Dress" src="assets/pages/img/products/model4.jpg"></a>
-								<a href="assets/pages/img/products/model5.jpg" class="fancybox-button" rel="photos-lib"><img
-										alt="Berry Lace Dress" src="assets/pages/img/products/model5.jpg"></a>
+								{{#each productDetail.image}}
+								<a href="data:image/png;base64, {{this}}" class="fancybox-button" rel="photos-lib"><img
+										alt="Berry Lace Dress" src="data:image/png;base64, {{this}}"></a>
+								{{/each}}
 							</div>
 						</div>
 						<div class="col-md-6 col-sm-6">
 							<h1>{{productDetail.name}}</h1>
 							<div class="price-availability-block clearfix">
 								<div class="price">
-									<strong><span>$</span>47.00</strong>
-									<em>$<span>62.00</span></em>
+									<strong><span>$</span>{{subtract productDetail.price productDetail.discount}}</strong>
+									<em>$<span>{{productDetail.price}}</span></em>
 								</div>
 								<div class="availability">
-									Availability: <strong>In Stock</strong>
+									Availability: <strong>{{productDetail.availability}}</strong>
 								</div>
 							</div>
 							<div class="description">
