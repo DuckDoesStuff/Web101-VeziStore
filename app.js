@@ -9,7 +9,6 @@ const db = require("./src/db");
 
 db();
 
-
 const app = express();
 const admin = express();
 
@@ -62,6 +61,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+admin.use(express.json());
 admin.use(express.urlencoded({ extended: true }));
 // Normal router
 const indexRouter = require("./routes/user/home/index");
