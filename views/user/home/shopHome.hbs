@@ -95,7 +95,7 @@
 <div class="main">
 	<div class="container">
 		<!-- BEGIN SALE PRODUCT & NEW ARRIVALS -->
-		<div class="row margin-bottom-40">
+		<div class="row margin-bottom-50">
 			<!-- BEGIN SALE PRODUCT -->
 			<div class="col-md-12 sale-product">
 				<h2>New Arrivals</h2>
@@ -105,11 +105,11 @@
 					<div>
 						<div class="product-item">
 							<div class="pi-img-wrapper">
-							<img src="data:image/png;base64, {{image.[0]}}" class="img-responsive" alt="{{name}}">
-							<div>
-								<a href="data:image/png;base64, {{image.[0]}}" class="btn btn-default fancybox-button">Zoom</a>
-								<a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-							</div>
+								<img src="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/600x800/smart/" class="img-responsive" alt="{{name}}">
+								<div>
+									<a href="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/600x800/smart/" class="btn btn-default fancybox-button">Zoom</a>
+									<a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+								</div>
 							</div>
 							<h3><a href="/product-detail/{{_id}}">{{name}}</a></h3>
 							<div class="pi-price">${{price}}</div>
@@ -120,6 +120,7 @@
 					{{/with}}
 					{{/each}}
 			</div>
+			<br>
 			<!-- END SALE PRODUCT -->
 		</div>
 		<!-- END SALE PRODUCT & NEW ARRIVALS -->

@@ -2,8 +2,16 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const sharp = require("sharp");
+const dotenv = require("dotenv");
+const {UploadClient} = require('@uploadcare/upload-client');
 const productController = require("../../../src/product/product.controller");
 const categoryController = require("../../../src/category/category.controller");
+
+dotenv.config();
+// Set up uploadcare client
+const uploadcare = new UploadClient({
+    publicKey: process.env.UPLOADCARE_PUBLIC_KEY
+});
 
 // Set up multer with memory storage
 const storage = multer.memoryStorage();
@@ -28,30 +36,15 @@ router.post("/", upload.array("files"), async (req, res, next) => {
         information,
         review,
     } = req.body;
-
     const files = req.files;
-    // Need to reduce file size later
-    const processedFiles = await Promise.all(
-        files.map(async (file) => {
-            // Resize images to a specific size (e.g., 300x300)
-            const resizedBuffer = await sharp(file.buffer)
-                .resize({ width: 600, height: 800 })
-                .toBuffer();
-
-            return {
-                originalBuffer: file.buffer,
-                resizedBuffer,
-            };
-        })
-    );
-
-    const base64Files = processedFiles.map((processedFile) => {
-        return processedFile.resizedBuffer.toString("base64");
-    });
+    const images = await Promise.all(files.map(async (file) => {
+        const uploadedFile = await uploadcare.uploadFile(file.buffer);
+        return uploadedFile.uuid;
+    }));
     productController
         .createProduct(
             name,
-            base64Files,
+            images,
             price,
             discount,
             availability,
