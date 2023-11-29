@@ -37,7 +37,7 @@
                 <input required type="number" class="form-control" id="discount" name="discount">
             </div>
 
-            <label class="col-sm-2 col-form-label">Size</label>
+            <label for="size" class="col-sm-2 col-form-label">Size</label>
             <div class="col-sm-10">
                 <div class="row text-start">
                     <div class="col">
@@ -50,6 +50,21 @@
                     </div>
                 </div>
             </div>
+            <script>
+                // Add a submit event listener to the form
+                const form = document.getElementById('product-info');
+                form.addEventListener('submit', function(event) {
+                    const checkboxes = document.querySelectorAll('input[name="size"]');
+                    const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
+
+                    // Check if at least one checkbox is checked
+                    if (!atLeastOneChecked) {
+                        event.preventDefault(); // Prevent form submission
+                        alert('Please select at least one size.'); // You can customize the error message
+                        checkboxes[0].focus();
+                    }
+                });
+            </script>
 
             <label for="stock" class="col-sm-2 col-form-label">Availability</label>
             <div class="col-sm-10">
@@ -60,7 +75,7 @@
             <div class="col-sm-10">
                 <select required class="form-select form-control"
                     aria-label="Floating label select example" name="category">
-                    <option selected>Choose category</option>
+                    <option value="">Choose category</option>
                     <option value="Woman">Woman</option>
                     <option value="Man">Man</option>
                     <option value="Kid">Kid</option>
@@ -71,7 +86,7 @@
             <div class="col-sm-10">
                 <select required class="form-select form-control"
                     aria-label="Floating label select example" name="subcategory">
-                    <option selected>Choose subcategory</option>
+                    <option value="">Choose subcategory</option>
                     <option value="T-Shirts">T-Shirts</option>
                     <option value="Shirts">Shirts</option>
                     <option value="Bottoms">Bottoms</option>
