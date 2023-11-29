@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {addUser, getUsers} = require("./users.controller");
+const {addUser, getUsers} = require("../../../src/account/user.controller");
 
 const users = [];
 
@@ -22,13 +22,13 @@ const signUp = async (username, password, email) => {
 
 router.post("/", async (req, res, next) => {
     const { username, password, email } = req.body;
-
     // Gọi chức năng đăng ký
     const result = await signUp(username, password, email);
 
     // Trả về kết quả đăng ký
     if (result.success) {
-        addUser(req, res);
+        // addUser(req, res);
+        console.log(req.body);
     } else {
         res.status(400).send(result.message);
     }

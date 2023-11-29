@@ -1,80 +1,119 @@
 {{> spinner}}
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
 
+    /* Firefox */
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+</style>
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">CREATE PRODUCT</h6>
-        <div class="mb-3">
-            <label for="formFileMultiple" class="form-label">Thumbnail</label>
-            <input class="form-control" type="file" id="formFileMultiple" multiple>
-        </div>
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Product name</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+        <form id="product-info" class="row mb-3" action="/product-create" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="formFileMultiple" class="form-label">Thumbnail</label>
+                <input required class="form-control" type="file" id="formFileMultiple" name="files" multiple>
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Price</label>
+
+            <label for="name" class="col-sm-2 col-form-label">Product name</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+                <input required type="text" class="form-control col-sm-10" id="name" name="name">
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Discount</label>
+
+
+            <label for="price" class="col-sm-2 col-form-label">Price</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+                <input required type="number" class="form-control" id="price" name="price">
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Size</label>
+
+            <label for="discount" class="col-sm-2 col-form-label">Discount</label>
+            <div class="col-sm-10">
+                <input required type="number" class="form-control" id="discount" name="discount">
+            </div>
+
+            <label class="col-sm-2 col-form-label">Size</label>
             <div class="col-sm-10">
                 <div class="row text-start">
                     <div class="col">
-                        <input type="checkbox" class="form-check-input me-2" id="exampleCheck1">
-                        <label class="form-check-label me-4" for="exampleCheck1">L</label>
-                        <input type="checkbox" class="form-check-input me-2" id="exampleCheck1">
-                        <label class="form-check-label me-4" for="exampleCheck1">M</label>
-                        <input type="checkbox" class="form-check-input me-2" id="exampleCheck1">
-                        <label class="form-check-label me-4" for="exampleCheck1">S</label>
+                        <input value="L" name="size" type="checkbox" class="form-check-input me-2">
+                        <label class="form-check-label me-4">L</label>
+                        <input value="M" name="size" type="checkbox" class="form-check-input me-2">
+                        <label class="form-check-label me-4">M</label>
+                        <input value="S" name="size" type="checkbox" class="form-check-input me-2">
+                        <label class="form-check-label me-4">S</label>
                     </div>
                 </div>
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Availability</label>
+
+            <label for="stock" class="col-sm-2 col-form-label">Availability</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+                <input required type="number" class="form-control" id="stock" name="stock">
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Category</label>
+
+            <label for="category" class="col-sm-2 col-form-label">Category</label>
             <div class="col-sm-10">
-                <select class="form-select form-control" id="floatingSelect"
-                    aria-label="Floating label select example">
+                <select required class="form-select form-control"
+                    aria-label="Floating label select example" name="category">
                     <option selected>Choose category</option>
-                    <option value="1">Woman</option>
-                    <option value="2">Man</option>
-                    <option value="3">Kid</option>
+                    <option value="Woman">Woman</option>
+                    <option value="Man">Man</option>
+                    <option value="Kid">Kid</option>
                 </select>
             </div>
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Type of items</label>
+
+            <label for="subcategory" class="col-sm-2 col-form-label">Subcategory</label>
             <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+                <select required class="form-select form-control"
+                    aria-label="Floating label select example" name="subcategory">
+                    <option selected>Choose subcategory</option>
+                    <option value="T-Shirts">T-Shirts</option>
+                    <option value="Shirts">Shirts</option>
+                    <option value="Bottoms">Bottoms</option>
+                    <option value="Outterwear">Outterwear</option>
+                    <option value="Footwear">Footwear</option>
+                    <option value="Tops">Tops</option>
+                    <option value="Dresses">Dresses</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Sleepwear">Sleepwear</option>
+                    <option value="School">School</option>
+                    <option value="Activity">Activity</option>
+                    <option value="Summer">Summer</option>
+                </select>
             </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-light rounded h-100 p-4">
-        <h6 class="mb-4">DESCRIPTION</h6>
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here"
-                id="floatingTextarea" style="height: 150px;"></textarea>
-            <label for="floatingTextarea">Description</label>
-        </div>
-    </div>
-</div>
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-light rounded h-100 p-4">
-        <h6 class="mb-4">INFORMATION</h6>
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Material</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded">
+                    <h6 class="mb-4">DESCRIPTION</h6>
+                    <div class="form-floating">
+                        <textarea requried class="form-control" placeholder="Leave a comment here"
+                            id="description" name="description" style="height: 150px;"></textarea>
+                        <label for="description" class="form-control-label">Description here</label>
+                    </div>
+                </div>
             </div>
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light rounded">
+                    <h6 class="mb-4">INFORMATION</h6>
+                    <div class="form-floating">
+                        <textarea required class="form-control" placeholder="Leave a comment here"
+                            id="information" name="information" style="height: 150px;"></textarea>
+                        <label for="information" class="form-control-label">Information here</label>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div class="row justify-content-center">
+            <input class="btn btn-success col-4 align-self-center" type="submit" form="product-info"></input>
         </div>
+
     </div>
 </div>
-<div class="container-fluid pt-4 px-4">
-    <input type="submit" class="btn btn-primary py-3 w-100 mb-4">Create new product</input>
-</div>
+

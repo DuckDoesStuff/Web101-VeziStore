@@ -5,10 +5,9 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const exphbs = require("express-handlebars");
 const vhost = require("vhost");
-const db = require("./db");
+const db = require("./src/db");
 
 db();
-
 
 const app = express();
 const admin = express();
@@ -58,10 +57,12 @@ admin.set("view engine", "hbs");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+admin.use(express.json());
+admin.use(express.urlencoded({ extended: true }));
 // Normal router
 const indexRouter = require("./routes/user/home/index");
 const categoryRouter = require("./routes/user/category/category");

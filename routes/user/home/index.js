@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../../../src/product/product.controller');
 
 const css_files = [
   'assets/pages/css/animate.css',
@@ -21,26 +22,30 @@ const js_files = [
   'assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js',
   'assets/corporate/scripts/layout.js',
   'assets/pages/scripts/bs-carousel.js'
-]
-
-const categoriesData = [
-  {
-    name: 'Woman',
-    types: ["Tops", "Dresses", "Activewear", "Accessories", "Footwear"]
-  },
-  {
-    name: 'Man',
-    types: ["T-Shirts", "Shirts", "Bottoms", "Outterwear", "Footwear"]
-  },
-  {
-    name: 'Kids',
-    types: ["Sleepwear", "School", "Activity", "Summer"]
-  }
 ];
+
+const generateData = async () => {
+  const products = await productController.getAllProduct();
+  const result = {
+    title: 'Vezi Store | Home',
+    css_files: css_files,
+    js_files: js_files,
+    products: {... products}
+  };
+  console.log("Product list: ", result.products);
+  return result;
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('user/home/shopHome', {title: 'Metronic Shop UI', css_files: css_files, js_files: js_files, categories:categoriesData});
+  generateData()
+    .then(data => {
+      res.render('user/home/shopHome', data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
