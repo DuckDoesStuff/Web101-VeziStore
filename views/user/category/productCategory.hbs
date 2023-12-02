@@ -20,8 +20,10 @@
 			<div class="sidebar col-md-3 col-sm-5">
 			{{> sidebar}}
 			{{!-- {{> filterSidebar}} --}}
-			{{> bestsellerSidebar}}
-
+			<h2>Similar products</h2>
+			{{> productSidebar}}
+			<h2>Bestsellers</h2>
+			{{> productSidebar}}
 
 			</div>
 
@@ -33,14 +35,7 @@
 					{{#each productData}}
 					{{#with this}}
 					<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
-						<div class="product-item">
-							<div class="pi-img-wrapper">
-								<img src="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/600x800/smart/" class="img-responsive" alt="Berry Lace Dress">
-							</div>
-							<h3><a href="/product-detail/{{_id}}">{{name}}</a></h3>
-							<div class="pi-price">${{subtract price discount}}</div>
-							<a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
-						</div>
+						{{> productItem}}
 					</div>
 					{{/with}}
 					{{/each}}

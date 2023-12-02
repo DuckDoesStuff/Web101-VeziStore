@@ -10,7 +10,6 @@
             <table class="table text-start align-middle table-bordered table-hover mb-0">
                 <thead>
                     <tr class="text-dark">
-                        <th scope="col">ID</th>
                         <th scope="col">Product name</th>
                         <th scope="col">Price</th>
                         <th scope="col">Discount</th>
@@ -19,10 +18,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each product_info}}
+                    {{#each allProducts}}
                     {{#with this}}
                     <tr>
-                        <td>{{id}}</td>
                         <td>{{name}}</td>
                         <td>${{price}}</td>
                         <td>${{discount}}</td>
@@ -34,5 +32,6 @@
                 </tbody>
             </table>
         </div>
+            
     </div>
 </div>

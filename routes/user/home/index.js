@@ -25,12 +25,16 @@ const js_files = [
 ];
 
 const generateData = async () => {
-  const products = await productController.getAllProduct();
+  const newestProducts = await productController.getNewProducts();
+  const saleProducts = await productController.getSaleProducts();
+  const popularProducts = await productController.getPopularProducts();
   const result = {
     title: 'Vezi Store | Home',
     css_files: css_files,
     js_files: js_files,
-    products: {... products}
+    newestProducts: {...newestProducts},
+    saleProducts: {...saleProducts},
+    popularProducts: {...popularProducts}
   };
   return result;
 }

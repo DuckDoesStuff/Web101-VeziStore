@@ -38,6 +38,21 @@ const getProductByCategoryAndSubcategory = async (category, subcategory) => {
 	return products;
 }
 
+const getNewProducts = async () => {
+	const products = await Product.find().sort({_id: -1}).limit(7).lean();
+	return products;
+}
+
+const getSaleProducts = async () => {
+	const products = await Product.find({discount: {$gt: 0}}).sort({discount: -1}).limit(6).lean();
+	return products;
+}
+
+const getPopularProducts = async () => {
+	const products = await Product.find().sort({rating: -1}).limit(4).lean();
+	return products;
+}
+
 const getReviewByID = async (id) => {
 	const review = await Review.findById(id);
 	return review;
@@ -103,6 +118,9 @@ module.exports = {
 	getProductByCategory,
 	getProductBySubcategory,
 	getProductByCategoryAndSubcategory,
+	getNewProducts,
+	getSaleProducts,
+	getPopularProducts,
 	getReviewByID,
 	createProduct,
 	createReview,

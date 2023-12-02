@@ -204,6 +204,10 @@
     transition: 0.5s;
 }
 
+.label-font-size {
+    font-size: 16px;
+}
+
 .content .navbar .dropdown-toggle[aria-expanded="true"]::after {
     transform: rotate(-180deg);
 }

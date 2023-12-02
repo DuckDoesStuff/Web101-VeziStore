@@ -48,43 +48,38 @@
         <!-- Sign In Start -->
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
-                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
-                    <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+                <div class="col-sm-12 col-xl-6">
+                    <form class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="/sign-in" method="post">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>VEZI</h3>
+                            <a href="/" class="">
+                                <h2 class="text-primary"><i class="fa fa-hashtag me-2"></i>VEZI</h2>
                             </a>
-                            <h3>Sign In</h3>
+                            <h2>Sign In</h2>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
+                        <div class="mb-3">
+                            <label for="username" class="form-label label-font-size">Username</label>
+                            <input class="form-control label-font-size" type="text" name="username" id="username">
                         </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">Password</label>
+                        <div class="mb-3">
+                            <label for="password" class="form-label label-font-size">Password</label>
+                            <input class="form-control label-font-size" type="password" name="password" id="password">
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
-                            <div class="form-check">
+                            <div class="form-check label-font-size">
                                 <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                 <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div>
-                            <a href="">Forgot Password</a>
+                            <a href="" class="label-font-size">Forgot Password</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                        <p class="text-center mb-0">Don't have an Account? <a href="/sign-up">Sign Up</a></p>
-                    </div>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4 label-font-size">Sign In</button>
+                        <p class="text-center mb-0 label-font-size">Don't have an Account? <a href="/sign-up" class="label-font-size">Sign Up</a></p>
+                    </form>
                 </div>
             </div>
         </div>
         <!-- Sign In End -->
     </div>
 
-    
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-    </div>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
