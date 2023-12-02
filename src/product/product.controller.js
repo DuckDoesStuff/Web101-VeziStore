@@ -16,26 +16,31 @@ const getProductByName = async (name) => {
 		return product;
 }
 
-const getProductByCategory = async (category) => {
-	const products = await Product.find({
-												category: {$in: [category]}
-											}).lean();
-	return products;
-}
-
-const getProductBySubcategory = async (subcategory) => {
-	const products = await Product.find({
-												subcategory: {$in: [subcategory]}
-											}).lean();
-	return products;
-}
-
 const getProductByCategoryAndSubcategory = async (category, subcategory) => {
-	const products = await Product.find({
+	if (subcategory) {
+		return await Product.find({
 												category: {$in: [category]},
 												subcategory: {$in: [subcategory]}
 											}).lean();
-	return products;
+	}else {
+		return await Product.find({
+												category: {$in: [category]}
+											}).lean();
+	
+	}
+}
+
+const getBestsellerProductsInCategory = async (category, subcategory) => {
+	if (subcategory) {
+		return await Product.find({
+			category: {$in: [category]},
+			subcategory: {$in: [subcategory]}
+		}).sort({rating: -1}).limit(3).lean();
+	}else {
+		return await Product.find({
+			category: {$in: [category]}
+		}).sort({rating: -1}).limit(3).lean();
+	}
 }
 
 const getNewProducts = async () => {
@@ -115,9 +120,8 @@ module.exports = {
 	getAllProduct,
 	getProductById,
 	getProductByName,
-	getProductByCategory,
-	getProductBySubcategory,
 	getProductByCategoryAndSubcategory,
+	getBestsellerProductsInCategory,
 	getNewProducts,
 	getSaleProducts,
 	getPopularProducts,

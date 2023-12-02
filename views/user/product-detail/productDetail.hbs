@@ -2,14 +2,23 @@
 	<div class="container">
 		<ul class="breadcrumb">
 			<li><a href="/home">Home</a></li>
-			<li><a href="">Store</a></li>
-			<li class="active">Cool green dress with red bell</li>
+			<li><a href="/category/?cate={{currentCategory}}">{{currentCategory}}</a></li>
+			<li class="active">{{productDetail.name}}</li>
 		</ul>
 		<!-- BEGIN SIDEBAR & CONTENT -->
 		<div class="row margin-bottom-40">
 			<div class="sidebar col-md-3 col-sm-5">
-				{{> sidebar}}
-				{{> bestsellerSidebar}}
+				{{> categorySidebar}}
+				{{#if similarProducts}}
+				<h2>Similar products</h2>
+				<div class="sidebar-products clearfix">
+					{{#each similarProducts}}
+					{{#with this}}
+					{{> productSidebar}}
+					{{/with}}
+					{{/each}}
+				</div>
+				{{/if}}
 			</div>
 			
 
@@ -143,7 +152,7 @@
 							</div>
 						</div>
 
-						<div class="sticker sticker-sale"></div>
+						<div class="sticker"></div>
 					</div>
 				</div>
 			</div>

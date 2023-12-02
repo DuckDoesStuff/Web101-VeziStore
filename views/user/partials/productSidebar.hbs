@@ -1,17 +1,6 @@
-<div class="sidebar-products clearfix">
-	<div class="item">
-		<a href="/product-detail"><img src="assets/pages/img/products/k1.jpg" alt="Some Shoes in Animal with Cut Out"></a>
-		<h3><a href="/product-detail">Some Shoes in Animal with Cut Out</a></h3>
-		<div class="price">$31.00</div>
-	</div>
-	<div class="item">
-		<a href="/product-detail"><img src="assets/pages/img/products/k4.jpg" alt="Some Shoes in Animal with Cut Out"></a>
-		<h3><a href="/product-detail">Some Shoes in Animal with Cut Out</a></h3>
-		<div class="price">$23.00</div>
-	</div>
-	<div class="item">
-		<a href="/product-detail"><img src="assets/pages/img/products/k3.jpg" alt="Some Shoes in Animal with Cut Out"></a>
-		<h3><a href="/product-detail">Some Shoes in Animal with Cut Out</a></h3>
-		<div class="price">$86.00</div>
-	</div>
+
+<div class="item">
+	<a href="/product-detail/{{_id}}"><img src="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/200x200/smart/" alt="{{name}}"></a>
+	<h3><a href="/product-detail/{{_id}}">{{name}}</a></h3>
+	<div class="price">${{subtract price discount}}</div>
 </div>

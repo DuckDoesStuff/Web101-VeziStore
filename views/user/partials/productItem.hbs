@@ -1,11 +1,9 @@
 <div>
 	<div class="product-item">
 		<div class="pi-img-wrapper">
+			<a href="/product-detail/{{_id}}">
 			<img src="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/600x800/smart/" class="img-responsive" alt="{{name}}">
-			<div>
-				<a href="https://ucarecdn.com/{{image.[0]}}/-/scale_crop/600x800/smart/" class="btn btn-default fancybox-button">Zoom</a>
-				<a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-			</div>
+			</a>
 		</div>
 		<h3><a href="/product-detail/{{_id}}">{{name}}</a></h3>
 		<div class="pi-price">${{subtract price discount}}</div>

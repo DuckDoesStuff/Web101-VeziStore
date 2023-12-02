@@ -46,13 +46,16 @@ const categoriesData = [
 // Function to generate data based on the route parameters
 /* Default category is Woman. */
 
-async function generateData(category, type, page) {
+async function generateData(category, type = null, page) {
   const currentCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const currentType = type ? type.charAt(0).toUpperCase() + type.slice(1) : null;
-  const allProduct = currentType ? 
-      await productController.getProductByCategoryAndSubcategory(category, type) : 
-      await productController.getProductByCategory(category);
+  const allProduct = 
+      await productController.getProductByCategoryAndSubcategory(category, type);
   const productData = allProduct.slice((page - 1) * 9, page * 9);
+  
+  const bestsellerData = 
+      await productController.getBestsellerProductsInCategory(category, type);
+
   return {
     title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
     currentCategory: currentCategory,
@@ -60,6 +63,7 @@ async function generateData(category, type, page) {
     categories: categoriesData,
     css_files: css_files,
     js_files: js_files,
+    bestsellerData: {...bestsellerData},
     productData: {...productData},
     productCount: productData.length,
     pages: Array.from({length: Math.ceil(allProduct.length / 9)}, (_, i) => ({
