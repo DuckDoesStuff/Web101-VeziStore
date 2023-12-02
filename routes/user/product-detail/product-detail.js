@@ -54,7 +54,6 @@ async function generateData(category, type = null, id = null) {
   const currentCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const currentType = type ? type.charAt(0).toUpperCase() + type.slice(1) : null;
   const productDetail = await productController.getProductById(id);
-  console.log(productDetail.image);
   const result = {
     title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
     currentCategory: currentCategory,

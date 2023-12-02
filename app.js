@@ -47,7 +47,7 @@ const adminHbs = exphbs.create({
 		},
 		lowercase: function (str) {
 			return str.toLowerCase();
-		},
+		}
 	},
 });
 
@@ -89,6 +89,7 @@ app.use("/", indexRouter);
 app.use("/home", indexRouter);
 app.use("/product-detail/", productRouter);
 app.use("/category/", categoryRouter);
+app.use("/lookup/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
 app.use("/sign-in", signInRouter);

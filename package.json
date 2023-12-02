@@ -25,6 +25,7 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
+    "querystring": "^0.2.1",
     "sharp": "^0.32.6",
     "vhost": "^3.0.2"
   }

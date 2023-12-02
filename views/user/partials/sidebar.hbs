@@ -4,7 +4,7 @@
 	{{#with this}}
 
 	<li class="list-group-item clearfix dropdown {{#if (eq ../currentCategory name)}}active{{/if}}">
-		<a href="/category/{{lowercase name}}" class="{{#if (eq ../currentCategory name)}}collapsed{{/if}}">
+		<a href="/category/?cate={{lowercase name}}" class="{{#if (eq ../currentCategory name)}}collapsed{{/if}}">
 			<i class="fa fa-angle-right"></i>
 			{{name}}
 		</a>
@@ -17,7 +17,7 @@
 
 			{{#each types}}
 			<li class="{{#if (eq ../../currentType this)}}active{{/if}}">
-				<a href="/category/{{lowercase ../name}}/{{lowercase this}}"> {{this}}</a>
+				<a href="/category/?cate={{lowercase ../name}}&type={{lowercase this}}"> {{this}}</a>
 			</li>
 			{{/each}}
 

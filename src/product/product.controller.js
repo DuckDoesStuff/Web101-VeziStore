@@ -19,14 +19,14 @@ const getProductByName = async (name) => {
 const getProductByCategory = async (category) => {
 	const products = await Product.find({
 												category: {$in: [category]}
-											});
+											}).lean();
 	return products;
 }
 
 const getProductBySubcategory = async (subcategory) => {
 	const products = await Product.find({
 												subcategory: {$in: [subcategory]}
-											});
+											}).lean();
 	return products;
 }
 
@@ -34,7 +34,7 @@ const getProductByCategoryAndSubcategory = async (category, subcategory) => {
 	const products = await Product.find({
 												category: {$in: [category]},
 												subcategory: {$in: [subcategory]}
-											});
+											}).lean();
 	return products;
 }
 

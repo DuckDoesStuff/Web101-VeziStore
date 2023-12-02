@@ -35,7 +35,6 @@ const generateData = async () => {
   return result;
 }
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   generateData()
     .then(data => {

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../../../src/product/product.controller');
 
 const css_files = [
   'assets/plugins/fancybox/source/jquery.fancybox.css',
@@ -43,35 +44,37 @@ const categoriesData = [
 ];
 
 // Function to generate data based on the route parameters
-function generateData(category, type = null) {
+/* Default category is Woman. */
+
+async function generateData(category, type, page) {
   const currentCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const currentType = type ? type.charAt(0).toUpperCase() + type.slice(1) : null;
-
+  const allProduct = currentType ? 
+      await productController.getProductByCategoryAndSubcategory(category, type) : 
+      await productController.getProductByCategory(category);
+  const productData = allProduct.slice((page - 1) * 9, page * 9);
   return {
     title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
     currentCategory: currentCategory,
     currentType: currentType,
     categories: categoriesData,
     css_files: css_files,
-    js_files: js_files
+    js_files: js_files,
+    productData: {...productData},
+    productCount: productData.length,
+    pages: Array.from({length: Math.ceil(allProduct.length / 9)}, (_, i) => ({
+      page:i + 1,
+      url: `/category/?cate=${category}${type ? `&type=${type}` : ''}&page=${i + 1}`
+    })),
+    curPage: page
   };
 }
 
-/* Default category is Woman. */
-router.get('/', function(req, res, next) {
-  const data = generateData('Woman');
-  res.render('user/category/productCategory', data);
-});
-
-router.get('/:name', function(req, res, next) {
-  const data = generateData(req.params.name);
-
-  res.render('user/category/productCategory', data);
-});
-
-router.get('/:name/:type', function(req, res, next) {
-  const data = generateData(req.params.name, req.params.type);
-
+router.get('/', async function(req, res, next) {
+  const cate = req.query.cate;
+  const type = req.query.type;
+  const page = req.query.page || 1;
+  const data = await generateData(cate, type, page);
   res.render('user/category/productCategory', data);
 });
 
