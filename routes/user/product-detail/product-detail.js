@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../../../src/product/product.controller');
+const { UploadClient } = require('@uploadcare/upload-client');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const uploadcare = new UploadClient({
+  publicKey: process.env.UPLOADCARE_PUBLIC_KEY
+});
 
 const css_files = [
   'assets/plugins/fancybox/source/jquery.fancybox.css',
@@ -47,6 +54,7 @@ async function generateData(category, type = null, id = null) {
   const currentCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const currentType = type ? type.charAt(0).toUpperCase() + type.slice(1) : null;
   const productDetail = await productController.getProductById(id);
+  console.log(productDetail.image);
   const result = {
     title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
     currentCategory: currentCategory,

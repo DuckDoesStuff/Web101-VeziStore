@@ -19,13 +19,13 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6">
 							<div class="product-main-image">
-								<img src="data:image/png;base64, {{productDetail.image.[0]}}" alt="Cool green dress with red bell"
-									class="img-responsive" data-BigImgsrc="data:image/png;base64, {{productDetail.image.[0]}}">
+								<img src="https://ucarecdn.com/{{productDetail.image.[0]}}/" alt="{{productDetail.name}}"
+									class="img-responsive" data-BigImgsrc="https://ucarecdn.com/{{productDetail.image.[0]}}/">
 							</div>
 							<div class="product-other-images">
 								{{#each productDetail.image}}
-								<a href="data:image/png;base64, {{this}}" class="fancybox-button" rel="photos-lib"><img
-										alt="Berry Lace Dress" src="data:image/png;base64, {{this}}"></a>
+								<a href="https://ucarecdn.com/{{this}}/" class="fancybox-button" rel="photos-lib">
+								<img alt="{{productDetail.name}}" src="https://ucarecdn.com/{{this}}/"></a>
 								{{/each}}
 							</div>
 						</div>
