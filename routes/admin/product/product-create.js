@@ -21,6 +21,28 @@ router.get("/", function (req, res, next) {
     res.render("admin/product/product-create");
 });
 
+// Thêm endpoint API để lấy danh sách subcategory dựa trên category
+router.get("/api/subcategories/:category",async (req, res) => {
+    const category = req.params.category;
+    // Thay thế logic này bằng cách lấy danh sách subcategory tương ứng với category từ cơ sở dữ liệu hoặc nguồn dữ liệu khác
+    let subcategories = [];
+    switch (category) {
+        case 'Woman':
+            subcategories = ['Tops', 'Dresses', 'Activewear', 'Accessories', 'Footwear'];
+            break;
+        case 'Man':
+            subcategories = ['T-Shirts', 'Shirts', 'Bottoms', 'Outterwear'];
+            break;
+        case 'Kid':
+        subcategories = ['Sleepwear', 'School', 'Activity', 'Summer'];
+        break;
+        // Thêm các trường hợp khác nếu cần
+    }
+
+    res.json({ subcategories });
+});
+
+
 router.post("/", upload.array("files"), async (req, res, next) => {
     const {
         name,
