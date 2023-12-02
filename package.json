@@ -11,13 +11,16 @@
   },
   "dependencies": {
     "@uploadcare/upload-client": "^6.10.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "connect-mongo": "^5.1.0",
     "cookie-parser": "~1.4.4",
     "datatables.net-dt": "^1.13.7",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
     "express": "~4.16.1",
     "express-handlebars": "^7.1.2",
+    "express-session": "^1.17.3",
     "handlebars-helpers": "^0.10.0",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
@@ -25,6 +28,8 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
     "sharp": "^0.32.6",
     "vhost": "^3.0.2"
   }

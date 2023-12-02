@@ -6,6 +6,11 @@ const logger = require("morgan");
 const exphbs = require("express-handlebars");
 const vhost = require("vhost");
 const db = require("./src/db");
+const session = require('express-session');
+const passport = require('passport');
+const MongoStore = require('connect-mongo');
+const dotenv = require('dotenv');
+dotenv.config();
 
 db();
 
@@ -66,14 +71,27 @@ app.use(express.static(path.join(__dirname, "public")));
 
 admin.use(express.json());
 admin.use(express.urlencoded({ extended: true }));
+// Express session setup
+app.use(session({
+	secret: process.env.SECRET_KEY,
+	resave: false,
+	saveUninitialized: true,
+	store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
+	cookie: { maxAge: 30 * 1000 } // 30 secs in ms
+}));
+
+// Passport initialize and session
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Normal router
 const indexRouter = require("./routes/user/home/index");
 const categoryRouter = require("./routes/user/category/category");
 const productRouter = require("./routes/user/product-detail/product-detail");
 const cartRouter = require("./routes/user/shop-cart/shop-cart");
 const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
-const signInRouter = require("./routes/user/account/sign-in");
-const signUpRouter = require("./routes/user/account/sign-up");
+// const signInRouter = require("./routes/user/account/sign-in");
+// const signUpRouter = require("./routes/user/account/sign-up");
 
 // Admin router
 const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
@@ -91,8 +109,9 @@ app.use("/product-detail/", productRouter);
 app.use("/category/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
-app.use("/sign-in", signInRouter);
-app.use("/sign-up", signUpRouter);
+// app.use("/sign-in", signInRouter);
+// app.use("/sign-up", signUpRouter);
+app.use("/", require("./routes/user/account/auth"));
 
 // Subdomain admin routing
 admin.use("/", usersDashboardRouter);

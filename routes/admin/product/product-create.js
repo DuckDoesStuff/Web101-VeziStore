@@ -3,14 +3,14 @@ const router = express.Router();
 const multer = require("multer");
 const sharp = require("sharp");
 const dotenv = require("dotenv");
-const {UploadClient} = require('@uploadcare/upload-client');
+const { UploadClient } = require("@uploadcare/upload-client");
 const productController = require("../../../src/product/product.controller");
 const categoryController = require("../../../src/category/category.controller");
 
 dotenv.config();
 // Set up uploadcare client
 const uploadcare = new UploadClient({
-    publicKey: process.env.UPLOADCARE_PUBLIC_KEY
+    publicKey: process.env.UPLOADCARE_PUBLIC_KEY,
 });
 
 // Set up multer with memory storage
@@ -36,11 +36,16 @@ router.post("/", upload.array("files"), async (req, res, next) => {
         information,
         review,
     } = req.body;
+    const lowerCaseCategory = String(category).toLowerCase();
+    const lowerCaseSubCategory = String(subcategory).toLowerCase();
+
     const files = req.files;
-    const images = await Promise.all(files.map(async (file) => {
-        const uploadedFile = await uploadcare.uploadFile(file.buffer);
-        return uploadedFile.uuid;
-    }));
+    const images = await Promise.all(
+        files.map(async (file) => {
+            const uploadedFile = await uploadcare.uploadFile(file.buffer);
+            return uploadedFile.uuid;
+        })
+    );
     productController
         .createProduct(
             name,
@@ -48,8 +53,8 @@ router.post("/", upload.array("files"), async (req, res, next) => {
             price,
             discount,
             availability,
-            category,
-            subcategory,
+            lowerCaseCategory,
+            lowerCaseSubCategory,
             size,
             color,
             rating,
