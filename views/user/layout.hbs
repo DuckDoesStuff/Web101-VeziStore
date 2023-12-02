@@ -42,13 +42,16 @@
 </head>
 
 <body class="ecommerce">
+  {{#if showHeaderFooter}}
   {{> header}}
+  {{/if}}
 
 
   {{{body}}}
 
-
+  {{#if showHeaderFooter}}
   {{> footer}}
+  {{/if}}
 
 
   <script src="assets/plugins/jquery.min.js" type="text/javascript"></script>

@@ -10,6 +10,7 @@ const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
 const dotenv = require('dotenv');
+const setLayout = require('./src/middleware');
 dotenv.config();
 
 db();
@@ -19,6 +20,7 @@ const admin = express();
 
 app.use(vhost("admin.vezi.store", admin));
 app.use(vhost("admin.*", admin));
+app.use(setLayout);
 
 const port = process.env.PORT || 3000;
 
