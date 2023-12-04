@@ -79,7 +79,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: true,
 	store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
-	cookie: { maxAge: 30 * 1000 } // 30 secs in ms
+	cookie: { maxAge: 24 * 60 * 60 * 1000 } // 12h in ms
 }));
 
 // Passport initialize and session
@@ -105,6 +105,20 @@ const productInfoRouter = require("./routes/admin/product/product-info");
 
 // Normal routing
 
+// For all routes, store the originalUrl in session
+app.use((req, res, next) => {
+	req.session.returnTo = req.originalUrl;
+	next();
+});
+
+// Keep scrolling position when redirecting
+app.use((req, res, next) => {
+  const scrollPosition = req.query.scrollPosition || 0;
+
+	res.locals.scrollPosition = Number(scrollPosition);
+  next();
+});
+
 app.use("/", indexRouter);
 app.use("/home", indexRouter);
 app.use("/product-detail/", productRouter);
@@ -112,8 +126,6 @@ app.use("/category/", categoryRouter);
 app.use("/lookup/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
-// app.use("/sign-in", signInRouter);
-// app.use("/sign-up", signUpRouter);
 app.use("/", require("./routes/user/account/auth"));
 
 // Subdomain admin routing

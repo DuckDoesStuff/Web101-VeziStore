@@ -20,9 +20,9 @@ const Product = mongoose.model('Product', productSchema, 'product');
 
 const reviewSchema = new mongoose.Schema({
 	username:String,
-	date: Date,
+	date: mongoose.Schema.Types.Date,
 	rating: Number,
-	review: [String]
+	review: String
 })
 
 const Review = mongoose.model('Review', reviewSchema, 'review');

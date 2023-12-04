@@ -5,15 +5,15 @@ const LocalStrategy = require("passport-local").Strategy;
 const User = require("../../../src/account/user.model");
 
 passport.use(
-    new LocalStrategy(async (username, email, password, done) => {
+    new LocalStrategy(async (username, password, done) => {
         try {
             const user = await User.findOne({ username });
             if (!user) {
                 return done(null, false, { message: "Incorrect username." });
             }
-            if (!email) {
-                return done(null, false, { message: "Incorrect email." });
-            }
+            // if (!email) {
+            //     return done(null, false, { message: "Incorrect email." });
+            // }
 
             const isValidPassword = await user.isValidPassword(password);
             if (!isValidPassword) {
@@ -29,13 +29,11 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, {id: user.id, username: user.username});
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (user, done) => {
     try {
-        // Retrieve the user data from the database based on the ID
-        const user = await User.findById(id);
         done(null, user);
     } catch (error) {
         done(error);
@@ -72,7 +70,7 @@ router.post("/sign-up", async (req, res) => {
 
         // Check if the email is already taken
         const existingEmail = await User.findOne({ email });
-        if (existingUser) {
+        if (existingEmail) {
             // showError('Username is already taken.');
             return res.render("user/account/signUp", {
                 error: "Email is already taken.",
@@ -83,7 +81,16 @@ router.post("/sign-up", async (req, res) => {
         const newUser = new User({ username, email, password });
         await newUser.save();
 
-        res.redirect("/sign-in");
+        // Log in the newly registered user
+        req.login(newUser, (err) => {
+            if (err) {
+                console.error(err);
+                return res.render("user/account/signUp", {
+                    error: "Login after registration failed. Please try logging in manually.",
+                });
+            }
+            return res.redirect(req.session.returnTo || "/");
+        });
     } catch (error) {
         console.error(error);
         res.render("user/account/signUp", {
@@ -109,7 +116,7 @@ router.post("/sign-in", (req, res) => {
                 });
             }
 
-            res.redirect("/");
+            res.redirect(req.session.returnTo || "/");
         });
     })(req, res);
 });
@@ -119,7 +126,7 @@ router.get("/logout", (req, res) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/");
+        res.redirect(req.session.returnTo || "/");
     });
 });
 

@@ -21,7 +21,7 @@
 			<div class="sidebar col-md-3 col-sm-5">
 			{{> categorySidebar}}
 			{{!-- {{> filterSidebar}} --}}
-			{{#if bestsellerData}}
+			{{#if bestsellerData.length}}
 			<h2>Popular products</h2>
 			<div class="sidebar-products clearfix">
 				{{#each bestsellerData}}
@@ -72,6 +72,7 @@
 				
 				<!-- BEGIN PRODUCT LIST -->
 				<div class="row">
+				{{#if productData.length}}
 					{{#each productData}}
 					{{#with this}}
 					<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
@@ -79,6 +80,11 @@
 					</div>
 					{{/with}}
 					{{/each}}
+				{{else}}
+					<div class="col-md-12 col-sm-12 col-xs-12 margin-bottom-40">
+						<h3>No product found</h3>
+					</div>
+				{{/if}}
 				</div>
 
 				{{!-- <div class="row product-list">

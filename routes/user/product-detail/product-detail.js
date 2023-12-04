@@ -53,7 +53,8 @@ const categoriesData = [
 async function generateData(id) {
   const productDetail = 
     await productController.getProductById(id);
-
+  const category = productDetail.category[0].charAt(0).toUpperCase() + productDetail.category[0].slice(1);
+  const subcategory = productDetail.subcategory[0].charAt(0).toUpperCase() + productDetail.subcategory[0].slice(1);
   const similarProducts = 
     await productController.getProductByCategoryAndSubcategory(productDetail.category, productDetail.subcategory)
     .then((products) => {
@@ -62,29 +63,45 @@ async function generateData(id) {
       }).slice(0, 3);
     });
 
+  const reviews = await Promise.all(productDetail.review.map(async (review) => {
+    const reviewDetail = await productController.getReviewByID(review._id);
+    return reviewDetail;
+  }));
+
+  console.log("Rewviews: ",reviews)
+
   const result = {
-    title: productDetail.category + productDetail.subcategory + ' category | Metronic Shop UI',
+    title: category + " " + subcategory + ' category | Metronic Shop UI',
     currentCategory: productDetail.category,
     currentType: productDetail.subcategory,
     categories: categoriesData,
     css_files: css_files,
     js_files: js_files,
-    productDetail: {...productDetail},
-    similarProducts: {...similarProducts}
+    productDetail: productDetail,
+    similarProducts: similarProducts,
+    reviews: reviews
   };
   return result;
 }
 
 router.get('/', function(req, res, next) {
   const data = generateData('Woman');
-  res.render('user/product-detail/productDetail', data);
+  res.render('user/product-detail/productDetail', {...data, user:req.user});
 });
 
 router.get('/:id', function(req, res, next) {
   generateData(req.params.id)
   .then((data) => {
-    res.render('user/product-detail/productDetail', data)
+    res.render('user/product-detail/productDetail', {...data, user:req.user})
   });
+});
+
+router.post('/:id/add-review', function(req, res, next) {
+  productController.createReview(req.user.username, Date.now(), req.body.rating, req.body.review)
+  .then((review) => {
+    productController.addReviewToProduct(req.params.id, review._id);
+    res.redirect('/product-detail/' + req.params.id);
+  })
 });
 
 module.exports = router;

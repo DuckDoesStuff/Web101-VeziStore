@@ -55,7 +55,6 @@ async function generateData(category, type = null, page) {
   
   const bestsellerData = 
       await productController.getBestsellerProductsInCategory(category, type);
-
   return {
     title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
     currentCategory: currentCategory,
@@ -63,9 +62,9 @@ async function generateData(category, type = null, page) {
     categories: categoriesData,
     css_files: css_files,
     js_files: js_files,
-    bestsellerData: {...bestsellerData},
-    productData: {...productData},
-    productCount: productData.length,
+    bestsellerData: bestsellerData,
+    productData: productData,
+    productCount: allProduct.length,
     pages: Array.from({length: Math.ceil(allProduct.length / 9)}, (_, i) => ({
       page:i + 1,
       url: `/category/?cate=${category}${type ? `&type=${type}` : ''}&page=${i + 1}`
@@ -79,7 +78,7 @@ router.get('/', async function(req, res, next) {
   const type = req.query.type;
   const page = req.query.page || 1;
   const data = await generateData(cate, type, page);
-  res.render('user/category/productCategory', data);
+  res.render('user/category/productCategory', {...data, user:req.user});
 });
 
 module.exports = router;

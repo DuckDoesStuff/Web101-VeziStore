@@ -42,7 +42,7 @@ const generateData = async () => {
 router.get('/', function(req, res, next) {
   generateData()
     .then(data => {
-      res.render('user/home/shopHome', data);
+      res.render('user/home/shopHome', {...data, user: req.user});
     })
     .catch(err => {
       console.log(err);
