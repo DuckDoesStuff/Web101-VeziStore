@@ -30,6 +30,7 @@
     "nodemon": "^3.0.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "querystring": "^0.2.1",
     "sharp": "^0.32.6",
     "vhost": "^3.0.2"
   }

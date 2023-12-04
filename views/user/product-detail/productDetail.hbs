@@ -2,14 +2,23 @@
 	<div class="container">
 		<ul class="breadcrumb">
 			<li><a href="/home">Home</a></li>
-			<li><a href="">Store</a></li>
-			<li class="active">Cool green dress with red bell</li>
+			<li><a href="/category/?cate={{currentCategory}}">{{currentCategory}}</a></li>
+			<li class="active">{{productDetail.name}}</li>
 		</ul>
 		<!-- BEGIN SIDEBAR & CONTENT -->
 		<div class="row margin-bottom-40">
 			<div class="sidebar col-md-3 col-sm-5">
-				{{> sidebar}}
-				{{> bestsellerSidebar}}
+				{{> categorySidebar}}
+				{{#if similarProducts}}
+				<h2>Similar products</h2>
+				<div class="sidebar-products clearfix">
+					{{#each similarProducts}}
+					{{#with this}}
+					{{> productSidebar}}
+					{{/with}}
+					{{/each}}
+				</div>
+				{{/if}}
 			</div>
 			
 
@@ -41,9 +50,7 @@
 								</div>
 							</div>
 							<div class="description">
-								<p>Lorem ipsum dolor ut sit ame dolore adipiscing elit, sed nonumy nibh sed euismod laoreet dolore
-									magna aliquarm erat volutpat
-									Nostrud duis molestie at dolore.</p>
+								<p>{{productDetail.description}}</p>
 							</div>
 							<div class="product-page-options">
 								<div class="pull-left">
@@ -54,13 +61,6 @@
 										<option>XL</option>
 									</select>
 								</div>
-								<div class="pull-left">
-									<label class="control-label">Color:</label>
-									<select class="form-control input-sm">
-										<option>Red</option>
-										<option>Blue</option>
-										<option>Black</option>
-									</select>
 								</div>
 							</div>
 							<div class="product-page-cart">
@@ -74,7 +74,7 @@
 								<div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"
 									data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
 								</div>
-								<a href="javascript:;">7 reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
+								<a href="javascript:;">{{productDetail.review.length}} reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
 							</div>
 							<ul class="social-icons">
 								<li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
@@ -89,43 +89,14 @@
 							<ul id="myTab" class="nav nav-tabs">
 								<li><a href="#Description" data-toggle="tab">Description</a></li>
 								<li><a href="#Information" data-toggle="tab">Information</a></li>
-								<li class="active"><a href="#Reviews" data-toggle="tab">Reviews (2)</a></li>
+								<li class="active"><a href="#Reviews" data-toggle="tab">Reviews ({{productDetail.review.length}})</a></li>
 							</ul>
 							<div id="myTabContent" class="tab-content">
 								<div class="tab-pane fade" id="Description">
-									<p>Lorem ipsum dolor ut sit ame dolore adipiscing elit, sed sit nonumy nibh sed euismod laoreet
-										dolore magna aliquarm erat sit volutpat Nostrud duis molestie at dolore. Lorem ipsum dolor ut sit
-										ame dolore adipiscing elit, sed sit nonumy nibh sed euismod laoreet dolore magna aliquarm erat sit
-										volutpat Nostrud duis molestie at dolore. Lorem ipsum dolor ut sit ame dolore adipiscing elit, sed
-										sit nonumy nibh sed euismod laoreet dolore magna aliquarm erat sit volutpat Nostrud duis molestie
-										at dolore. </p>
+									<p>{{productDetail.description}}</p>
 								</div>
 								<div class="tab-pane fade" id="Information">
-									<table class="datasheet">
-										<tr>
-											<th colspan="2">Additional features</th>
-										</tr>
-										<tr>
-											<td class="datasheet-features-type">Value 1</td>
-											<td>21 cm</td>
-										</tr>
-										<tr>
-											<td class="datasheet-features-type">Value 2</td>
-											<td>700 gr.</td>
-										</tr>
-										<tr>
-											<td class="datasheet-features-type">Value 3</td>
-											<td>10 person</td>
-										</tr>
-										<tr>
-											<td class="datasheet-features-type">Value 4</td>
-											<td>14 cm</td>
-										</tr>
-										<tr>
-											<td class="datasheet-features-type">Value 5</td>
-											<td>plastic</td>
-										</tr>
-									</table>
+									{{productDetail.information}}
 								</div>
 								<div class="tab-pane fade in active" id="Reviews">
 									<!--<p>There are no reviews for this product.</p>-->
@@ -162,14 +133,6 @@
 									<form action="#" class="reviews-form" role="form">
 										<h2>Write a review</h2>
 										<div class="form-group">
-											<label for="name">Name <span class="require">*</span></label>
-											<input type="text" class="form-control" id="name">
-										</div>
-										<div class="form-group">
-											<label for="email">Email</label>
-											<input type="text" class="form-control" id="email">
-										</div>
-										<div class="form-group">
 											<label for="review">Review <span class="require">*</span></label>
 											<textarea class="form-control" rows="8" id="review"></textarea>
 										</div>
@@ -189,7 +152,7 @@
 							</div>
 						</div>
 
-						<div class="sticker sticker-sale"></div>
+						<div class="sticker"></div>
 					</div>
 				</div>
 			</div>
