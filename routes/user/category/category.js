@@ -45,40 +45,71 @@ const categoriesData = [
 
 // Function to generate data based on the route parameters
 /* Default category is Woman. */
-
-async function generateData(category, type = null, page) {
-  const currentCategory = category.charAt(0).toUpperCase() + category.slice(1);
-  const currentType = type ? type.charAt(0).toUpperCase() + type.slice(1) : null;
-  const allProduct = 
-      await productController.getProductByCategoryAndSubcategory(category, type);
-  const productData = allProduct.slice((page - 1) * 9, page * 9);
-  
-  const bestsellerData = 
-      await productController.getBestsellerProductsInCategory(category, type);
-  return {
-    title: currentCategory + (currentType ? ` ${currentType}` : '') + ' category | Metronic Shop UI',
-    currentCategory: currentCategory,
-    currentType: currentType,
-    categories: categoriesData,
-    css_files: css_files,
-    js_files: js_files,
-    bestsellerData: bestsellerData,
-    productData: productData,
-    productCount: allProduct.length,
-    pages: Array.from({length: Math.ceil(allProduct.length / 9)}, (_, i) => ({
-      page:i + 1,
-      url: `/category/?cate=${category}${type ? `&type=${type}` : ''}&page=${i + 1}`
-    })),
-    curPage: page
-  };
+async function generateSort(type, allProducts) {
+    if (type == "1") {
+        return productController.sortProductsByTime(allProducts);
+    }
+    if (type == "2") {
+      return productController.sortProductsByPrice(allProducts);
+  }
+    return allProducts;
 }
 
-router.get('/', async function(req, res, next) {
-  const cate = req.query.cate;
-  const type = req.query.type;
-  const page = req.query.page || 1;
-  const data = await generateData(cate, type, page);
-  res.render('user/category/productCategory', {...data, user:req.user});
+async function generateData(category, type = null, page, sort = null) {
+    const currentCategory =
+        category.charAt(0).toUpperCase() + category.slice(1);
+    const currentType = type
+        ? type.charAt(0).toUpperCase() + type.slice(1)
+        : null;
+    let allProduct =
+        await productController.getProductByCategoryAndSubcategory(
+            category,
+            type
+        );
+
+    if (sort) {
+        allProduct = await generateSort(type, allProduct);
+    }
+    const productData = allProduct.slice((page - 1) * 9, page * 9);
+
+    const bestsellerData =
+        await productController.getBestsellerProductsInCategory(category, type);
+    return {
+        title:
+            currentCategory +
+            (currentType ? ` ${currentType}` : "") +
+            " category | Metronic Shop UI",
+        currentCategory: currentCategory,
+        currentType: currentType,
+        categories: categoriesData,
+        css_files: css_files,
+        js_files: js_files,
+        bestsellerData: bestsellerData,
+        productData: productData,
+        productCount: allProduct.length,
+        pages: Array.from(
+            { length: Math.ceil(allProduct.length / 9) },
+            (_, i) => ({
+                page: i + 1,
+                url: `/category/?cate=${category}${
+                    type ? `&type=${type}` : ""
+                }${sort ? `&sort=${sort}` : ""}&page=${i + 1}`,
+            })
+        ),
+        curPage: page,
+        sortType: sort,
+    };
+}
+
+router.get("/", async function (req, res, next) {
+    const cate = req.query.cate;
+    const type = req.query.type;
+    const page = req.query.page || 1;
+    const sort = req.query.sort;
+    const data = await generateData(cate, type, page, sort);
+    console.log(cate);
+    console.log(sort);
+    res.render("user/category/productCategory", { ...data, user: req.user });
 });
 
 module.exports = router;

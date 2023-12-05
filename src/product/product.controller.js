@@ -77,7 +77,7 @@ const createProduct = async (name, image, price, discount, availability, categor
 		rating: rating,
 		description: description,
 		information: information,
-		review: review
+		review: review,
 	});
 	return await newProduct.save();
 }
@@ -98,6 +98,31 @@ const addReviewToProduct = async (id, review) => {
 	product.rating = (product.rating * (product.review.length - 1) + review.rating) / product.review.length;
 	await product.save();
 }
+
+
+const sortProductsByTime = (productData) => {
+	const sortedProducts = [...productData];
+  
+	sortedProducts.sort((a, b) => {
+	  const timeA = new Date(a.createdAt).getTime();
+	  const timeB = new Date(b.createdAt).getTime();
+	  return timeB - timeA;
+	});
+  
+	return sortedProducts;
+  };
+
+  const sortProductsByPrice = (productData) => {
+	const sortedProducts = [...productData];
+  
+	sortedProducts.sort((a, b) => {
+	  const priceA = a.price;
+	  const priceB = b.price;
+	  return priceB - priceA;
+	});
+  
+	return sortedProducts;
+  };
 
 const updateProduct = async (id, name, image, price, discount, availability, category, subcategory, size, color, rating, description, information, review) => {
 	const product = await Product.findById(id);
@@ -130,5 +155,6 @@ module.exports = {
 	createProduct,
 	createReview,
 	addReviewToProduct,
-	updateProduct
+	updateProduct,
+	sortProductsByTime
 }

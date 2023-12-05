@@ -6,23 +6,20 @@ const dotenv = require("dotenv");
 const { UploadClient } = require("@uploadcare/upload-client");
 const productController = require("../../../src/product/product.controller");
 const categoryController = require("../../../src/category/category.controller");
-
 dotenv.config();
 // Set up uploadcare client
 const uploadcare = new UploadClient({
     publicKey: process.env.UPLOADCARE_PUBLIC_KEY,
 });
-
 // Set up multer with memory storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
 router.get("/", function (req, res, next) {
     res.render("admin/product/product-create");
 });
 
 // Thêm endpoint API để lấy danh sách subcategory dựa trên category
-router.get("/",async (req, res) => {
+router.get("/api/subcategories/:category",async (req, res) => {
     const category = req.params.category;
     // Thay thế logic này bằng cách lấy danh sách subcategory tương ứng với category từ cơ sở dữ liệu hoặc nguồn dữ liệu khác
     let subcategories = [];
@@ -60,7 +57,6 @@ router.post("/", upload.array("files"), async (req, res, next) => {
     } = req.body;
     const lowerCaseCategory = String(category).toLowerCase();
     const lowerCaseSubCategory = String(subcategory).toLowerCase();
-
     const files = req.files;
     const images = await Promise.all(
         files.map(async (file) => {
@@ -82,7 +78,7 @@ router.post("/", upload.array("files"), async (req, res, next) => {
             rating,
             description,
             information,
-            review
+            review,
         )
         .then((product) => {
             categoryController.addProductToCategoryAndSubcategory(
@@ -97,5 +93,4 @@ router.post("/", upload.array("files"), async (req, res, next) => {
             res.redirect("/product-create");
         });
 });
-
 module.exports = router;
