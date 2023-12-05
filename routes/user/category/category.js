@@ -69,7 +69,7 @@ async function generateData(category, type = null, page, sort = null) {
             category,
             type
         );
-
+        
     if (sort) {
         allProduct = await generateSort(sort, allProduct);
     }
@@ -110,8 +110,6 @@ router.get("/", async function (req, res, next) {
     const page = req.query.page || 1;
     const sort = req.query.sort;
     const data = await generateData(cate, type, page, sort);
-    console.log(cate);
-    console.log(sort);
     res.render("user/category/productCategory", { ...data, user: req.user });
 });
 
