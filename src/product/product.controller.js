@@ -44,7 +44,7 @@ const getBestsellerProductsInCategory = async (category, subcategory) => {
 }
 
 const getNewProducts = async () => {
-	const products = await Product.find().sort({_id: -1}).limit(7).lean();
+	const products = await Product.find().sort({createAt: -1}).limit(7).lean();
 	return products;
 }
 
