@@ -112,13 +112,24 @@ const sortProductsByTime = (productData) => {
 	return sortedProducts;
   };
 
-  const sortProductsByPrice = (productData) => {
+  const sortProductsByPriceDes = (productData) => {
 	const sortedProducts = [...productData];
   
 	sortedProducts.sort((a, b) => {
-	  const priceA = a.price;
-	  const priceB = b.price;
+	  const priceA = a.price - a.discount;
+	  const priceB = b.price - b.discount;
 	  return priceB - priceA;
+	});
+  
+	return sortedProducts;
+  };
+  const sortProductsByPriceAsc = (productData) => {
+	const sortedProducts = [...productData];
+  
+	sortedProducts.sort((a, b) => {
+	  const priceA = a.price - a.discount;
+	  const priceB = b.price - b.discount;
+	  return priceA - priceB;
 	});
   
 	return sortedProducts;
@@ -156,5 +167,7 @@ module.exports = {
 	createReview,
 	addReviewToProduct,
 	updateProduct,
-	sortProductsByTime
+	sortProductsByTime,
+	sortProductsByPriceAsc,
+	sortProductsByPriceDes
 }

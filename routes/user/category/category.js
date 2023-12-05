@@ -50,8 +50,11 @@ async function generateSort(type, allProducts) {
         return productController.sortProductsByTime(allProducts);
     }
     if (type == "2") {
-      return productController.sortProductsByPrice(allProducts);
-  }
+      return productController.sortProductsByPriceAsc(allProducts);
+    }
+    if (type == "3") {
+      return productController.sortProductsByPriceDes(allProducts);
+    }
     return allProducts;
 }
 
@@ -68,7 +71,7 @@ async function generateData(category, type = null, page, sort = null) {
         );
 
     if (sort) {
-        allProduct = await generateSort(type, allProduct);
+        allProduct = await generateSort(sort, allProduct);
     }
     const productData = allProduct.slice((page - 1) * 9, page * 9);
 
