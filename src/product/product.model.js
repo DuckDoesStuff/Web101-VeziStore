@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
 	description: [String],
 	information: [String],
 	review: [{type: mongoose.Schema.Types.ObjectId, ref:'Review'}],
-	createdAt: { type: Date, default: Date.now }
+	createAt: { type: Date, default: Date.now() }
 });
 
 const Product = mongoose.model('Product', productSchema, 'product');

@@ -44,7 +44,7 @@ const getBestsellerProductsInCategory = async (category, subcategory) => {
 }
 
 const getNewProducts = async () => {
-	const products = await Product.find().sort({_id: -1}).limit(7).lean();
+	const products = await Product.find().sort({createAt: -1}).limit(7).lean();
 	return products;
 }
 
@@ -102,38 +102,39 @@ const addReviewToProduct = async (id, review) => {
 
 const sortProductsByTime = (productData) => {
 	const sortedProducts = [...productData];
-  
+
 	sortedProducts.sort((a, b) => {
-	  const timeA = new Date(a.createdAt).getTime();
-	  const timeB = new Date(b.createdAt).getTime();
+	  const timeA = new Date(a.createAt).getTime();
+	  const timeB = new Date(b.createAt).getTime();
 	  return timeB - timeA;
 	});
   
 	return sortedProducts;
-  };
+};
 
-  const sortProductsByPriceDes = (productData) => {
+const sortProductsByPriceDes = (productData) => {
 	const sortedProducts = [...productData];
-  
+
 	sortedProducts.sort((a, b) => {
-	  const priceA = a.price - a.discount;
-	  const priceB = b.price - b.discount;
-	  return priceB - priceA;
+		const priceA = a.price - a.discount;
+		const priceB = b.price - b.discount;
+		return priceB - priceA;
 	});
-  
+
 	return sortedProducts;
-  };
-  const sortProductsByPriceAsc = (productData) => {
+};
+
+const sortProductsByPriceAsc = (productData) => {
 	const sortedProducts = [...productData];
-  
+
 	sortedProducts.sort((a, b) => {
-	  const priceA = a.price - a.discount;
-	  const priceB = b.price - b.discount;
-	  return priceA - priceB;
+		const priceA = a.price - a.discount;
+		const priceB = b.price - b.discount;
+		return priceA - priceB;
 	});
-  
+
 	return sortedProducts;
-  };
+};
 
 
 const updateProduct = async (id, name, image, price, discount, availability, category, subcategory, size, color, rating, description, information, review) => {

@@ -91,7 +91,7 @@ async function generateData(category, type = null, page, sort = null, filter=nul
             category,
             type
         );
-
+        
     if (sort) {
       allProduct = await generateSort(sort, allProduct);
     }
