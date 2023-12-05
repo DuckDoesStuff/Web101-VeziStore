@@ -43,8 +43,8 @@
 				top: 0,
 				left: 0,
 				opacity: 0,
-				width: img.width * magnify,
-				height: img.height * magnify,
+				width: 600 * magnify,
+				height: 800 * magnify,
 				border: 'none',
 				maxWidth: 'none'
 			})

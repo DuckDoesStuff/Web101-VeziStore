@@ -31,13 +31,13 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-6">
 							<div class="product-main-image">
-								<img src="https://ucarecdn.com/{{productDetail.image.[0]}}/" alt="{{productDetail.name}}"
-									class="img-responsive" data-BigImgsrc="https://ucarecdn.com/{{productDetail.image.[0]}}/">
+								<img src="https://ucarecdn.com/{{productDetail.image.[0]}}/-/preview/600x800/" alt="{{productDetail.name}}"
+									class="img-responsive" data-BigImgsrc="https://ucarecdn.com/{{productDetail.image.[0]}}/-/preview/600x800/">
 							</div>
 							<div class="product-other-images">
 								{{#each productDetail.image}}
-								<a href="https://ucarecdn.com/{{this}}/" class="fancybox-button" rel="photos-lib">
-								<img alt="{{productDetail.name}}" src="https://ucarecdn.com/{{this}}/"></a>
+								<a href="https://ucarecdn.com/{{this}}/-/preview/600x800/" class="other-image-link">
+								<img alt="{{productDetail.name}}" src="https://ucarecdn.com/{{this}}/-/preview/600x800/"></a>
 								{{/each}}
 							</div>
 						</div>
@@ -64,28 +64,28 @@
 										<option>XL</option>
 									</select>
 								</div>
-								</div>
 							</div>
-							<div class="product-page-cart">
-								<div class="product-quantity">
-									<input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
-								</div>
-								<button class="btn btn-primary" type="submit">Add to cart</button>
+						</div>
+						<div class="product-page-cart">
+							<div class="product-quantity">
+								<input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
 							</div>
-							<div class="review">
-								<input type="range" value="{{productDetail.rating}}" step="0.25" id="backing4">
-								<div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"
-									data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5" data-rateit-readonly="true">
-								</div>
-								<a href="javascript:;">{{productDetail.review.length}} reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
+							<button class="btn btn-primary" type="submit">Add to cart</button>
+						</div>
+						<div class="review">
+							<input type="range" value="{{productDetail.rating}}" step="0.25" id="backing4">
+							<div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"
+								data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5" data-rateit-readonly="true">
 							</div>
-							<ul class="social-icons">
-								<li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
-								<li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
-								<li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
-								<li><a class="evernote" data-original-title="evernote" href="javascript:;"></a></li>
-								<li><a class="tumblr" data-original-title="tumblr" href="javascript:;"></a></li>
-							</ul>
+							<a href="javascript:;">{{productDetail.review.length}} reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
+						</div>
+						<ul class="social-icons">
+							<li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
+							<li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
+							<li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
+							<li><a class="evernote" data-original-title="evernote" href="javascript:;"></a></li>
+							<li><a class="tumblr" data-original-title="tumblr" href="javascript:;"></a></li>
+						</ul>
 					</div>
 
 					<div class="product-page-content">
@@ -175,3 +175,17 @@
 		<!-- END SIMILAR PRODUCTS -->
 	</div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.other-image-link').on('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+
+            // Get the clicked image source
+            var newImageSrc = $(this).find('img').attr('src');
+
+            // Set the main image source
+            $('.product-main-image img').attr('src', newImageSrc);
+        });
+    });
+</script>

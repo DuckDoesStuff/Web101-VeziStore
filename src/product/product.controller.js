@@ -30,26 +30,26 @@ const getProductByCategoryAndSubcategory = async (category, subcategory) => {
 	}
 }
 
-const getBestsellerProductsInCategory = async (category, subcategory) => {
+const getBestsellerProductsInCategory = async (category, subcategory, num = 3) => {
 	if (subcategory) {
 		return await Product.find({
 			category: {$in: [category]},
 			subcategory: {$in: [subcategory]}
-		}).sort({rating: -1}).limit(3).lean();
+		}).sort({rating: -1}).limit(num).lean();
 	}else {
 		return await Product.find({
 			category: {$in: [category]}
-		}).sort({rating: -1}).limit(3).lean();
+		}).sort({rating: -1}).limit(num).lean();
 	}
 }
 
-const getNewProducts = async () => {
-	const products = await Product.find().sort({createAt: -1}).limit(7).lean();
+const getNewProducts = async (num = 6) => {
+	const products = await Product.find().sort({createAt: -1}).limit(num).lean();
 	return products;
 }
 
-const getSaleProducts = async () => {
-	const products = await Product.find({discount: {$gt: 0}}).sort({discount: -1}).limit(6).lean();
+const getSaleProducts = async (num = 6) => {
+	const products = await Product.find({discount: {$gt: 0}}).sort({discount: -1}).limit(num).lean();
 	return products;
 }
 
