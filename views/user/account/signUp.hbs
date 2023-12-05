@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="utf-8">
-    <title> Vezi.admin </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -47,26 +46,27 @@
 
         <!-- Sign Up Start -->
         <div class="container-fluid">
-            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+            <div class="row align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-sm-12 col-xl-6">
                     <form class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="/sign-up" method="post">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h1 class="text-danger font-weight-bold mb-5">{{error}}</h1>
+                        <div class="d-flex align-items-center justify-content-between mb-5">
                             <a href="/" class="">
-                                <h2 class="text-primary"><i class="fa fa-hashtag me-2"></i>VEZI</h2>
+                                <h1 class="text-primary"><i class="fa fa-hashtag me-2"></i>VEZI</h1>
                             </a>
-                            <h2>Sign Up</h2>
+                            <h3>Sign Up</h3>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label label-font-size">Username</label>
-                            <input type="text" class="form-control label-font-size" id="username" name="username">
+                            <input required type="text" class="form-control label-font-size" id="username" name="username">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label label-font-size">Email address</label>
-                            <input type="email" class="form-control label-font-size" id="email" name="email">
+                            <input required type="email" class="form-control label-font-size" id="email" name="email">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label label-font-size">Password</label>
-                            <input type="password" class="form-control label-font-size" id="password" name="password">
+                            <input required type="password" class="form-control label-font-size" id="password" name="password">
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div class="form-check label-font-size">
@@ -75,7 +75,7 @@
                             </div>
                             <a href="" class="label-font-size">Forgot Password</a>
                         </div>
-                        <input type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</input>
+                        <button type="submit" class="btn btn-primary btn-block py-3" style="font-size:15px;">Sign up</button>
                         <p class="text-center mb-0 label-font-size">Already have an Account? <a href="/sign-in" class="label-font-size">Sign In</a></p>
                     </form>
                 </div>

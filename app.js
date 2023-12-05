@@ -105,19 +105,11 @@ const productInfoRouter = require("./routes/admin/product/product-info");
 
 // Normal routing
 
-// For all routes, store the originalUrl in session
-app.use((req, res, next) => {
-	req.session.returnTo = req.originalUrl;
-	next();
-});
-
-// Keep scrolling position when redirecting
-app.use((req, res, next) => {
-  const scrollPosition = req.query.scrollPosition || 0;
-
-	res.locals.scrollPosition = Number(scrollPosition);
-  next();
-});
+// app.use((req, res, next) => {
+// 	req.session.returnTo = req.originalUrl;
+// 	console.log("Return to: ", req.session.returnTo);
+// 	next();
+// });
 
 app.use("/", indexRouter);
 app.use("/home", indexRouter);

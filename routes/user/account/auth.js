@@ -9,7 +9,7 @@ passport.use(
         try {
             const user = await User.findOne({ username });
             if (!user) {
-                return done(null, false, { message: "Incorrect username." });
+                return done(null, false, { message: "Username doesn't exist" });
             }
             // if (!email) {
             //     return done(null, false, { message: "Incorrect email." });
@@ -17,13 +17,13 @@ passport.use(
 
             const isValidPassword = await user.isValidPassword(password);
             if (!isValidPassword) {
-                return done(null, false, { message: "Incorrect password." });
+                return done(null, false, { message: "Your password is incorrect, please try again" });
             }
 
             return done(null, user);
         } catch (error) {
             console.log(error);
-            return done(null, false, { message: "Something went wrong." });
+            return done(null, false, { message: "Something else went wrong please try again." });
         }
     })
 );
@@ -41,11 +41,11 @@ passport.deserializeUser(async (user, done) => {
 });
 
 router.get("/sign-in", (req, res) => {
-    res.render("user/account/signIn");
+    res.render("user/account/signIn", {title: "Sign In"});
 });
 
 router.get("/sign-up", (req, res) => {
-    res.render("user/account/signUp");
+    res.render("user/account/signUp", {title: "Sign Up"});
 });
 
 router.post("/sign-up", async (req, res) => {
@@ -55,6 +55,7 @@ router.post("/sign-up", async (req, res) => {
         // Check if the username or password is empty
         if (username === "" || email === "" || password === "") {
             return res.render("user/account/signUp", {
+                title: "Sign Up",
                 error: "Please fill in all fields.",
             });
         }
@@ -64,6 +65,7 @@ router.post("/sign-up", async (req, res) => {
         if (existingUser) {
             // showError('Username is already taken.');
             return res.render("user/account/signUp", {
+                title: "Sign Up",
                 error: "Username is already taken.",
             });
         }
@@ -73,6 +75,7 @@ router.post("/sign-up", async (req, res) => {
         if (existingEmail) {
             // showError('Username is already taken.');
             return res.render("user/account/signUp", {
+                title: "Sign Up",
                 error: "Email is already taken.",
             });
         }
@@ -86,6 +89,7 @@ router.post("/sign-up", async (req, res) => {
             if (err) {
                 console.error(err);
                 return res.render("user/account/signUp", {
+                    title: "Sign Up",
                     error: "Login after registration failed. Please try logging in manually.",
                 });
             }
@@ -94,6 +98,7 @@ router.post("/sign-up", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.render("user/account/signUp", {
+            title: "Sign Up",
             error: "Registration failed. Please try again.",
         });
     }
@@ -102,16 +107,20 @@ router.post("/sign-up", async (req, res) => {
 router.post("/sign-in", (req, res) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) {
-            return res.render("user/account/signIn", { error: err.message });
+            return res.render("user/account/signIn", {
+                title: "Sign In",
+                error: err.message });
         }
 
         if (!user) {
-            return res.render("user/account/signIn", { error: info.message });
+            return res.render("user/account/signIn", { 
+                error: info.message });
         }
 
         req.login(user, (err) => {
             if (err) {
                 return res.render("user/account/signIn", {
+                    title: "Sign In",
                     error: err.message,
                 });
             }
@@ -129,5 +138,6 @@ router.get("/logout", (req, res) => {
         res.redirect(req.session.returnTo || "/");
     });
 });
+
 
 module.exports = router;

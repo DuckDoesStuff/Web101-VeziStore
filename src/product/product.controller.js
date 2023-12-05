@@ -53,8 +53,8 @@ const getSaleProducts = async () => {
 	return products;
 }
 
-const getPopularProducts = async () => {
-	const products = await Product.find().sort({rating: -1}).limit(4).lean();
+const getPopularProducts = async (num = 4) => {
+	const products = await Product.find().sort({rating: -1}).limit(num).lean();
 	return products;
 }
 
@@ -94,13 +94,8 @@ const createReview = async (username, date, rating, review) => {
 
 const addReviewToProduct = async (id, review) => {
 	const product = await Product.findById(id);
-	product.review.push(review);
-	await product.save();
-}
-
-const updateProductReview = async (id, review) => {
-	const product = await Product.findById(id);
-	product.review.push(review);
+	product.review.push(review._id);
+	product.rating = (product.rating * (product.review.length - 1) + review.rating) / product.review.length;
 	await product.save();
 }
 
@@ -135,6 +130,5 @@ module.exports = {
 	createProduct,
 	createReview,
 	addReviewToProduct,
-	updateProductReview,
 	updateProduct
 }

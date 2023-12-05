@@ -63,12 +63,18 @@ async function generateData(id) {
       }).slice(0, 3);
     });
 
+  const popularProducts = 
+    await productController.getPopularProducts(6)
+    .then((products) => {
+      return products.filter((product) => {
+        return product._id != id;
+      });
+    });
+
   const reviews = await Promise.all(productDetail.review.map(async (review) => {
     const reviewDetail = await productController.getReviewByID(review._id);
     return reviewDetail;
   }));
-
-  console.log("Rewviews: ",reviews)
 
   const result = {
     title: category + " " + subcategory + ' category | Metronic Shop UI',
@@ -79,6 +85,7 @@ async function generateData(id) {
     js_files: js_files,
     productDetail: productDetail,
     similarProducts: similarProducts,
+    popularProducts: popularProducts,
     reviews: reviews
   };
   return result;
@@ -92,6 +99,7 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   generateData(req.params.id)
   .then((data) => {
+    res.locals.scrollPosition = req.session.scrollPosition;
     res.render('user/product-detail/productDetail', {...data, user:req.user})
   });
 });
@@ -99,7 +107,8 @@ router.get('/:id', function(req, res, next) {
 router.post('/:id/add-review', function(req, res, next) {
   productController.createReview(req.user.username, Date.now(), req.body.rating, req.body.review)
   .then((review) => {
-    productController.addReviewToProduct(req.params.id, review._id);
+    productController.addReviewToProduct(req.params.id, review);
+    req.session.scrollPosition = req.session.scrollPosition || 0;
     res.redirect('/product-detail/' + req.params.id);
   })
 });
