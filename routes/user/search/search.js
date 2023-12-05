@@ -80,7 +80,7 @@ router.get("/", async function (req, res, next) {
 
     const data = await performSearch(searchTerm, page);
 
-    console.log(searchTerm);
+    console.log("Search term: ",searchTerm);
     res.render("user/search/productSearch", data);
 });
 

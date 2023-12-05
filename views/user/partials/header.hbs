@@ -295,7 +295,7 @@
                   </span>
                 </div>
               </form>
-              <!--<script>
+              <script>
                 document.addEventListener('DOMContentLoaded', function () {
                   const searchForm = document.getElementById('search-info');
 
@@ -305,22 +305,17 @@
                       // Lấy giá trị tìm kiếm từ ô input
                       const searchTerm = document.getElementById('search').value.trim();
 
-                      fetch(`/search-product/?term=${searchTerm}`)
-                      .then(response => {
-                          if (!response.ok) {
-                              throw new Error(`Network response was not ok: ${response.status}`);
-                          }
-                          return response.json();
-                      })
-                      .then(data => {
-                          // Xử lý kết quả tìm kiếm, có thể làm gì đó với dữ liệu nhận được từ server
-                          console.log(data);
-                      })
-                      .catch(error => console.error('Error:', error));
+                      // Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+                      if (!searchTerm) {
+                          return;
+                      }
+                      else {
+                        window.location.href = `/search-product?search=${searchTerm}`;
+                      }
                       
                   });
               });
-              </script>-->
+              </script>
             </div>
           </li>
           <!-- END TOP SEARCH -->
