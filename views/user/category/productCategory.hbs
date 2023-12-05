@@ -1,7 +1,11 @@
 <div class="title-wrapper">
 	<div class="container">
 		<div class="container-inner">
+			{{#if currentCategory}}
 			<h1><span>{{currentCategory}}</span> CATEGORY</h1>
+			{{else}}
+			<h1><span> SEARCH: </span> {{searchName}}</h1>
+			{{/if}}
 		</div>
 	</div>
 </div>
@@ -11,32 +15,41 @@
 	<div class="container">
 		<ul class="breadcrumb">
 			<li><a href="/home">Home</a></li>
+
+			{{#if currentCategory}}
 			<li><a href="/category/?cate={{lowercase currentCategory}}">{{currentCategory}}</a></li>
+			{{else}}
+			<li>Search result for: {{searchName}}</li>
+			{{/if}}
+
 			{{#if currentType}}
 			<li class="active">{{currentType}}</li>
 			{{/if}}
 		</ul>
 		<!-- BEGIN SIDEBAR & CONTENT -->
 		<div class="row margin-bottom-40">
+			<!-- BEGIN SIDEBAR -->
 			<div class="sidebar col-md-3 col-sm-5">
-			{{> categorySidebar}}
-			{{!-- {{> filterSidebar}} --}}
-			{{#if bestsellerData.length}}
-			<h2>Popular products</h2>
-			<div class="sidebar-products clearfix">
-				{{#each bestsellerData}}
-				{{#with this}}
-				{{> productSidebar}}
-				{{/with}}
-				{{/each}}
+				{{> categorySidebar}}
+				<!-- {{> filterSidebar}} -->
+				{{#if bestsellerData.length}}
+				<h2>Popular products</h2>
+				<div class="sidebar-products clearfix">
+					{{#each bestsellerData}}
+					{{#with this}}
+					{{> productSidebar}}
+					{{/with}}
+					{{/each}}
+				</div>
+				{{/if}}
 			</div>
-			{{/if}}
-		</div>
+			<!-- END SIDEBAR -->
 
 			<!-- BEGIN CONTENT -->
 			<div class="col-md-9 col-sm-7">
 				<!-- BEGIN SORTER -->
-				{{!-- <div class="row list-view-sorting clearfix">
+				<!--
+				<div class="row list-view-sorting clearfix">
 					<div class="col-md-2 col-sm-2 list-view">
 						<a href="javascript:;"><i class="fa fa-th-large"></i></a>
 						<a href="javascript:;"><i class="fa fa-th-list"></i></a>
@@ -67,24 +80,24 @@
 							</select>
 						</div>
 					</div>
-				</div> --}}
+				</div>-->
 				<!-- END SORTER -->
 				
 				<!-- BEGIN PRODUCT LIST -->
 				<div class="row">
-				{{#if productData.length}}
-					{{#each productData}}
-					{{#with this}}
-					<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
-						{{> productItem}}
-					</div>
-					{{/with}}
-					{{/each}}
-				{{else}}
-					<div class="col-md-12 col-sm-12 col-xs-12 margin-bottom-40">
-						<h3>No product found</h3>
-					</div>
-				{{/if}}
+					{{#if productData.length}}
+						{{#each productData}}
+						{{#with this}}
+						<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
+							{{> productItem}}
+						</div>
+						{{/with}}
+						{{/each}}
+					{{else}}
+						<div class="col-md-12 col-sm-12 col-xs-12 margin-bottom-40">
+							<h3>No product found</h3>
+						</div>
+					{{/if}}
 				</div>
 
 				{{!-- <div class="row product-list">

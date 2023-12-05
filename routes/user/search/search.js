@@ -56,7 +56,7 @@ async function performSearch(searchTerm, page) {
             css_files: css_files,
             js_files: js_files,
             bestsellerData: { ...bestsellerData },
-            productData: { ...productData },
+            productData: productData,
             productCount: productData.length,
             pages: Array.from(
                 { length: Math.ceil(searchResult.length / 9) },
@@ -79,7 +79,7 @@ router.get("/", async function (req, res, next) {
 
     const data = await performSearch(searchTerm, page);
 
-    res.render("user/search/productSearch", data);
+    res.render("user/category/productCategory", data);
 });
 
 module.exports = router;
