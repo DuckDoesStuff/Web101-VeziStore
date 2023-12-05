@@ -279,14 +279,40 @@
             <span class="sep"></span>
             <i class="fa fa-search search-btn"></i>
             <div class="search-box">
-              <form action="#">
+              <form action="/search-product" method="post" id="search-info">
                 <div class="input-group">
-                  <input type="text" placeholder="Search" class="form-control">
+                  <input type="text" placeholder="Search" class="form-control" id="search" name="search">
                   <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Search</button>
+                    <input class="btn btn-primary" type="submit" form="search-info">Search</input>
                   </span>
                 </div>
               </form>
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const searchForm = document.getElementById('search-info');
+
+                  searchForm.addEventListener('submit', function (event) {
+                      event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+                      // Lấy giá trị tìm kiếm từ ô input
+                      const searchTerm = document.getElementById('search').value.trim();
+
+                      fetch(`/search-product/?term=${searchTerm}`)
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error(`Network response was not ok: ${response.status}`);
+                          }
+                          return response.json();
+                      })
+                      .then(data => {
+                          // Xử lý kết quả tìm kiếm, có thể làm gì đó với dữ liệu nhận được từ server
+                          console.log(data);
+                      })
+                      .catch(error => console.error('Error:', error));
+                      
+                  });
+              });
+              </script>
             </div>
           </li>
           <!-- END TOP SEARCH -->

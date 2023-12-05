@@ -22,7 +22,7 @@ router.get("/", function (req, res, next) {
 });
 
 // Thêm endpoint API để lấy danh sách subcategory dựa trên category
-router.get("/api/subcategories/:category",async (req, res) => {
+router.get("/",async (req, res) => {
     const category = req.params.category;
     // Thay thế logic này bằng cách lấy danh sách subcategory tương ứng với category từ cơ sở dữ liệu hoặc nguồn dữ liệu khác
     let subcategories = [];

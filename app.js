@@ -6,11 +6,11 @@ const logger = require("morgan");
 const exphbs = require("express-handlebars");
 const vhost = require("vhost");
 const db = require("./src/db");
-const session = require('express-session');
-const passport = require('passport');
-const MongoStore = require('connect-mongo');
-const dotenv = require('dotenv');
-const setLayout = require('./src/middleware');
+const session = require("express-session");
+const passport = require("passport");
+const MongoStore = require("connect-mongo");
+const dotenv = require("dotenv");
+const setLayout = require("./src/middleware");
 dotenv.config();
 
 db();
@@ -26,36 +26,36 @@ const port = process.env.PORT || 3000;
 
 // View engine configuration
 const hbs = exphbs.create({
-	extname: ".hbs",
-	defaultLayout: "layout",
-	layoutsDir: path.join(__dirname, "views/user"),
-	partialsDir: path.join(__dirname, "views/user/partials"),
-	helpers: {
-		eq: function (v1, v2) {
-			return v1 === v2;
-		},
-		lowercase: function (str) {
-			return str.toLowerCase();
-		},
-		subtract: (price, discount) => {
-			return price - discount;
-		}
-	},
+    extname: ".hbs",
+    defaultLayout: "layout",
+    layoutsDir: path.join(__dirname, "views/user"),
+    partialsDir: path.join(__dirname, "views/user/partials"),
+    helpers: {
+        eq: function (v1, v2) {
+            return v1 === v2;
+        },
+        lowercase: function (str) {
+            return str.toLowerCase();
+        },
+        subtract: (price, discount) => {
+            return price - discount;
+        },
+    },
 });
 
 const adminHbs = exphbs.create({
-	extname: ".hbs",
-	defaultLayout: "admin-layout",
-	layoutsDir: path.join(__dirname, "views/admin"),
-	partialsDir: path.join(__dirname, "views/admin/partials"),
-	helpers: {
-		eq: function (v1, v2) {
-			return v1 === v2;
-		},
-		lowercase: function (str) {
-			return str.toLowerCase();
-		}
-	},
+    extname: ".hbs",
+    defaultLayout: "admin-layout",
+    layoutsDir: path.join(__dirname, "views/admin"),
+    partialsDir: path.join(__dirname, "views/admin/partials"),
+    helpers: {
+        eq: function (v1, v2) {
+            return v1 === v2;
+        },
+        lowercase: function (str) {
+            return str.toLowerCase();
+        },
+    },
 });
 
 // Setup view engine for both admin and normal routing
@@ -74,13 +74,15 @@ app.use(express.static(path.join(__dirname, "public")));
 admin.use(express.json());
 admin.use(express.urlencoded({ extended: true }));
 // Express session setup
-app.use(session({
-	secret: process.env.SECRET_KEY,
-	resave: false,
-	saveUninitialized: true,
-	store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
-	cookie: { maxAge: 30 * 1000 } // 30 secs in ms
-}));
+app.use(
+    session({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: true,
+        store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
+        cookie: { maxAge: 30 * 1000 }, // 30 secs in ms
+    })
+);
 
 // Passport initialize and session
 app.use(passport.initialize());
@@ -112,6 +114,7 @@ app.use("/category/", categoryRouter);
 app.use("/lookup/", categoryRouter);
 app.use("/shop-cart", cartRouter);
 app.use("/mywishlist", wishlistRouter);
+app.use("/search-product/", require("./routes/user/search/search"));
 // app.use("/sign-in", signInRouter);
 // app.use("/sign-up", signUpRouter);
 app.use("/", require("./routes/user/account/auth"));
@@ -126,24 +129,25 @@ admin.use("/order-info", orderInfoRouter);
 admin.use("/product-create", productCreateRouter);
 admin.use("/product-info", productInfoRouter);
 
+
 app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	next(createError(404));
+    next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get("env") === "development" ? err : {};
-	// render the error page
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get("env") === "development" ? err : {};
+    // render the error page
 
-	res.status(err.status || 500);
-	res.render("error");
+    res.status(err.status || 500);
+    res.render("error");
 });
 
 module.exports = app;
