@@ -49,7 +49,6 @@ async function performSearch(searchTerm, page) {
         );
         const productData = searchResult.slice((page - 1) * 9, page * 9);
         const bestsellerData = await productController.getPopularProducts();
-        console.log(productData);
         return {
             title: "Vezi",
             searchName: searchTerm,
@@ -80,7 +79,6 @@ router.get("/", async function (req, res, next) {
 
     const data = await performSearch(searchTerm, page);
 
-    console.log("Search term: ",searchTerm);
     res.render("user/search/productSearch", data);
 });
 
