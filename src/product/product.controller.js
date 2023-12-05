@@ -11,9 +11,9 @@ const getProductById = async (id) => {
 		return product;
 }
 
-const getProductByName = async (name) => {
-		const product = await Product.find({name: name}).lean();
-		return product;
+const getProductsByName = async (name) => {
+  const products = await Product.find({ name: { $regex: new RegExp(name, 'i') } }).lean();
+  return products;
 }
 
 const getProductByCategoryAndSubcategory = async (category, subcategory) => {
@@ -120,7 +120,7 @@ const updateProduct = async (id, name, image, price, discount, availability, cat
 module.exports = {
 	getAllProduct,
 	getProductById,
-	getProductByName,
+	getProductsByName,
 	getProductByCategoryAndSubcategory,
 	getBestsellerProductsInCategory,
 	getNewProducts,

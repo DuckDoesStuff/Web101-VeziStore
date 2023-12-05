@@ -44,14 +44,12 @@ const categoriesData = [
 
 async function performSearch(searchTerm, page) {
     try {
-        // Sử dụng hàm tìm kiếm của Mongoose hoặc cơ sở dữ liệu của bạn
-        const searchResult = await productController.getProductByName(
+        const searchResult = await productController.getProductsByName(
             searchTerm
         );
         const productData = searchResult.slice((page - 1) * 9, page * 9);
         const bestsellerData = await productController.getPopularProducts();
-
-        // Trả về kết quả tìm kiếm
+        console.log(productData);
         return {
             title: "Vezi",
             searchName: searchTerm,
@@ -71,9 +69,8 @@ async function performSearch(searchTerm, page) {
             curPage: page,
         };
     } catch (error) {
-        // Xử lý lỗi nếu có
         console.error("Error performing search:", error);
-        throw error; // Nếu không muốn xử lý lỗi ở đây, bạn có thể loại bỏ dòng này.
+        throw error;
     }
 }
 
@@ -81,10 +78,8 @@ router.get("/", async function (req, res, next) {
     const searchTerm = req.query.term;
     const page = req.query.page || 1;
 
-    // Gọi hàm xử lý tìm kiếm từ backend controller hoặc service
     const data = await performSearch(searchTerm, page);
 
-    // Trả kết quả về phía frontend dưới dạng JSON
     console.log(searchTerm);
     res.render("user/search/productSearch", data);
 });
