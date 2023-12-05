@@ -58,7 +58,29 @@ async function generateSort(type, allProducts) {
     return allProducts;
 }
 
-async function generateData(category, type = null, page, sort = null) {
+async function generatePrice(type, allProducts) {
+  if (type == "0-100") {
+    return allProducts.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 0 && productPrice <= 100;
+    });
+  }
+  if (type == "100-200") {
+    return allProducts.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 100 && productPrice <= 200;
+    });
+  }
+  if (type == "200+") {
+    return allProducts.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 200;
+    });
+  }
+  return allProducts;
+}
+
+async function generateData(category, type = null, page, sort = null, filter=null) {
     const currentCategory =
         category.charAt(0).toUpperCase() + category.slice(1);
     const currentType = type
@@ -71,8 +93,11 @@ async function generateData(category, type = null, page, sort = null) {
         );
 
     if (sort) {
-        allProduct = await generateSort(sort, allProduct);
+      allProduct = await generateSort(sort, allProduct);
     }
+    if (filter) {
+      allProduct = await generatePrice(filter, allProduct);
+    } 
     const productData = allProduct.slice((page - 1) * 9, page * 9);
 
     const bestsellerData =
@@ -109,9 +134,11 @@ router.get("/", async function (req, res, next) {
     const type = req.query.type;
     const page = req.query.page || 1;
     const sort = req.query.sort;
-    const data = await generateData(cate, type, page, sort);
+    const filter = req.query.filter;
+    const data = await generateData(cate, type, page, sort, filter);
     console.log(cate);
     console.log(sort);
+
     res.render("user/category/productCategory", { ...data, user: req.user });
 });
 

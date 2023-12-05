@@ -42,12 +42,20 @@ const categoriesData = [
     },
 ];
 
-async function performSearch(searchTerm, page) {
+async function performSearch(searchTerm, page, sort = null, filter=null) {
     try {
         const searchResult = await productController.getProductsByName(
             searchTerm
         );
-        const productData = searchResult.slice((page - 1) * 9, page * 9);
+        let allProduct = searchResult;
+
+        if (sort) {
+            allProduct = await generateSort(sort, allProduct);
+        }
+        if (filter) {
+            allProduct = await generatePrice(filter, allProduct);
+         } 
+        const productData = allProduct.slice((page - 1) * 9, page * 9);
         const bestsellerData = await productController.getPopularProducts();
         return {
             title: "Vezi",

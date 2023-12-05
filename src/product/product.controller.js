@@ -135,6 +135,7 @@ const sortProductsByTime = (productData) => {
 	return sortedProducts;
   };
 
+
 const updateProduct = async (id, name, image, price, discount, availability, category, subcategory, size, color, rating, description, information, review) => {
 	const product = await Product.findById(id);
 	product.name = name;

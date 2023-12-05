@@ -1,15 +1,48 @@
 <div class="sidebar-filter margin-bottom-25">
 	<h2>Filter</h2>
-	<h3>Availability</h3>
-	<div class="checkbox-list">
-		<label><input type="checkbox"> Not Available (3)</label>
-		<label><input type="checkbox"> In Stock (26)</label>
-	</div>
-
 	<h3>Price</h3>
-	<p>
-		<label for="amount">Range:</label>
-		<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;">
-	</p>
-	<div id="slider-range"></div>
+	<div class="radio-list">
+		<label><input type="radio" name="price-range" value="0-100"> $0 - $100</label>
+		<label><input type="radio" name="price-range" value="100-200"> $100 - $200</label>
+		<label><input type="radio" name="price-range" value="200+"> Over $200</label>
+		<label><input type="radio" name="price-range" value="all" checked> All product</label>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const radioList = document.querySelectorAll('input[name="price-range"]');
+			const filterParam = new URLSearchParams(window.location.search).get('filter');
+
+			if (filterParam) {
+				const selectedRadio = document.querySelector(`input[name="price-range"][value="${filterParam}"]`);
+				if (selectedRadio) {
+					selectedRadio.checked = true;
+				}
+			}
+			radioList.forEach(function (radio, selectedRadio) {
+				radio.addEventListener('click', function () {
+					// Lấy giá trị được chọn
+					selectedRadio.checked = false;
+					const selectedValue = document.querySelector('input[name="price-range"]:checked').value;
+					
+					
+
+					// Get the current URL
+					const currentUrl = window.location.href;
+
+					// Create a URL object from the current URL
+					const url = new URL(currentUrl);
+					url.searchParams.delete('page');
+
+					// Set the new sort parameter
+					url.searchParams.set('filter', selectedValue);
+
+					// Redirect to the updated URL
+					window.location.href = url.toString();
+					// Thực hiện xử lý tương ứng với giá trị đã chọn
+					console.log(selectedValue);
+				});
+			});
+		});
+	</script>
+
 </div>
