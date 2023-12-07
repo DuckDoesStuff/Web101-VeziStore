@@ -11,6 +11,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 const dotenv = require("dotenv");
 const setLayout = require("./src/middleware");
+const express_handlebars_sections = require('express-handlebars-sections');
 dotenv.config();
 
 db();
@@ -42,6 +43,7 @@ const hbs = exphbs.create({
         },
     },
 });
+express_handlebars_sections(hbs);
 
 const adminHbs = exphbs.create({
     extname: ".hbs",
@@ -87,7 +89,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Normal router
-const homeRouter = require("./routes/user/home/index");
+const homeRouter = require("./routes/user/home/");
+const productRouter = require("./routes/user/product/");
 // const categoryRouter = require("./routes/user/category/category");
 // const productRouter = require("./routes/user/product-detail/product-detail");
 // const cartRouter = require("./routes/user/shop-cart/shop-cart");
@@ -113,6 +116,7 @@ const productInfoRouter = require("./routes/admin/product/product-info");
 
 app.use("/", homeRouter);
 app.use("/home", homeRouter);
+app.use("/product/", productRouter);
 // app.use("/product-detail/", productRouter);
 // app.use("/category/", categoryRouter);
 // app.use("/lookup/", categoryRouter);

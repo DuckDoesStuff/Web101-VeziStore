@@ -2,22 +2,23 @@
 <ul class="list-group margin-bottom-25 sidebar-menu">
 	{{#each categories}}
 	{{#with this}}
-
+	
 	<li class="list-group-item clearfix dropdown {{#if (eq ../currentCategory name)}}active{{/if}}">
-		<a href="/category/?cate={{lowercase name}}" class="{{#if (eq ../currentCategory name)}}collapsed{{/if}}">
+		<a href="/product/?cate={{lowercase name}}" class="{{#if (eq ../currentCategory name)}}collapsed{{/if}}">
 			<i class="fa fa-angle-right"></i>
 			{{name}}
 		</a>
 
-		<ul class="dropdown-menu" style="	{{#if (eq ../currentCategory name)}}
-													display:block;
-												{{else}}
-													display:none;
-												{{/if}}">
+		<ul class="dropdown-menu" style="	
+							{{#if (eq ../currentCategory name)}}
+								display:block;
+							{{else}}
+								display:none;
+							{{/if}}">
 
-			{{#each types}}
+			{{#each subcategory}}
 			<li class="{{#if (eq ../../currentType this)}}active{{/if}}">
-				<a href="/category/?cate={{lowercase ../name}}&type={{lowercase this}}"> {{this}}</a>
+				<a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}"> {{this}}</a>
 			</li>
 			{{/each}}
 

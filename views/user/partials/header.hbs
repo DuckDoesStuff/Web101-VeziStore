@@ -146,53 +146,24 @@
       <!-- BEGIN NAVIGATION -->
       <div class="header-navigation">
         <ul>
-          {{!-- Woman --}}
+          {{#each categories}}
+          {{#with this}}
           <li class="dropdown">
-            <a class="dropdown-toggle" data-target="#" href="/category/?cate=woman">
-              Woman
-
+            <a class="dropdown-toggle" data-target="#" href="/product/?cate={{lowercase name}}">
+              {{name}}
             </a>
 
             <!-- BEGIN DROPDOWN MENU -->
             <ul class="dropdown-menu">
-              <li><a href="/category/?cate=woman&type=tops">Tops</a></li>
-              <li><a href="/category/?cate=woman&type=dresses">Dresses</a></li>
-              <li><a href="/category/?cate=woman&type=activewear">Activewear</a></li>
-              <li><a href="/category/?cate=woman&type=accessories">Accessories</a></li>
-              <li><a href="/category/?cate=woman&type=footwear">Footwear</a></li>
+              {{#each subcategory}}
+              <li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
+              {{/each}}
             </ul>
             <!-- END DROPDOWN MENU -->
+
           </li>
-
-          {{!-- Men --}}
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-target="#" href="/category/?cate=man">
-              Man
-
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="/category/?cate=man&type=t-shirts">T-Shirts</a></li>
-              <li><a href="/category/?cate=man&type=shirts">Shirts</a></li>
-              <li><a href="/category/?cate=man&type=bottoms">Bottoms</a></li>
-              <li><a href="/category/?cate=man&type=outterwear">Outterwear</a></li>
-              <li><a href="/category/?cate=man&type=footwear">Footwear</a></li>
-            </ul>
-          </li>
-
-          {{!-- Kids --}}
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-target="#" href="/category/?cate=kids">
-              Kids
-              
-            </a>
-
-            <ul class="dropdown-menu">
-              <li><a href="/category/?cate=kids&type=sleepwear">Sleepwear</a></li>
-              <li><a href="/category/?cate=kids&type=school">School</a></li>
-              <li><a href="/category/?cate=kids&type=activity">Activity</a></li>
-              <li><a href="/category/?cate=kids&type=summer">Summer</a></li>
-            </ul>
-          </li>
+          {{/with}}
+          {{/each}}
 
           {{!-- New --}}
           <li class="dropdown dropdown100 nav-catalogue">
@@ -253,33 +224,6 @@
               </li>
             </ul>
           </li>
-
-          {{!-- Page menu start --}}
-          {{!-- <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
-              Pages
-
-            </a>
-
-            <ul class="dropdown-menu">
-              <li class="active"><a href="/home">Home</a></li>
-              <li><a href="#">Product categories</a></li>
-              <li><a href="#">Product Page</a></li>
-              <li><a href="shop-shopping-cart-null.html">Shopping Cart (Null Cart)</a></li>
-              <li><a href="#">Shopping Cart</a></li>
-              <li><a href="shop-checkout.html">Checkout</a></li>
-              <li><a href="shop-about.html">About</a></li>
-              <li><a href="shop-contacts.html">Contacts</a></li>
-              <li><a href="shop-account.html">My account</a></li>
-              <li><a href="#">My Wish List</a></li>
-              <li><a href="shop-goods-compare.html">Product Comparison</a></li>
-              <li><a href="shop-standart-forms.html">Standart Forms</a></li>
-              <li><a href="shop-faq.html">FAQ</a></li>
-              <li><a href="shop-privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="shop-terms-conditions-page.html">Terms &amp; Conditions</a></li>
-            </ul>
-          </li> --}}
-          {{!-- Page menu end --}}
 
 
           <!-- BEGIN TOP SEARCH -->

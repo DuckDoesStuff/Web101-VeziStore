@@ -100,7 +100,7 @@
 			<div class="col-md-12 sale-product">
 				<h2>New Arrivals</h2>
 				<div class="owl-carousel owl-carousel5">
-					{{#each newestProducts}}
+					{{#each newProducts}}
 					{{#with this}}
 					{{> productItem}}
 					{{/with}}
@@ -118,37 +118,20 @@
 				<!-- BEGIN SIDEBAR -->
 				<div class="sidebar col-md-3 col-sm-4">
 					<ul class="list-group margin-bottom-25 sidebar-menu">
+						{{#each categories}}
+						{{#with this}}
 						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-								Woman</a>
-							<ul class="dropdown-menu">
-								<li><a href="/category/?cate=woman&type=tops">Tops</a></li>
-								<li><a href="/category/?cate=woman&type=dresses">Dresses</a></li>
-								<li><a href="/category/?cate=woman&type=activewear">Activewear</a></li>
-								<li><a href="/category/?cate=woman&type=accessories">Accessories</a></li>
-								<li><a href="/category/?cate=woman&type=footwear">Footwear</a></li>
-							</ul>
-						</li>
+								{{name}}
+							</a>
 
-						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-								Man</a>
 							<ul class="dropdown-menu">
-								<li><a href="/category/?cate=man&type=t-shirts">T-Shirts</a></li>
-								<li><a href="/category/?cate=man&type=shirts">Shirts</a></li>
-								<li><a href="/category/?cate=man&type=bottoms">Bottoms</a></li>
-								<li><a href="/category/?cate=man&type=outerwear">Outterwear</a></li>
-								<li><a href="/category/?cate=man&type=footwear">Footwear</a></li>
+								{{#each subcategory}}
+								<li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
+								{{/each}}
 							</ul>
 						</li>
-
-						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-								Kids</a>
-							<ul class="dropdown-menu">
-								<li><a href="/category/?cate=kids&type=sleepwear">Sleepwear</a></li>
-								<li><a href="/category/?cate=kids&type=school">School</a></li>
-								<li><a href="/category/?cate=kids&type=activity">Activity</a></li>
-								<li><a href="/category/?cate=kids&type=summer">Summer</a></li>
-							</ul>
-						</li>
+						{{/with}}
+						{{/each}}
 					</ul>
 				</div>
 				<!-- END SIDEBAR -->

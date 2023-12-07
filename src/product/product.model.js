@@ -18,17 +18,4 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model('Product', productSchema, 'product');
-
-const reviewSchema = new mongoose.Schema({
-	username:String,
-	date: mongoose.Schema.Types.Date,
-	rating: Number,
-	review: String
-})
-
-const Review = mongoose.model('Review', reviewSchema, 'review');
-
-module.exports = {
-	Product,
-	Review
-}
+exports.Product = Product;

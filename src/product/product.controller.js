@@ -1,175 +1,58 @@
-const Product = require('./product.model').Product;
-const Review = require('./product.model').Review;
+const productService = require("./product.service");
+const categoryService = require('../category/category.service');
 
-const getAllProduct = async () => {
-		const products = await Product.find().lean();
-		return products;
+const home = async (req,res,next) => {
+	res.render("user/home", {
+		title: "Vezi Store | Home",
+		user: req.user,
+		newProducts: await productService.getNewProducts(),
+		saleProducts: await productService.getSaleProducts(),
+		popularProducts: await productService.getPopularProducts(),
+		categories: await categoryService.getAllCategory(),
+		subcategories: await categoryService.getAllSubcategory(),
+	});
 }
+exports.home = home;
 
-const getProductById = async (id) => {
-		const product = await Product.findById(id).lean();
-		return product;
-}
-
-const getProductsByName = async (name) => {
-  const products = await Product.find({ name: { $regex: new RegExp(name, 'i') } }).lean();
-  return products;
-}
-
-const getProductByCategoryAndSubcategory = async (category, subcategory) => {
-	if (subcategory) {
-		return await Product.find({
-												category: {$in: [category]},
-												subcategory: {$in: [subcategory]}
-											}).lean();
-	}else {
-		return await Product.find({
-												category: {$in: [category]}
-											}).lean();
-	
+const catalog = async (req,res,next) => {
+	const page = req.query.page || 1;
+	const sort = req.query.sort || 0;
+	const num = 9;
+	let products = await productService.getProductByCategoryAndSubcategory(req.query.cate, req.query.type);
+	const productCount = await productService.countProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
+	switch (sort) {
+		case 1:
+			products = productService.sortProductsByTime(products);
+			products.slice((page - 1) * num, (page - 1) * num + num);
+			break;
+		case 2:
+			products = productService.sortProductsByPriceDes(products);
+			products.slice((page - 1) * num, (page - 1) * num + num);
+			break;
+		case 3:
+			products = productService.sortProductsByPriceAsc(products);
+			products.slice((page - 1) * num, (page - 1) * num + num);
+			break;
 	}
-}
 
-const getBestsellerProductsInCategory = async (category, subcategory, num = 3) => {
-	if (subcategory) {
-		return await Product.find({
-			category: {$in: [category]},
-			subcategory: {$in: [subcategory]}
-		}).sort({rating: -1}).limit(num).lean();
-	}else {
-		return await Product.find({
-			category: {$in: [category]}
-		}).sort({rating: -1}).limit(num).lean();
-	}
-}
+	const popularProducts = await productService.getPopularProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
 
-const getNewProducts = async (num = 6) => {
-	const products = await Product.find().sort({createAt: -1}).limit(num).lean();
-	return products;
-}
+	const currentCategory = req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
+	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
 
-const getSaleProducts = async (num = 6) => {
-	const products = await Product.find({discount: {$gt: 0}}).sort({discount: -1}).limit(num).lean();
-	return products;
-}
 
-const getPopularProducts = async (num = 4) => {
-	const products = await Product.find().sort({rating: -1}).limit(num).lean();
-	return products;
-}
-
-const getReviewByID = async (id) => {
-	const review = await Review.findById(id).lean();
-	return review;
-}
-
-const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color=[], rating=0, description, information, review=[]) => {
-	const newProduct = new Product({
-		name: name,
-		image: image,
-		price: price,
-		discount: discount,
-		availability: availability,
-		category: category,
-		subcategory: subcategory,
-		size: size,
-		color: color,
-		rating: rating,
-		description: description,
-		information: information,
-		review: review,
+	res.render("user/catalog", {
+		title: "Vezi Store | " + currentCategory + " " + currentType + " | Catalog",
+		user: req.user,
+		categories: await categoryService.getAllCategory(),
+		subcategories: await categoryService.getAllSubcategory(),
+		currentCategory: currentCategory,
+		currentType: currentType,
+		sort: sort,
+		products: products,
+		popularProducts: popularProducts,
+		currentPage: page,
+		totalPages: Math.ceil(productCount / 9),
 	});
-	return await newProduct.save();
 }
-
-const createReview = async (username, date, rating, review) => {
-	const newReview = new Review({
-		username: username,
-		date: date,
-		rating: rating,
-		review: review
-	});
-	return await newReview.save();
-}
-
-const addReviewToProduct = async (id, review) => {
-	const product = await Product.findById(id);
-	product.review.push(review._id);
-	product.rating = (product.rating * (product.review.length - 1) + review.rating) / product.review.length;
-	await product.save();
-}
-
-
-const sortProductsByTime = (productData) => {
-	const sortedProducts = [...productData];
-
-	sortedProducts.sort((a, b) => {
-	  const timeA = new Date(a.createAt).getTime();
-	  const timeB = new Date(b.createAt).getTime();
-	  return timeB - timeA;
-	});
-  
-	return sortedProducts;
-};
-
-const sortProductsByPriceDes = (productData) => {
-	const sortedProducts = [...productData];
-
-	sortedProducts.sort((a, b) => {
-		const priceA = a.price - a.discount;
-		const priceB = b.price - b.discount;
-		return priceB - priceA;
-	});
-
-	return sortedProducts;
-};
-
-const sortProductsByPriceAsc = (productData) => {
-	const sortedProducts = [...productData];
-
-	sortedProducts.sort((a, b) => {
-		const priceA = a.price - a.discount;
-		const priceB = b.price - b.discount;
-		return priceA - priceB;
-	});
-
-	return sortedProducts;
-};
-
-
-const updateProduct = async (id, name, image, price, discount, availability, category, subcategory, size, color, rating, description, information, review) => {
-	const product = await Product.findById(id);
-	product.name = name;
-	product.image = image;
-	product.price = price;
-	product.discount = discount;
-	product.availability = availability;
-	product.category = category;
-	product.subcategory = subcategory;
-	product.size = size;
-	product.color = color;
-	product.rating = rating;
-	product.description = description;
-	product.information = information;
-	product.review = review;
-	await product.save();
-}
-
-module.exports = {
-	getAllProduct,
-	getProductById,
-	getProductsByName,
-	getProductByCategoryAndSubcategory,
-	getBestsellerProductsInCategory,
-	getNewProducts,
-	getSaleProducts,
-	getPopularProducts,
-	getReviewByID,
-	createProduct,
-	createReview,
-	addReviewToProduct,
-	updateProduct,
-	sortProductsByTime,
-	sortProductsByPriceAsc,
-	sortProductsByPriceDes
-}
+exports.catalog = catalog;

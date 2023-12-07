@@ -1,0 +1,152 @@
+<div class="title-wrapper">
+	<div class="container">
+		<div class="container-inner">
+			{{#if currentCategory}}
+			<h1><span>{{currentCategory}}</span> CATEGORY</h1>
+			{{else}}
+			<h1><span> SEARCH: </span> {{searchName}}</h1>
+			{{/if}}
+		</div>
+	</div>
+</div>
+
+
+<div class="main">
+	<div class="container">
+		{{> productBreadcrumb}}
+		<!-- BEGIN SIDEBAR & CONTENT -->
+		<div class="row margin-bottom-40">
+			<!-- BEGIN SIDEBAR -->
+			<div class="sidebar col-md-3 col-sm-5">
+				{{> categorySidebar}}
+				{{> filterSidebar}}
+				{{> popularProductSidebar}}
+			</div>
+			<!-- END SIDEBAR -->
+
+			<!-- BEGIN CONTENT -->
+			<div class="col-md-9 col-sm-7">
+				<!-- BEGIN SORTER -->
+				<div class="row list-view-sorting clearfix">
+					<div class="col-md-2 col-sm-2 list-view">
+						<a href="javascript:;"><i class="fa fa-th-large"></i></a>
+						<a href="javascript:;"><i class="fa fa-th-list"></i></a>
+					</div>
+					<div class="col-md-10 col-sm-10">
+						<div class="pull-right">
+							<label class="control-label">Sort&nbsp;By:</label>
+							<select class="form-control input-sm" name="sort-by" id="sort-by">
+								<option value="0">Default</option>
+								<option value="1"> New arrivals</option>
+								<option value="2"> Price (Low &gt; High)</option>
+								<option value="3"> Price (High &gt; Low)</option>
+								{{!-- <option value="#?sort=rating&amp;order=DESC">Rating (Highest)</option>
+								<option value="#?sort=rating&amp;order=ASC">Rating (Lowest)</option>
+								<option value="#?sort=p.model&amp;order=ASC">Model (A - Z)</option>
+								<option value="#?sort=p.model&amp;order=DESC">Model (Z - A)</option> --}}
+							</select>
+						</div>
+					</div>
+				</div>
+				<!-- END SORTER -->
+
+				<!-- BEGIN PRODUCT LIST -->
+				<div class="row">
+					{{#if products.length}}
+					{{#each products}}
+					{{#with this}}
+					<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
+						{{> productItem}}
+					</div>
+					{{/with}}
+					{{/each}}
+					{{else}}
+					<div class="col-md-12 col-sm-12 col-xs-12 margin-bottom-40">
+						<h3>No product found</h3>
+					</div>
+					{{/if}}
+				</div>
+
+				<!-- END PRODUCT LIST -->
+				<!-- BEGIN PAGINATOR -->
+				<div class="row">
+					<div class="col-md-12 col-sm-12 justify-content-end">
+						<ul class="pagination pull-right" id="paginator">
+						</ul>
+					</div>
+				</div>
+				<!-- END PAGINATOR -->
+			</div>
+			<!-- END CONTENT -->
+		</div>
+		<!-- END SIDEBAR & CONTENT -->
+	</div>
+</div>
+
+{{#section "scripts"}}
+<script>
+	function generatePagination(currentCategory, currentType) {
+		const paginator = document.getElementById('paginator');
+		const currentPage = {{currentPage}};
+		const totalPages = {{totalPages}};
+		const currentSort = {{sort}};
+
+		if (totalPages > 1) {
+			if (currentPage > 1) {
+				paginator.innerHTML += 
+				`<li>
+					<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${currentPage - 1}">&laquo;</a>
+				</li>`;
+			}
+
+			for (let i = 1; i <= totalPages; i++) {
+				if (i == currentPage) {
+					paginator.innerHTML += `<li><span>${i}</span></li>`;
+				} else {
+					paginator.innerHTML += 
+					`<li>
+						<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${i}">${i}</a>
+					</li>`;
+				}
+			}
+
+			if (currentPage < totalPages) {
+				paginator.innerHTML += 
+				`<li>
+					<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${currentPage + 1}">&raquo;</a>
+				</li>`;
+			}
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const currentCategory = "{{currentCategory}}".toLowerCase();
+		const currentType = "{{currentType}}".toLowerCase();
+		const sortSelect = document.querySelector('#sort-by');
+
+		// Lấy giá trị sort từ tham số trên URL
+		const urlParams = new URLSearchParams(window.location.search);
+		sortSelect.value = {{sort}};
+
+		sortSelect.addEventListener('change', function (){
+			const selectedSort = sortSelect.value;
+
+			// Get the current URL
+			const currentUrl = window.location.href;
+
+			// Create a URL object from the current URL
+			const url = new URL(currentUrl);
+			url.searchParams.delete('page');
+
+			// Set the new sort parameter
+			url.searchParams.set('sort', selectedSort);
+
+			// Redirect to the updated URL
+			window.location.href = url.toString();
+		});
+
+		// Pagination
+		generatePagination(currentCategory, currentType);
+	});
+</script>
+{{/section}}

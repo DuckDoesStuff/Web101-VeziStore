@@ -1,0 +1,14 @@
+<ul class="breadcrumb">
+	<li><a href="/home">Home</a></li>
+
+
+	{{#if currentCategory}}
+	<li><a href="/product/?cate={{lowercase currentCategory}}">{{currentCategory}}</a></li>
+	{{else}}
+	<li>Search result for: {{searchName}}</li>
+	{{/if}}
+
+	{{#if currentType}}
+	<li class="active">{{currentType}}</li>
+	{{/if}}
+</ul>

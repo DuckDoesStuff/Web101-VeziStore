@@ -1,0 +1,10 @@
+{{#if popularProducts.length}}
+<h2>Popular products</h2>
+<div class="sidebar-products clearfix">
+	{{#each popularProducts}}
+	{{#with this}}
+	{{> productSidebar}}
+	{{/with}}
+	{{/each}}
+</div>
+{{/if}}
