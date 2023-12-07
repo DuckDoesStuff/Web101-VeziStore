@@ -87,11 +87,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Normal router
-const indexRouter = require("./routes/user/home/index");
-const categoryRouter = require("./routes/user/category/category");
-const productRouter = require("./routes/user/product-detail/product-detail");
-const cartRouter = require("./routes/user/shop-cart/shop-cart");
-const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
+const homeRouter = require("./routes/user/home/index");
+// const categoryRouter = require("./routes/user/category/category");
+// const productRouter = require("./routes/user/product-detail/product-detail");
+// const cartRouter = require("./routes/user/shop-cart/shop-cart");
+// const wishlistRouter = require("./routes/user/wish-list/user-wishlist");
 // const signInRouter = require("./routes/user/account/sign-in");
 // const signUpRouter = require("./routes/user/account/sign-up");
 
@@ -111,17 +111,17 @@ const productInfoRouter = require("./routes/admin/product/product-info");
 // 	next();
 // });
 
-app.use("/", indexRouter);
-app.use("/home", indexRouter);
-app.use("/product-detail/", productRouter);
-app.use("/category/", categoryRouter);
-app.use("/lookup/", categoryRouter);
-app.use("/shop-cart", cartRouter);
-app.use("/mywishlist", wishlistRouter);
-app.use("/search-product/", require("./routes/user/search/search"));
+app.use("/", homeRouter);
+app.use("/home", homeRouter);
+// app.use("/product-detail/", productRouter);
+// app.use("/category/", categoryRouter);
+// app.use("/lookup/", categoryRouter);
+// app.use("/shop-cart", cartRouter);
+// app.use("/mywishlist", wishlistRouter);
+// app.use("/search-product/", require("./routes/user/search/search"));
 // app.use("/sign-in", signInRouter);
 // app.use("/sign-up", signUpRouter);
-app.use("/", require("./routes/user/account/auth"));
+// app.use("/", require("./routes/user/account/auth"));
 
 // Subdomain admin routing
 admin.use("/", usersDashboardRouter);

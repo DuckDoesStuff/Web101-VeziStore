@@ -105,110 +105,112 @@
 					{{> productItem}}
 					{{/with}}
 					{{/each}}
-			</div>
-			<br>
-			<!-- END SALE PRODUCT -->
-		</div>
-		<!-- END SALE PRODUCT & NEW ARRIVALS -->
-
-
-
-		<!-- BEGIN SIDEBAR & CONTENT -->
-		<div class="row margin-bottom-40 ">
-			<!-- BEGIN SIDEBAR -->
-			<div class="sidebar col-md-3 col-sm-4">
-				<ul class="list-group margin-bottom-25 sidebar-menu">
-					<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-						Woman</a>
-						<ul class="dropdown-menu">
-							<li><a href="/category/?cate=woman&type=tops">Tops</a></li>
-							<li><a href="/category/?cate=woman&type=dresses">Dresses</a></li>
-							<li><a href="/category/?cate=woman&type=activewear">Activewear</a></li>
-							<li><a href="/category/?cate=woman&type=accessories">Accessories</a></li>
-							<li><a href="/category/?cate=woman&type=footwear">Footwear</a></li>
-						</ul>
-					</li>
-
-					<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-						Man</a>
-						<ul class="dropdown-menu">
-							<li><a href="/category/?cate=man&type=t-shirts">T-Shirts</a></li>
-							<li><a href="/category/?cate=man&type=shirts">Shirts</a></li>
-							<li><a href="/category/?cate=man&type=bottoms">Bottoms</a></li>
-							<li><a href="/category/?cate=man&type=outerwear">Outterwear</a></li>
-							<li><a href="/category/?cate=man&type=footwear">Footwear</a></li>
-						</ul>
-					</li>
-
-					<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-						Kids</a>
-						<ul class="dropdown-menu">
-							<li><a href="/category/?cate=kids&type=sleepwear">Sleepwear</a></li>
-							<li><a href="/category/?cate=kids&type=school">School</a></li>
-							<li><a href="/category/?cate=kids&type=activity">Activity</a></li>
-							<li><a href="/category/?cate=kids&type=summer">Summer</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<!-- END SIDEBAR -->
-			<!-- BEGIN CONTENT -->
-			<div class="col-md-9 col-sm-8">
-				<h2>Sale items</h2>
-				<div class="owl-carousel owl-carousel3">
-					{{#each saleProducts}}
-					{{#with this}}
-					{{> productItem}}
-					{{/with}}
-					{{/each}}
 				</div>
+				<br>
+				<!-- END SALE PRODUCT -->
 			</div>
-			<!-- END CONTENT -->
-		</div>
-		<!-- END SIDEBAR & CONTENT -->
+			<!-- END SALE PRODUCT & NEW ARRIVALS -->
 
 
 
-		<!-- BEGIN TWO PRODUCTS & PROMO -->
-		<div class="row margin-bottom-35 ">
-			<!-- BEGIN TWO PRODUCTS -->
-			<div class="col-md-6 two-items-bottom-items">
-				<h2>Popular items</h2>
-				<div class="owl-carousel owl-carousel2">
-					{{#each popularProducts}}
-					{{#with this}}
-					{{> productItem}}
-					{{/with}}
-					{{/each}}
+			<!-- BEGIN SIDEBAR & CONTENT -->
+			<div class="row margin-bottom-40 ">
+				<!-- BEGIN SIDEBAR -->
+				<div class="sidebar col-md-3 col-sm-4">
+					<ul class="list-group margin-bottom-25 sidebar-menu">
+						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
+								Woman</a>
+							<ul class="dropdown-menu">
+								<li><a href="/category/?cate=woman&type=tops">Tops</a></li>
+								<li><a href="/category/?cate=woman&type=dresses">Dresses</a></li>
+								<li><a href="/category/?cate=woman&type=activewear">Activewear</a></li>
+								<li><a href="/category/?cate=woman&type=accessories">Accessories</a></li>
+								<li><a href="/category/?cate=woman&type=footwear">Footwear</a></li>
+							</ul>
+						</li>
+
+						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
+								Man</a>
+							<ul class="dropdown-menu">
+								<li><a href="/category/?cate=man&type=t-shirts">T-Shirts</a></li>
+								<li><a href="/category/?cate=man&type=shirts">Shirts</a></li>
+								<li><a href="/category/?cate=man&type=bottoms">Bottoms</a></li>
+								<li><a href="/category/?cate=man&type=outerwear">Outterwear</a></li>
+								<li><a href="/category/?cate=man&type=footwear">Footwear</a></li>
+							</ul>
+						</li>
+
+						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
+								Kids</a>
+							<ul class="dropdown-menu">
+								<li><a href="/category/?cate=kids&type=sleepwear">Sleepwear</a></li>
+								<li><a href="/category/?cate=kids&type=school">School</a></li>
+								<li><a href="/category/?cate=kids&type=activity">Activity</a></li>
+								<li><a href="/category/?cate=kids&type=summer">Summer</a></li>
+							</ul>
+						</li>
+					</ul>
 				</div>
+				<!-- END SIDEBAR -->
+				<!-- BEGIN CONTENT -->
+				<div class="col-md-9 col-sm-8">
+					<h2>Sale items</h2>
+					<div class="owl-carousel owl-carousel3">
+						{{#each saleProducts}}
+						{{#with this}}
+						{{> productItem}}
+						{{/with}}
+						{{/each}}
+					</div>
+				</div>
+				<!-- END CONTENT -->
 			</div>
-			<!-- END TWO PRODUCTS -->
-			<!-- BEGIN PROMO -->
-			<div class="col-md-6 shop-index-carousel">
-				<div class="content-slider">
-					<div id="myCarousel" class="carousel slide" data-ride="carousel">
-						<!-- Indicators -->
-						<ol class="carousel-indicators">
-							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-							<li data-target="#myCarousel" data-slide-to="1"></li>
-							<li data-target="#myCarousel" data-slide-to="2"></li>
-						</ol>
-						<div class="carousel-inner">
-							<div class="item active">
-								<img src="assets/pages/img/index-sliders/slide1.jpg" class="img-responsive" alt="Berry Lace Dress">
-							</div>
-							<div class="item">
-								<img src="assets/pages/img/index-sliders/slide2.jpg" class="img-responsive" alt="Berry Lace Dress">
-							</div>
-							<div class="item">
-								<img src="assets/pages/img/index-sliders/slide3.jpg" class="img-responsive" alt="Berry Lace Dress">
+			<!-- END SIDEBAR & CONTENT -->
+
+
+
+			<!-- BEGIN TWO PRODUCTS & PROMO -->
+			<div class="row margin-bottom-35 ">
+				<!-- BEGIN TWO PRODUCTS -->
+				<div class="col-md-6 two-items-bottom-items">
+					<h2>Popular items</h2>
+					<div class="owl-carousel owl-carousel2">
+						{{#each popularProducts}}
+						{{#with this}}
+						{{> productItem}}
+						{{/with}}
+						{{/each}}
+					</div>
+				</div>
+				<!-- END TWO PRODUCTS -->
+
+				
+				<!-- BEGIN PROMO -->
+				<div class="col-md-6 shop-index-carousel">
+					<div class="content-slider">
+						<div id="myCarousel" class="carousel slide" data-ride="carousel">
+							<!-- Indicators -->
+							<ol class="carousel-indicators">
+								<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+								<li data-target="#myCarousel" data-slide-to="1"></li>
+								<li data-target="#myCarousel" data-slide-to="2"></li>
+							</ol>
+							<div class="carousel-inner">
+								<div class="item active">
+									<img src="assets/pages/img/index-sliders/slide1.jpg" class="img-responsive" alt="Berry Lace Dress">
+								</div>
+								<div class="item">
+									<img src="assets/pages/img/index-sliders/slide2.jpg" class="img-responsive" alt="Berry Lace Dress">
+								</div>
+								<div class="item">
+									<img src="assets/pages/img/index-sliders/slide3.jpg" class="img-responsive" alt="Berry Lace Dress">
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- END PROMO -->
 			</div>
-			<!-- END PROMO -->
+			<!-- END TWO PRODUCTS & PROMO -->
 		</div>
-		<!-- END TWO PRODUCTS & PROMO -->
 	</div>
-</div>
