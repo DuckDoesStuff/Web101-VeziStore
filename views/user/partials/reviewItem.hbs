@@ -1,0 +1,15 @@
+{{#each reviews}}
+{{#with this}}
+<div class="review-item clearfix">
+	<div class="review-item-submitted">
+		<strong>{{username}}</strong>
+		<em>{{date}}</em>
+		<div class="rateit" data-rateit-value="{{rating}}" data-rateit-ispreset="true" data-rateit-readonly="true">
+		</div>
+	</div>
+	<div class="review-item-content">
+		<p>{{review}}</p>
+	</div>
+</div>
+{{/with}}
+{{/each}}

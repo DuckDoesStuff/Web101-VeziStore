@@ -165,7 +165,7 @@
           {{/with}}
           {{/each}}
 
-          {{!-- New --}}
+          {{!-- New
           <li class="dropdown dropdown100 nav-catalogue">
             <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
               New
@@ -223,7 +223,7 @@
                 </div>
               </li>
             </ul>
-          </li>
+          </li> --}}
 
 
           <!-- BEGIN TOP SEARCH -->
@@ -231,7 +231,7 @@
             <span class="sep"></span>
             <i class="fa fa-search search-btn"></i>
             <div class="search-box">
-              <form action="/search-product" method="post" id="search-info">
+              <form action="" method="" id="search-info">
                 <div class="input-group">
                   <input type="text" placeholder="Search" class="form-control" id="search" name="search">
                   <span class="input-group-btn">
@@ -248,13 +248,12 @@
 
                       // Lấy giá trị tìm kiếm từ ô input
                       const searchTerm = document.getElementById('search').value.trim();
-
                       // Kiểm tra nếu người dùng không nhập gì thì bỏ qua
                       if (!searchTerm) {
                           return;
                       }
                       else {
-                        window.location.href = `/search-product/?term=${searchTerm}`;
+                        window.location.href = `/product/search/?term=${searchTerm}`;
                       }
                       
                   });

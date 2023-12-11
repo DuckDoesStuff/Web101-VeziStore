@@ -40,10 +40,6 @@
 								<option value="1"> New arrivals</option>
 								<option value="2"> Price (Low &gt; High)</option>
 								<option value="3"> Price (High &gt; Low)</option>
-								{{!-- <option value="#?sort=rating&amp;order=DESC">Rating (Highest)</option>
-								<option value="#?sort=rating&amp;order=ASC">Rating (Lowest)</option>
-								<option value="#?sort=p.model&amp;order=ASC">Model (A - Z)</option>
-								<option value="#?sort=p.model&amp;order=DESC">Model (Z - A)</option> --}}
 							</select>
 						</div>
 					</div>
@@ -87,15 +83,33 @@
 <script>
 	function generatePagination(currentCategory, currentType) {
 		const paginator = document.getElementById('paginator');
-		const currentPage = {{currentPage}};
-		const totalPages = {{totalPages}};
-		const currentSort = {{sort}};
+		const currentPage = "{{currentPage}}";
+		const totalPages = "{{totalPages}}";
+		const currentSort = "{{sort}}";
+		const filter = "{{filter}}";
+		const term = "{{searchName}}"
+		let existingParams = `?`;
+		if (term) {
+			existingParams = `search/?`;
+			existingParams += `&term=${term}`;
+		}
+		if(currentCategory) {
+			existingParams += `cate=${currentCategory}`;
+		}
+		if(currentType) {
+			existingParams += `&type=${currentType}`;
+		}
+		if(currentSort) {
+			existingParams += `&sort=${currentSort}`;
+		}
+		if(filter) {
+			existingParams += `&filter=${filter}`;
+		}
 
 		if (totalPages > 1) {
 			if (currentPage > 1) {
-				paginator.innerHTML += 
 				`<li>
-					<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${currentPage - 1}">&laquo;</a>
+					<a href="/product/` + existingParams + `&page=${currentPage - 1}">&laquo;</a>
 				</li>`;
 			}
 
@@ -105,7 +119,7 @@
 				} else {
 					paginator.innerHTML += 
 					`<li>
-						<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${i}">${i}</a>
+						<a href="/product/` + existingParams + `&page=${i}">${i}</a>
 					</li>`;
 				}
 			}
@@ -113,7 +127,7 @@
 			if (currentPage < totalPages) {
 				paginator.innerHTML += 
 				`<li>
-					<a href="/product/?cate=${currentCategory}&type=${currentType}&sort=${currentSort}&page=${currentPage + 1}">&raquo;</a>
+					<a href="/product/` + existingParams + `&page=${currentPage + 1}">&raquo;</a>
 				</li>`;
 			}
 		}

@@ -9,11 +9,13 @@ const getProductById = async (id) => {
 		const product = await Product.findById(id).lean();
 		return product;
 }
+exports.getProductById = getProductById;
 
 const getProductsByName = async (name) => {
   const products = await Product.find({ name: { $regex: new RegExp(name, 'i') } }).lean();
   return products;
 }
+exports.getProductsByName = getProductsByName;
 
 const countProductsByCategoryAndSubcategory = async (category, subcategory) => {
 	if (subcategory) {
@@ -107,13 +109,12 @@ exports.sortProductsByTime = sortProductsByTime;
 
 const sortProductsByPriceDes = (productData) => {
 	const sortedProducts = [...productData];
-
 	sortedProducts.sort((a, b) => {
 		const priceA = a.price - a.discount;
 		const priceB = b.price - b.discount;
 		return priceB - priceA;
 	});
-
+	
 	return sortedProducts;
 };
 exports.sortProductsByPriceDes = sortProductsByPriceDes;
@@ -130,3 +131,46 @@ const sortProductsByPriceAsc = (productData) => {
 	return sortedProducts;
 };
 exports.sortProductsByPriceAsc = sortProductsByPriceAsc;
+
+const sortProducts = (productData, sort)=> {
+	let products = [...productData];
+	switch (sort) {
+		case "1":
+			products = sortProductsByTime(products);
+			break;
+		case "2":
+			products = sortProductsByPriceAsc(products);
+			break;
+		case "3":
+			products = sortProductsByPriceDes(products);
+			break;
+		default:
+			break;
+	}
+	return products;
+}
+exports.sortProducts = sortProducts;
+
+const filterProducts = (productData, filter) => {
+	let products = [...productData];
+  if (filter == "0-100") {
+    return products.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 0 && productPrice <= 100;
+    });
+  }
+  if (filter == "100-200") {
+    return products.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 100 && productPrice <= 200;
+    });
+  }
+  if (filter == "200+") {
+    return products.filter(product => {
+      const productPrice = product.price;
+      return productPrice >= 200;
+    });
+  }
+  return products;
+}
+exports.filterProducts = filterProducts;

@@ -33,7 +33,7 @@ const hbs = exphbs.create({
     partialsDir: path.join(__dirname, "views/user/partials"),
     helpers: {
         eq: function (v1, v2) {
-            return v1 === v2;
+            return v1 === v2 || v1.toLowerCase() === v2.toLowerCase();
         },
         lowercase: function (str) {
             return str.toLowerCase();
@@ -89,8 +89,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Normal router
-const homeRouter = require("./routes/user/home/");
-const productRouter = require("./routes/user/product/");
+const homeRouter = require("./src");
+const productRouter = require("./src/product");
 // const categoryRouter = require("./routes/user/category/category");
 // const productRouter = require("./routes/user/product-detail/product-detail");
 // const cartRouter = require("./routes/user/shop-cart/shop-cart");
@@ -99,12 +99,12 @@ const productRouter = require("./routes/user/product/");
 // const signUpRouter = require("./routes/user/account/sign-up");
 
 // Admin router
-const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
-const productsDashboardRouter = require("./routes/admin/product/product-dashboard");
-const userInfoRouter = require("./routes/admin/account/user-info");
-const orderInfoRouter = require("./routes/admin/order-info/order-info");
-const productCreateRouter = require("./routes/admin/product/product-create");
-const productInfoRouter = require("./routes/admin/product/product-info");
+// const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
+// const productsDashboardRouter = require("./routes/admin/product/product-dashboard");
+// const userInfoRouter = require("./routes/admin/account/user-info");
+// const orderInfoRouter = require("./routes/admin/order-info/order-info");
+// const productCreateRouter = require("./routes/admin/product/product-create");
+// const productInfoRouter = require("./routes/admin/product/product-info");
 
 // Normal routing
 
@@ -128,14 +128,14 @@ app.use("/product/", productRouter);
 // app.use("/", require("./routes/user/account/auth"));
 
 // Subdomain admin routing
-admin.use("/", usersDashboardRouter);
-admin.use("/users-dashboard", usersDashboardRouter);
-admin.use("/products-dashboard", productsDashboardRouter);
+// admin.use("/", usersDashboardRouter);
+// admin.use("/users-dashboard", usersDashboardRouter);
+// admin.use("/products-dashboard", productsDashboardRouter);
 
-admin.use("/user-info", userInfoRouter);
-admin.use("/order-info", orderInfoRouter);
-admin.use("/product-create", productCreateRouter);
-admin.use("/product-info", productInfoRouter);
+// admin.use("/user-info", userInfoRouter);
+// admin.use("/order-info", orderInfoRouter);
+// admin.use("/product-create", productCreateRouter);
+// admin.use("/product-info", productInfoRouter);
 
 
 app.listen(port, () => {
