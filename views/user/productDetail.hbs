@@ -104,13 +104,13 @@
 							</div>
 
 							<div class="tab-pane fade in active" id="Reviews">
-								<div class="review-container">
+								<div class="review-container" style="max-height: 350px; overflow-y:auto;">
 
 								</div>
 								<div>
 									{{#if user}}
 									<!-- BEGIN FORM-->
-									<form method="post" action="product/{{productDetail._id}}/add" class="reviews-form" role="form">
+									<form id="review-form" class="reviews-form" role="form">
 										<h2>Write a review</h2>
 										<div class="form-group">
 											<label for="review">Review <span class="require">*</span></label>
@@ -129,7 +129,7 @@
 									</form>
 									<!-- END FORM-->
 									{{else}}
-									<p>Please <a href="/sign-in">login</a> to write a review.</p>
+									<p>Please <a href="/signin">login</a> to write a review.</p>
 									{{/if}}
 								</div>
 							</div>
@@ -176,8 +176,9 @@
 </script>
 {{#section 'scripts'}}
     <script>
+			const reviewDiv = document.querySelector('#Reviews .review-container');
+
 			async function getReviewData() {
-				const reviewDiv = document.querySelector('#Reviews .review-container');
 				reviewDiv.innerHTML = '<p>Loading reviews</p>';
         const response = await fetch(`/product/{{productDetail._id}}/reviews`);
 				const reviewData = await response.json();
@@ -194,7 +195,7 @@
 							<div class="review-item-submitted">
 								<strong>${review.username}</strong>
 								<em>${review.date}</em>
-								<div class="rateit" data-rateit-value="${review.rating}" data-rateit-ispreset="true" data-rateit-readonly="true">
+								<div id="rateit-${review._id}" class="rateit" data-rateit-value="${review.rating}" data-rateit-ispreset="true" data-rateit-readonly="true">
 								</div>
 							</div>
 							<div class="review-item-content">
@@ -208,9 +209,54 @@
 				$(".rateit").rateit();
 			}
 
+			async function createReviewAndRefreshUI(username, review, rating) {
+				const response = await fetch(`/product/{{productDetail._id}}/reviews`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						username,
+						review,
+						rating
+					})
+				});
+
+				const result = await response.json();
+				if(result.success === true) {
+					reviewDiv.innerHTML = `
+						<div class="review-item clearfix">
+							<div class="review-item-submitted">
+								<strong>${result.review.username}</strong>
+								<em>${result.review.date}</em>
+								<div id="rateit-${result.review._id}" class="rateit" data-rateit-value="${result.review.rating}" data-rateit-ispreset="true" data-rateit-readonly="true">
+								</div>
+							</div>
+							<div class="review-item-content">
+								<p>${result.review.review}</p>
+							</div>
+						</div>
+					` + reviewDiv.innerHTML;
+					$(`#rateit-${result.review._id}`).rateit();
+				}
+			}
 
 			document.addEventListener('DOMContentLoaded', () => {
 				getReviewData();
+
+				const reviewForm = document.getElementById('review-form');
+				reviewForm.addEventListener('submit', async function (event) {
+						event.preventDefault();
+
+						// Get form data
+						const formData = new FormData(reviewForm);
+						const username = formData.get('username');
+						const review = formData.get('review');
+						const rating = formData.get('rating');
+
+						// Call the function to create the review and refresh the UI
+						await createReviewAndRefreshUI(username, review, rating);
+				});
 			});
 
     </script>

@@ -93,6 +93,7 @@ const addReviewToProduct = async (id, review) => {
 	product.rating = (product.rating * (product.review.length - 1) + review.rating) / product.review.length;
 	await product.save();
 }
+exports.addReviewToProduct = addReviewToProduct;
 
 const sortProductsByTime = (productData) => {
 	const sortedProducts = [...productData];

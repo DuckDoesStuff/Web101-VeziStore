@@ -14,7 +14,10 @@ const getReviewByProductId = async (productId) => {
 	if(!productDetail.review) {
 		return [];
 	}
-  return getReviews(productDetail.review.map(review => review._id))
+	let reviews = await getReviews(productDetail.review.map(review => review._id));
+	// Sort reviews by date
+	reviews.sort((a, b) => b.date - a.date);
+	return reviews;
 }
 exports.getReviewByProductId = getReviewByProductId;
 
