@@ -9,5 +9,7 @@ router.get('/:id', productController.detail);
 router.use('/:id/reviews', reviewRouter);
 router.get('/', productController.catalog);
 
+router.post('/', productController.catalog);
+
 
 module.exports = router;

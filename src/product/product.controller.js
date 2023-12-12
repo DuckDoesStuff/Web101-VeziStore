@@ -103,5 +103,4 @@ const search = async (req,res,next) => {
 		popularProducts: popularProducts,
 	});
 }
-
 exports.search = search;
