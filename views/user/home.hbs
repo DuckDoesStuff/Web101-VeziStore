@@ -95,7 +95,7 @@
 <div class="main">
 	<div class="container">
 		<!-- BEGIN SALE PRODUCT & NEW ARRIVALS -->
-		<div class="row margin-bottom-50">
+		<div class="row">
 			<!-- BEGIN SALE PRODUCT -->
 			<div class="col-md-12 sale-product">
 				<h2>New Arrivals</h2>
@@ -109,91 +109,92 @@
 				<br>
 				<!-- END SALE PRODUCT -->
 			</div>
-			<!-- END SALE PRODUCT & NEW ARRIVALS -->
+		</div>
+		<!-- END SALE PRODUCT & NEW ARRIVALS -->
 
 
 
-			<!-- BEGIN SIDEBAR & CONTENT -->
-			<div class="row margin-bottom-40 ">
-				<!-- BEGIN SIDEBAR -->
-				<div class="sidebar col-md-3 col-sm-4">
-					<ul class="list-group margin-bottom-25 sidebar-menu">
-						{{#each categories}}
-						{{#with this}}
-						<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
-								{{name}}
-							</a>
+		<!-- BEGIN SIDEBAR & CONTENT -->
+		<div class="row margin-bottom-40 ">
+			<!-- BEGIN SIDEBAR -->
+			<div class="sidebar col-md-3 col-sm-4">
+				<ul class="list-group margin-bottom-25 sidebar-menu">
+					{{#each categories}}
+					{{#with this}}
+					<li class="list-group-item clearfix dropdown"><a href="#"><i class="fa fa-angle-right"></i>
+							{{name}}
+						</a>
 
-							<ul class="dropdown-menu">
-								{{#each subcategory}}
-								<li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
-								{{/each}}
-							</ul>
-						</li>
-						{{/with}}
-						{{/each}}
-					</ul>
-				</div>
-				<!-- END SIDEBAR -->
-				<!-- BEGIN CONTENT -->
-				<div class="col-md-9 col-sm-8">
-					<h2>Sale items</h2>
-					<div class="owl-carousel owl-carousel3">
-						{{#each saleProducts}}
-						{{#with this}}
-						{{> productItem}}
-						{{/with}}
-						{{/each}}
-					</div>
-				</div>
-				<!-- END CONTENT -->
+						<ul class="dropdown-menu">
+							{{#each subcategory}}
+							<li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
+							{{/each}}
+						</ul>
+					</li>
+					{{/with}}
+					{{/each}}
+				</ul>
 			</div>
-			<!-- END SIDEBAR & CONTENT -->
-
-
-
-			<!-- BEGIN TWO PRODUCTS & PROMO -->
-			<div class="row margin-bottom-35 ">
-				<!-- BEGIN TWO PRODUCTS -->
-				<div class="col-md-6 two-items-bottom-items">
-					<h2>Popular items</h2>
-					<div class="owl-carousel owl-carousel2">
-						{{#each popularProducts}}
-						{{#with this}}
-						{{> productItem}}
-						{{/with}}
-						{{/each}}
-					</div>
+			<!-- END SIDEBAR -->
+			<!-- BEGIN CONTENT -->
+			<div class="col-md-9 col-sm-8">
+				<h2>Sale items</h2>
+				<div class="owl-carousel owl-carousel3">
+					{{#each saleProducts}}
+					{{#with this}}
+					{{> productItem}}
+					{{/with}}
+					{{/each}}
 				</div>
-				<!-- END TWO PRODUCTS -->
+			</div>
+			<!-- END CONTENT -->
+		</div>
+		<!-- END SIDEBAR & CONTENT -->
 
-				
-				<!-- BEGIN PROMO -->
-				<div class="col-md-6 shop-index-carousel">
-					<div class="content-slider">
-						<div id="myCarousel" class="carousel slide" data-ride="carousel">
-							<!-- Indicators -->
-							<ol class="carousel-indicators">
-								<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-								<li data-target="#myCarousel" data-slide-to="1"></li>
-								<li data-target="#myCarousel" data-slide-to="2"></li>
-							</ol>
-							<div class="carousel-inner">
-								<div class="item active">
-									<img src="assets/pages/img/index-sliders/slide1.jpg" class="img-responsive" alt="Berry Lace Dress">
-								</div>
-								<div class="item">
-									<img src="assets/pages/img/index-sliders/slide2.jpg" class="img-responsive" alt="Berry Lace Dress">
-								</div>
-								<div class="item">
-									<img src="assets/pages/img/index-sliders/slide3.jpg" class="img-responsive" alt="Berry Lace Dress">
-								</div>
+
+
+		<!-- BEGIN TWO PRODUCTS & PROMO -->
+		<div class="row margin-bottom-35">
+			<!-- BEGIN TWO PRODUCTS -->
+			<div class="col-md-6 two-items-bottom-items">
+				<h2>Popular items</h2>
+				<div class="owl-carousel owl-carousel2">
+					{{#each popularProducts}}
+					{{#with this}}
+					{{> productItem}}
+					{{/with}}
+					{{/each}}
+				</div>
+			</div>
+			<!-- END TWO PRODUCTS -->
+
+
+			<!-- BEGIN PROMO -->
+			<div class="col-md-6 shop-index-carousel">
+				<div class="content-slider">
+					<div id="myCarousel" class="carousel slide" data-ride="carousel">
+						<!-- Indicators -->
+						<ol class="carousel-indicators">
+							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+							<li data-target="#myCarousel" data-slide-to="1"></li>
+							<li data-target="#myCarousel" data-slide-to="2"></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="item active">
+								<img src="assets/pages/img/index-sliders/slide1.jpg" class="img-responsive" alt="Berry Lace Dress">
+							</div>
+							<div class="item">
+								<img src="assets/pages/img/index-sliders/slide2.jpg" class="img-responsive" alt="Berry Lace Dress">
+							</div>
+							<div class="item">
+								<img src="assets/pages/img/index-sliders/slide3.jpg" class="img-responsive" alt="Berry Lace Dress">
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- END PROMO -->
 			</div>
-			<!-- END TWO PRODUCTS & PROMO -->
+			<!-- END PROMO -->
 		</div>
+		<!-- END TWO PRODUCTS & PROMO -->
 	</div>
+</div>
