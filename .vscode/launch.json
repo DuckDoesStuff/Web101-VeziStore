@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Admin/Desktop/RSA-HCMUS/project_01_01",
-      "program": "c:/Users/Admin/Desktop/RSA-HCMUS/project_01_01/build/Debug/outDebug",
+      "cwd": "c:/Users/Admin/Desktop/Date/Date",
+      "program": "c:/Users/Admin/Desktop/Date/Date/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

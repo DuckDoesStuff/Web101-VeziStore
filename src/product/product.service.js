@@ -5,6 +5,8 @@ const getAllProduct = async () => {
 		return products;
 }
 
+
+
 const getProductById = async (id) => {
 		const product = await Product.findById(id).lean();
 		return product;
@@ -16,34 +18,6 @@ const getProductsByName = async (name) => {
   return products;
 }
 exports.getProductsByName = getProductsByName;
-
-const countProductsByCategoryAndSubcategory = async (category, subcategory) => {
-	if (subcategory) {
-		return await Product.countDocuments({
-			category: {$in: [category]},
-			subcategory: {$in: [subcategory]}
-		});
-	}else {
-		return await Product.countDocuments({
-			category: {$in: [category]}
-		});
-	}
-}
-exports.countProductsByCategoryAndSubcategory = countProductsByCategoryAndSubcategory;
-
-const getProductByCategoryAndSubcategory = (category, subcategory) => {
-	if (subcategory) {
-		return Product.find({
-						category: {$in: [category]},
-						subcategory: {$in: [subcategory]},
-					}).lean();
-	}else {
-		return Product.find({
-						category: {$in: [category]},
-					}).lean();
-	}
-}
-exports.getProductByCategoryAndSubcategory = getProductByCategoryAndSubcategory;
 
 const getPopularProductsByCategoryAndSubcategory = (category, subcategory, num = 3) => {
 	if (subcategory) {
@@ -59,6 +33,9 @@ const getPopularProductsByCategoryAndSubcategory = (category, subcategory, num =
 }
 exports.getPopularProductsByCategoryAndSubcategory = getPopularProductsByCategoryAndSubcategory;
 
+
+
+
 const getNewProducts = (num = 6) => Product.find().sort({createAt: -1}).limit(num).lean();
 exports.getNewProducts = getNewProducts;
 
@@ -67,6 +44,34 @@ exports.getSaleProducts = getSaleProducts;
 
 const getPopularProducts = async (num = 4) => Product.find().sort({rating: -1}).limit(num).lean();
 exports.getPopularProducts = getPopularProducts;
+
+const getProducts = async (page, sort, filter, category, subcategory, term) => {
+	let products = await Product.find().lean();
+	if (category) {
+		products = products.filter(product => product.category.includes(category));
+	}
+	if (subcategory) {
+		products = products.filter(product => product.subcategory.includes(subcategory));
+	}
+	if (term) {
+		products = products.filter(product => product.name.toLowerCase().includes(term.toLowerCase()));
+	}
+	products = sortProducts(products, sort);
+	products = filterProducts(products, filter);
+	const productCount = products.length;
+	products = products.slice((page - 1) * 9, (page - 1) * 9 + 9);
+	products.forEach(product => {
+		product.price = product.price - product.discount;
+	});
+	return {
+		products: products,
+		productCount: productCount
+	};
+}
+exports.getProducts = getProducts;
+
+
+
 
 const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color=[], rating=0, description, information, review=[]) => {
 	const newProduct = new Product({
@@ -94,6 +99,9 @@ const addReviewToProduct = async (id, review) => {
 	await product.save();
 }
 exports.addReviewToProduct = addReviewToProduct;
+
+
+
 
 const sortProductsByTime = (productData) => {
 	const sortedProducts = [...productData];
@@ -152,21 +160,24 @@ const sortProducts = (productData, sort)=> {
 }
 exports.sortProducts = sortProducts;
 
+
+
+
 const filterProducts = (productData, filter) => {
 	let products = [...productData];
-  if (filter == "0-100") {
+  if (filter == "1") {
     return products.filter(product => {
       const productPrice = product.price;
       return productPrice >= 0 && productPrice <= 100;
     });
   }
-  if (filter == "100-200") {
+  if (filter == "2") {
     return products.filter(product => {
       const productPrice = product.price;
       return productPrice >= 100 && productPrice <= 200;
     });
   }
-  if (filter == "200+") {
+  if (filter == "3") {
     return products.filter(product => {
       const productPrice = product.price;
       return productPrice >= 200;

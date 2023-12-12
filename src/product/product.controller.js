@@ -15,27 +15,9 @@ const home = async (req,res,next) => {
 exports.home = home;
 
 const catalog = async (req,res,next) => {
-	const page = req.query.page || 1;
-	const sort = req.query.sort || 0;
-	const filter = req.query.filter || "";
-
-	let products = await productService.getProductByCategoryAndSubcategory(req.query.cate, req.query.type);
-	products = productService.sortProducts(products, sort);
-	products = productService.filterProducts(products, filter);
-
-	let productCount = 0;
-	if (filter !== "") {
-		productCount = products.length;
-	}else {
-		productCount = await productService.countProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
-	}
-	products = products = products.slice((page - 1) * 9, (page - 1) * 9 + 9);
-
-	const popularProducts = await productService.getPopularProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
-
 	const currentCategory = req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
 	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
-
+	const popularProducts = await productService.getPopularProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
 
 	res.render("user/catalog", {
 		title: "Vezi Store | " + currentCategory + " " + currentType + " | Catalog",
@@ -44,12 +26,7 @@ const catalog = async (req,res,next) => {
 		subcategories: await categoryService.getAllSubcategory(),
 		currentCategory: currentCategory,
 		currentType: currentType,
-		sort: sort,
-		filter: filter,
-		products: products,
 		popularProducts: popularProducts,
-		currentPage: page,
-		totalPages: Math.ceil(productCount / 9),
 	});
 }
 exports.catalog = catalog;
@@ -68,24 +45,12 @@ const detail = async (req,res,next) => {
 		similarProducts: similarProducts,
 		productDetail: productDetail,
 		popularProducts: popularProducts,
-		// message: "This one is from server"
 	});
 }
 exports.detail = detail;
 
 const search = async (req,res,next) => {
 	const term = req.query.term;
-	const page = req.query.page || 1;
-	const sort = req.query.sort || 0;
-	const filter = req.query.filter || "";
-
-	let products = await productService.getProductsByName(term);
-	const productCount = products.length;
-	products = productService.sortProducts(products, sort);
-	products = productService.filterProducts(products, filter);
-
-	products = products = products.slice((page - 1) * 9, (page - 1) * 9 + 9);
-	const popularProducts = await productService.getPopularProducts(3);
 
 	res.render("user/catalog", {
 		title: "Vezi Store | Search",
@@ -94,13 +59,18 @@ const search = async (req,res,next) => {
 		subcategories: await categoryService.getAllSubcategory(),
 		currentCategory: "",
 		currentType: "",
-		sort: sort,
-		filter: filter,
-		currentPage: page,
-		totalPages: Math.ceil(productCount / 9),
 		searchName: term,
-		products: products,
-		popularProducts: popularProducts,
 	});
 }
 exports.search = search;
+
+const getProducts = async (req,res,next) => {
+	const page = req.query.page || 1;
+	const sort = req.query.sort || 0;
+	const filter = req.query.filter || "";
+	const category = req.query.cate || "";
+	const subcategory = req.query.type || "";
+	const term = req.query.term || "";
+	res.json(await productService.getProducts(page, sort, filter, category, subcategory, term));
+}
+exports.getProducts = getProducts;

@@ -47,20 +47,8 @@
 				<!-- END SORTER -->
 
 				<!-- BEGIN PRODUCT LIST -->
-				<div class="row">
-					{{#if products.length}}
-					{{#each products}}
-					{{#with this}}
-					<div class="col-md-4 col-sm-6 col-xs-12 margin-bottom-40">
-						{{> productItem}}
-					</div>
-					{{/with}}
-					{{/each}}
-					{{else}}
-					<div class="col-md-12 col-sm-12 col-xs-12 margin-bottom-40">
-						<h3>No product found</h3>
-					</div>
-					{{/if}}
+				<div id="product-view" class="row">
+
 				</div>
 
 				<!-- END PRODUCT LIST -->
@@ -80,14 +68,22 @@
 </div>
 
 {{#section "scripts"}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js" type="text/javascript"></script>
+
 <script>
-	function generatePagination(currentCategory, currentType) {
-		const paginator = document.getElementById('paginator');
-		const currentPage = "{{currentPage}}";
-		const totalPages = "{{totalPages}}";
-		const currentSort = "{{sort}}";
-		const filter = "{{filter}}";
-		const term = "{{searchName}}"
+	let productTemplate;
+	let currentPage = 1;
+	let totalPages = 1;
+
+	const urlParams = new URLSearchParams(window.location.search);
+
+	const currentCategory = urlParams.get('cate')
+	const currentType = urlParams.get('type')
+	const term = urlParams.get('term')
+	const filter = urlParams.get('filter');
+	const sort = urlParams.get('sort');
+
+	function redirectPage(currentCategory, currentType, term, filter, sort) {
 		let existingParams = `?`;
 		if (term) {
 			existingParams = `search/?`;
@@ -99,68 +95,146 @@
 		if(currentType) {
 			existingParams += `&type=${currentType}`;
 		}
-		if(currentSort !== '0') {
-			existingParams += `&sort=${currentSort}`;
+		if(filter) {
+			existingParams += `&filter=${filter}`;
+		}
+		if(sort) {
+			existingParams += `&sort=${sort}`;
+		}
+		window.location.href = '/product/' + existingParams;
+	}
+
+	async function getProducts(apiURL) {
+		apiURL = apiURL.replace('/search', '');
+		const result = await fetch(apiURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+		return result;
+	}
+	
+	async function renderProducts(products) {
+		const productItemHtml = await fetch('./assets/productItem.html')
+		const productTemplateSrc = await productItemHtml.text();
+		productTemplate = Handlebars.compile(productTemplateSrc);
+		const productContainer = document.getElementById('product-view');
+
+		productContainer.innerHTML = productTemplate(products);
+		generatePagination();
+		window.scrollTo({
+			top: 200,
+			behavior: 'smooth'
+		});
+	}
+
+	async function initialLoad() {
+		const apiURL = '/product/api/' + window.location.search;
+		const products = await getProducts(apiURL);
+		totalPages = Math.ceil(products.productCount / 9);
+		renderProducts(products);
+	}
+
+	function generatePagination() {
+		let paginator = document.getElementById('paginator');
+		paginator.innerHTML = '';
+		let existingParams = `?`;
+		if (term) {
+			existingParams = `search/?`;
+			existingParams += `&term=${term}`;
+		}
+		if(currentCategory) {
+			existingParams += `cate=${currentCategory}`;
+		}
+		if(currentType) {
+			existingParams += `&type=${currentType}`;
+		}
+		if(sort) {
+			existingParams += `&sort=${sort}`;
 		}
 		if(filter) {
 			existingParams += `&filter=${filter}`;
 		}
 
 		if (totalPages > 1) {
-			if (currentPage > 1) {
-				`<li>
-					<a href="/product/` + existingParams + `&page=${currentPage - 1}">&laquo;</a>
-				</li>`;
+			// Left arrow
+			if(currentPage > 1) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Previous';
+				a.addEventListener('click', () => {
+					getProducts(`/product/api/${existingParams}&page=${currentPage - 1}`).then(products => {
+						renderProducts(products);
+						currentPage = currentPage - 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
 			}
 
+			// Number
 			for (let i = 1; i <= totalPages; i++) {
-				if (i == currentPage) {
-					paginator.innerHTML += `<li><span>${i}</span></li>`;
-				} else {
-					paginator.innerHTML += 
-					`<li>
-						<a href="/product/` + existingParams + `&page=${i}">${i}</a>
-					</li>`;
+				let li = document.createElement('li');
+				if (i !== currentPage) {
+					let a = document.createElement('a');
+						a.href = 'javascript:void(0);';
+						a.innerText = i;
+						a.addEventListener('click', () => {
+							getProducts(`/product/api/${existingParams}&page=${i}`).then(products => {
+								renderProducts(products);
+								currentPage = i;
+							});
+						});
+					li.appendChild(a);
+				}else {
+					let span = document.createElement('span');
+					span.innerText = i;
+					li.appendChild(span);
 				}
+				paginator.appendChild(li);
 			}
 
-			if (currentPage < totalPages) {
-				paginator.innerHTML += 
-				`<li>
-					<a href="/product/` + existingParams + `&page=${currentPage + 1}">&raquo;</a>
-				</li>`;
+			// Right arrow
+			if(currentPage < totalPages) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Next';
+				a.addEventListener('click', () => {
+					getProducts(`/product/api/${existingParams}&page=${currentPage + 1}`).then(products => {
+						renderProducts(products);
+						currentPage = currentPage + 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
 			}
 		}
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
-		const currentCategory = "{{currentCategory}}".toLowerCase();
-		const currentType = "{{currentType}}".toLowerCase();
 		const sortSelect = document.querySelector('#sort-by');
-
-		// Lấy giá trị sort từ tham số trên URL
-		const urlParams = new URLSearchParams(window.location.search);
-		sortSelect.value = {{sort}};
-
-		sortSelect.addEventListener('change', function (){
-			const selectedSort = sortSelect.value;
-
-			// Get the current URL
-			const currentUrl = window.location.href;
-
-			// Create a URL object from the current URL
-			const url = new URL(currentUrl);
-			url.searchParams.delete('page');
-
-			// Set the new sort parameter
-			url.searchParams.set('sort', selectedSort);
-
-			// Redirect to the updated URL
-			window.location.href = url.toString();
+		sortSelect.value = sort || 0;
+		sortSelect.addEventListener('change', () => {
+			redirectPage(currentCategory, currentType, term, filter, sortSelect.value);
 		});
+		
+		
+		const selectedFilter = document.querySelector(`input[name="price-range"][value="${filter}"]`);
+		if (selectedFilter) {
+			selectedFilter.click();
+		}
+		const radioList = document.querySelectorAll('input[name="price-range"]');
 
-		// Pagination
-		generatePagination(currentCategory, currentType);
+		radioList.forEach((radio, selectedValue) => {
+			radio.addEventListener('click', () => {
+				redirectPage(currentCategory, currentType, term, selectedValue, sort);
+			});
+		})
+		
+		initialLoad();
 	});
 </script>
 {{/section}}
