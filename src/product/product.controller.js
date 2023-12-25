@@ -1,5 +1,7 @@
 const productService = require("./product.service");
+const {Product} = require("./product.model");
 const categoryService = require('../category/category.service');
+const userService = require('../user/user.service');
 
 const home = async (req,res,next) => {
 	res.render("user/home", {
@@ -74,3 +76,22 @@ const getProducts = async (req,res,next) => {
 	res.json(await productService.getProducts(page, sort, filter, category, subcategory, term));
 }
 exports.getProducts = getProducts;
+
+const addToCart = async (req, res, next) => {
+	const productId = req.params.id;
+	const quantity = req.body.quantity;
+	const userId = req.user.id;
+	// Check for available stock
+	let product = await productService.getProductById(productId);
+	if (product.availability < quantity) {
+		return res.json({ status: "error", message: "Not enough stock" });
+	}
+	
+	product.availability -= quantity;
+	await Product.findByIdAndUpdate(productId, product);
+
+	const result = await userService.addToCart(productId, quantity, userId);
+
+	res.json(result);
+}
+exports.addToCart = addToCart;

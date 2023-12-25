@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    shopcart: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    shopcart: [{
+        productId : { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: {type:Number}
+    }],
     checkout_history: [],
     order_history: [],
 });

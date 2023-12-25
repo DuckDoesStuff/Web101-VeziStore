@@ -10,8 +10,10 @@
 				</a>
 			</div>
 			<h3><a href="/product/{{_id}}">{{name}}</a></h3>
-			<div class="pi-price">${{price}}</div>
-			<a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+			<div class="price-rating">
+				<div class="pi-price">${{price}}</div>
+				<div class="rateit" data-rateit-value="{{rating}}" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+			</div>
 			<div class="sticker"></div>
 		</div>
 	</div>
@@ -23,3 +25,9 @@
 	<h3>No product found</h3>
 </div>
 {{/if}}
+
+<!-- <script>
+		document.addEventListener('DOMContentLoaded', function() {
+			jQuery('.rateit').rateit();
+  	});
+</script> -->

@@ -46,16 +46,18 @@ const getPopularProducts = async (num = 4) => Product.find().sort({rating: -1}).
 exports.getPopularProducts = getPopularProducts;
 
 const getProducts = async (page, sort, filter, category, subcategory, term) => {
-	let products = await Product.find().lean();
+	let query = {};
 	if (category) {
-		products = products.filter(product => product.category.includes(category));
+			query.category = category;
 	}
 	if (subcategory) {
-		products = products.filter(product => product.subcategory.includes(subcategory));
+			query.subcategory = subcategory;
 	}
 	if (term) {
-		products = products.filter(product => product.name.toLowerCase().includes(term.toLowerCase()));
+			query.name = { $regex: new RegExp(term, 'i') };
 	}
+	let products = await Product.find(query).lean();
+	
 	products = sortProducts(products, sort);
 	products = filterProducts(products, filter);
 	const productCount = products.length;
@@ -69,7 +71,6 @@ const getProducts = async (page, sort, filter, category, subcategory, term) => {
 	};
 }
 exports.getProducts = getProducts;
-
 
 
 

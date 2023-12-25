@@ -215,9 +215,10 @@ Header and header elements
 .top-cart-content ul {
 	margin: 0;
 	padding: 0 8px;
+	overflow-y:scroll;
 }
 .top-cart-content .scroller {
-	overflow: hidden;
+	overflow-y: scroll;
 }
 .top-cart-content li {
 	list-style: none;
@@ -259,7 +260,7 @@ Header and header elements
 	color: #717880;
 }
 .top-cart-content em {
-	width: 55px;
+	width: 48px;
 	font-style: normal;
 	text-align: right;
 }

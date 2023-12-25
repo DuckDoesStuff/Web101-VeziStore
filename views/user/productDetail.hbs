@@ -41,6 +41,7 @@
 								{{/each}}
 							</div>
 						</div>
+
 						<div class="col-md-6 col-sm-6">
 							<h1>{{productDetail.name}}</h1>
 							<div class="price-availability-block clearfix">
@@ -55,37 +56,42 @@
 							<div class="description">
 								<p>{{productDetail.description}}</p>
 							</div>
-							<div class="product-page-options">
-								<div class="pull-left">
-									<label class="control-label">Size:</label>
-									<select class="form-control input-sm">
-										<option>L</option>
-										<option>M</option>
-										<option>XL</option>
-									</select>
+
+							<form id="order-info" action="product/{{productDetail._id}}" method="post">
+								<div class="product-page-options">
+									<div class="pull-left">
+										<label class="control-label">Size:</label>
+										<select class="form-control input-sm">
+											<option>L</option>
+											<option>M</option>
+											<option>XL</option>
+										</select>
+									</div>
 								</div>
-							</div>
+								<div class="product-page-cart">
+									<div class="product-quantity">
+										<input name="quantity" type="text" max="{{productDetail.availability}}" value="1" class="form-control input-sm">
+									</div>
+									<input type="hidden" name="name" value="{{productDetail.name}}">
+									<button class="btn btn-primary" type="submit">Add to cart</button>
+								</div>
+							</form>
 						</div>
-						<div class="product-page-cart">
-							<div class="product-quantity">
-								<input id="product-quantity" type="text" value="1" readonly class="form-control input-sm">
-							</div>
-							<button class="btn btn-primary" type="submit">Add to cart</button>
-						</div>
+
 						<div class="review">
 							<input type="range" value="{{productDetail.rating}}" step="0.25" id="backing4">
 							<div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"
 								data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5" data-rateit-readonly="true">
 							</div>
-							<a href="javascript:;">{{productDetail.review.length}} reviews</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
+							<a href="javascript:;">{{productDetail.review.length}} reviews</a>
 						</div>
-						<ul class="social-icons">
+						{{!-- <ul class="social-icons">
 							<li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
 							<li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
 							<li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
 							<li><a class="evernote" data-original-title="evernote" href="javascript:;"></a></li>
 							<li><a class="tumblr" data-original-title="tumblr" href="javascript:;"></a></li>
-						</ul>
+						</ul> --}}
 					</div>
 
 					<div class="product-page-content">
@@ -257,6 +263,8 @@
 						// Call the function to create the review and refresh the UI
 						await createReviewAndRefreshUI(username, review, rating);
 				});
+
+
 			});
 
     </script>

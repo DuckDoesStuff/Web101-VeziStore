@@ -1,44 +1,24 @@
 const User = require('./user.model');
 
-const getUsers = async(req, res) => {
-	const users = await User.find();
-	return users;
-}
-
-const getUserByID = async(req, res) => {
-	const { id } = req.params;
-	const user = await User.findById(id);
-	return user;
-}
-
-const getUserByEmail = async (req, res) => {
-	const { email } = req.params;
-	const user = await User.findOne({ email });
-	return user;
-}
-
-const addUser = async(req, res) => {
-	const { username, email, password } = req.body;
-	const user = new User({
-		username,
-		email,
-		password,
-		wishlist: [],
-    checkout_history: [],
-    order_history: []
+const addToCart = async (productId, quantity, userId) => {
+	var user = await User.findById(userId);
+	const existingProduct = user.shopcart.find(product => {
+		if(product.productId == productId) {
+			product.quantity += Number(quantity);
+			return true;
+		}
 	});
-	user.save()
-	.then(() => {
-		console.log("Added a new user");
-	})
-	.catch((error) => {
-		console.log(error);
-	});
-}
 
-module.exports = {
-	getUsers,
-	getUserByID,
-	getUserByEmail,
-	addUser
+	if (!existingProduct) {
+		user.shopcart.push({
+			"productId":productId, 
+			"quantity":quantity
+		});
+	}
+	await user.save();
+	return {
+		"message": "Product added to cart successfully",
+		"status": 200
+	}
 }
+exports.addToCart = addToCart;

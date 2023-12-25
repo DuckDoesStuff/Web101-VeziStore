@@ -3080,3 +3080,9 @@ Styler Panel
 .fancybox-opened {
   z-index: 100001;
 }
+
+.price-rating {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
