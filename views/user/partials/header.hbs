@@ -1,216 +1,195 @@
-  <!-- BEGIN TOP BAR -->
-  <div class="pre-header">
-    <div class="container">
-      <div class="row">
-        <!-- BEGIN TOP BAR LEFT PART -->
-        <div class="col-md-6 col-sm-6 additional-shop-info">
-          <ul class="list-unstyled list-inline">
-            <li><i class="fa fa-phone"></i><span>+1 456 6717</span></li>
-            <!-- BEGIN CURRENCIES -->
-            <li class="shop-currencies">
-              <a href="javascript:void(0);">€</a>
-              <a href="javascript:void(0);">£</a>
-              <a href="javascript:void(0);" class="current">$</a>
-            </li>
-            <!-- END CURRENCIES -->
-            <!-- BEGIN LANGS -->
-            <li class="langs-block">
-              <a href="javascript:void(0);" class="current">English </a>
-              <div class="langs-block-others-wrapper">
-                <div class="langs-block-others">
-                  <a href="javascript:void(0);">French</a>
-                  <a href="javascript:void(0);">Germany</a>
-                  <a href="javascript:void(0);">Turkish</a>
-                </div>
+<!-- BEGIN TOP BAR -->
+<div class="pre-header">
+  <div class="container">
+    <div class="row">
+      <!-- BEGIN TOP BAR LEFT PART -->
+      <div class="col-md-6 col-sm-6 additional-shop-info">
+        <ul class="list-unstyled list-inline">
+          <li><i class="fa fa-phone"></i><span>+1 456 6717</span></li>
+          <!-- BEGIN CURRENCIES -->
+          <li class="shop-currencies">
+            <a href="javascript:void(0);">€</a>
+            <a href="javascript:void(0);">£</a>
+            <a href="javascript:void(0);" class="current">$</a>
+          </li>
+          <!-- END CURRENCIES -->
+          <!-- BEGIN LANGS -->
+          <li class="langs-block">
+            <a href="javascript:void(0);" class="current">English </a>
+            <div class="langs-block-others-wrapper">
+              <div class="langs-block-others">
+                <a href="javascript:void(0);">French</a>
+                <a href="javascript:void(0);">Germany</a>
+                <a href="javascript:void(0);">Turkish</a>
               </div>
-            </li>
-            <!-- END LANGS -->
-          </ul>
-        </div>
-        <!-- END TOP BAR LEFT PART -->
-        <!-- BEGIN TOP BAR MENU -->
-        <div class="col-md-6 col-sm-6 additional-nav">
-          <ul class="list-unstyled list-inline pull-right">
-          {{#if user}}
-            <li><a href="#">My Account</a></li>
-            <li><a href="/#">My Wishlist</a></li>
-            <li><a href="#">Checkout</a></li>
-            <li><a href="/logout">Log out</a></li>
-          {{else}}
-            <li><a href="signin">Log In</a></li>
-            <li><a href="signup">Sign Up</a></li>
-          {{/if}}
-          </ul>
-        </div>
-        <!-- END TOP BAR MENU -->
+            </div>
+          </li>
+          <!-- END LANGS -->
+        </ul>
       </div>
+      <!-- END TOP BAR LEFT PART -->
+      <!-- BEGIN TOP BAR MENU -->
+      <div class="col-md-6 col-sm-6 additional-nav">
+        <ul class="list-unstyled list-inline pull-right">
+          {{#if user}}
+          <li><a href="#">My Account</a></li>
+          <li><a href="/#">My Wishlist</a></li>
+          <li><a href="#">Checkout</a></li>
+          <li><a href="/logout">Log out</a></li>
+          {{else}}
+          <li><a href="signin">Log In</a></li>
+          <li><a href="signup">Sign Up</a></li>
+          {{/if}}
+        </ul>
+      </div>
+      <!-- END TOP BAR MENU -->
     </div>
   </div>
-  <!-- END TOP BAR -->
+</div>
+<!-- END TOP BAR -->
 
-  <!-- BEGIN HEADER -->
-  <div class="header">
-    <div class="container">
-      <a class="site-logo" href="/home"><img style="height: 40px;" src="assets/corporate/img/logos/logo-vezi-01.png"
-          alt="Vezi Store"></a>
+<!-- BEGIN HEADER -->
+<div class="header">
+  <div class="container">
+    <a class="site-logo" href="/home"><img style="height: 40px;" src="assets/corporate/img/logos/logo-vezi-01.png"
+        alt="Vezi Store"></a>
 
-      <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
+    <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
 
-      <!-- BEGIN CART -->
-      {{#if user}}
-      <div class="top-cart-block">
-        <div class="top-cart-info">
-          <a href="javascript:void(0);" class="top-cart-info-count">number_of_items</a>
-          <a href="javascript:void(0);" class="top-cart-info-value">$total</a>
-        </div>
-        <i class="fa fa-shopping-cart"></i>
-
-        <div class="top-cart-content-wrapper">
-          <div class="top-cart-content">
-            <ul style="height: 250px;">
-              <li>
-                <a href="#"><img src="assets/pages/img/cart-img.jpg" alt="Rolex Classic Watch" width="37"
-                    height="34"></a>
-                <span class="cart-content-count">x 1</span>
-                <strong><a href="#">Rolex Classic Watch</a></strong>
-                <em>$1230</em>
-                <a href="javascript:void(0);" class="del-goods">&nbsp;</a>
-              </li>
-            </ul>
-
-
-            <div class="text-right">
-              <a href="#" class="btn btn-default">View Cart</a>
-              <a href="#" class="btn btn-primary">Checkout</a>
-            </div>
-          </div>
-        </div>
+    <!-- BEGIN CART -->
+    {{#if user}}
+    <div class="top-cart-block">
+      <div class="top-cart-info">
+        <a href="javascript:void(0);" class="top-cart-info-count">number_of_items</a>
+        {{!-- <a href="javascript:void(0);" class="top-cart-info-value">$total</a> --}}
       </div>
-      {{/if}}
-      <!--END CART -->
+      <i class="fa fa-shopping-cart"></i>
+    </div>
+    {{/if}}
+    <!--END CART -->
 
-      <!-- BEGIN NAVIGATION -->
-      <div class="header-navigation">
-        <ul>
-          {{#each categories}}
-          {{#with this}}
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-target="#" href="/product/?cate={{lowercase name}}">
-              {{name}}
-            </a>
+    <!-- BEGIN NAVIGATION -->
+    <div class="header-navigation">
+      <ul>
+        {{#each categories}}
+        {{#with this}}
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-target="#" href="/product/?cate={{lowercase name}}">
+            {{name}}
+          </a>
 
-            <!-- BEGIN DROPDOWN MENU -->
-            <ul class="dropdown-menu">
-              {{#each subcategory}}
-              <li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
-              {{/each}}
-            </ul>
-            <!-- END DROPDOWN MENU -->
+          <!-- BEGIN DROPDOWN MENU -->
+          <ul class="dropdown-menu">
+            {{#each subcategory}}
+            <li><a href="/product/?cate={{lowercase ../name}}&type={{lowercase this}}">{{this}}</a></li>
+            {{/each}}
+          </ul>
+          <!-- END DROPDOWN MENU -->
 
-          </li>
-          {{/with}}
-          {{/each}}
+        </li>
+        {{/with}}
+        {{/each}}
 
-          {{!-- New
-          <li class="dropdown dropdown100 nav-catalogue">
-            <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
-              New
+        {{!-- New
+        <li class="dropdown dropdown100 nav-catalogue">
+          <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="javascript:;">
+            New
 
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <div class="header-navigation-content">
-                  <div class="row">
-                    <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="product-item">
-                        <div class="pi-img-wrapper">
-                          <a href="#"><img src="assets/pages/img/products/model4.jpg"
-                              class="img-responsive" alt="Berry Lace Dress"></a>
-                        </div>
-                        <h3><a href="#">Berry Lace Dress</a></h3>
-                        <div class="pi-price">$29.00</div>
-                        <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <div class="header-navigation-content">
+                <div class="row">
+                  <div class="col-md-3 col-sm-4 col-xs-6">
+                    <div class="product-item">
+                      <div class="pi-img-wrapper">
+                        <a href="#"><img src="assets/pages/img/products/model4.jpg" class="img-responsive"
+                            alt="Berry Lace Dress"></a>
                       </div>
+                      <h3><a href="#">Berry Lace Dress</a></h3>
+                      <div class="pi-price">$29.00</div>
+                      <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                     </div>
-                    <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="product-item">
-                        <div class="pi-img-wrapper">
-                          <a href="#"><img src="assets/pages/img/products/model3.jpg"
-                              class="img-responsive" alt="Berry Lace Dress"></a>
-                        </div>
-                        <h3><a href="#">Berry Lace Dress</a></h3>
-                        <div class="pi-price">$29.00</div>
-                        <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+                  </div>
+                  <div class="col-md-3 col-sm-4 col-xs-6">
+                    <div class="product-item">
+                      <div class="pi-img-wrapper">
+                        <a href="#"><img src="assets/pages/img/products/model3.jpg" class="img-responsive"
+                            alt="Berry Lace Dress"></a>
                       </div>
+                      <h3><a href="#">Berry Lace Dress</a></h3>
+                      <div class="pi-price">$29.00</div>
+                      <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                     </div>
-                    <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="product-item">
-                        <div class="pi-img-wrapper">
-                          <a href="#"><img src="assets/pages/img/products/model7.jpg"
-                              class="img-responsive" alt="Berry Lace Dress"></a>
-                        </div>
-                        <h3><a href="#">Berry Lace Dress</a></h3>
-                        <div class="pi-price">$29.00</div>
-                        <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+                  </div>
+                  <div class="col-md-3 col-sm-4 col-xs-6">
+                    <div class="product-item">
+                      <div class="pi-img-wrapper">
+                        <a href="#"><img src="assets/pages/img/products/model7.jpg" class="img-responsive"
+                            alt="Berry Lace Dress"></a>
                       </div>
+                      <h3><a href="#">Berry Lace Dress</a></h3>
+                      <div class="pi-price">$29.00</div>
+                      <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                     </div>
-                    <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="product-item">
-                        <div class="pi-img-wrapper">
-                          <a href="#"><img src="assets/pages/img/products/model4.jpg"
-                              class="img-responsive" alt="Berry Lace Dress"></a>
-                        </div>
-                        <h3><a href="#">Berry Lace Dress</a></h3>
-                        <div class="pi-price">$29.00</div>
-                        <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
+                  </div>
+                  <div class="col-md-3 col-sm-4 col-xs-6">
+                    <div class="product-item">
+                      <div class="pi-img-wrapper">
+                        <a href="#"><img src="assets/pages/img/products/model4.jpg" class="img-responsive"
+                            alt="Berry Lace Dress"></a>
                       </div>
+                      <h3><a href="#">Berry Lace Dress</a></h3>
+                      <div class="pi-price">$29.00</div>
+                      <a href="javascript:;" class="btn btn-default add2cart">Add to cart</a>
                     </div>
                   </div>
                 </div>
-              </li>
-            </ul>
-          </li> --}}
+              </div>
+            </li>
+          </ul>
+        </li> --}}
 
 
-          <!-- BEGIN TOP SEARCH -->
-          <li class="menu-search">
-            <span class="sep"></span>
-            <i class="fa fa-search search-btn"></i>
-            <div class="search-box">
-              <form action="" method="" id="search-info">
-                <div class="input-group">
-                  <input type="text" placeholder="Search" class="form-control" id="search" name="search">
-                  <span class="input-group-btn">
-                    <input class="btn btn-primary" type="submit" form="search-info">Search</input>
-                  </span>
-                </div>
-              </form>
-              <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                  const searchForm = document.getElementById('search-info');
+        <!-- BEGIN TOP SEARCH -->
+        <li class="menu-search">
+          <span class="sep"></span>
+          <i class="fa fa-search search-btn"></i>
+          <div class="search-box">
+            <form action="" method="" id="search-info">
+              <div class="input-group">
+                <input type="text" placeholder="Search" class="form-control" id="search" name="search">
+                <span class="input-group-btn">
+                  <input class="btn btn-primary" type="submit" form="search-info">Search</input>
+                </span>
+              </div>
+            </form>
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                const searchForm = document.getElementById('search-info');
 
-                  searchForm.addEventListener('submit', function (event) {
-                      event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+                searchForm.addEventListener('submit', function (event) {
+                  event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
 
-                      // Lấy giá trị tìm kiếm từ ô input
-                      const searchTerm = document.getElementById('search').value.trim();
-                      // Kiểm tra nếu người dùng không nhập gì thì bỏ qua
-                      if (!searchTerm) {
-                          return;
-                      }
-                      else {
-                        window.location.href = `/product/search/?term=${searchTerm}`;
-                      }
-                      
-                  });
+                  // Lấy giá trị tìm kiếm từ ô input
+                  const searchTerm = document.getElementById('search').value.trim();
+                  // Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+                  if (!searchTerm) {
+                    return;
+                  }
+                  else {
+                    window.location.href = `/product/search/?term=${searchTerm}`;
+                  }
+
+                });
               });
-              </script>
-            </div>
-          </li>
-          <!-- END TOP SEARCH -->
-        </ul>
-      </div>
-      <!-- END NAVIGATION -->
+            </script>
+          </div>
+        </li>
+        <!-- END TOP SEARCH -->
+      </ul>
     </div>
+    <!-- END NAVIGATION -->
   </div>
-  <!-- Header END -->
+</div>
+<!-- Header END -->

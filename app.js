@@ -91,6 +91,7 @@ app.use(passport.session());
 // Normal router
 const homeRouter = require("./src");
 const productRouter = require("./src/product");
+const userRouter = require('./src/user');
 
 // Admin router
 // const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
@@ -103,7 +104,8 @@ const productRouter = require("./src/product");
 // Normal routing
 app.use("/", homeRouter);
 app.use("/home", homeRouter);
-app.use("/product/", productRouter);
+app.use("/products", productRouter);
+app.use("/cart", userRouter);
 
 // Subdomain admin routing
 // admin.use("/", usersDashboardRouter);

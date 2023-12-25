@@ -4,6 +4,7 @@ const categoryService = require('../category/category.service');
 const userService = require('../user/user.service');
 
 const home = async (req,res,next) => {
+	console.log(req.user);
 	res.render("user/home", {
 		title: "Vezi Store | Home",
 		user: req.user,
@@ -20,7 +21,6 @@ const catalog = async (req,res,next) => {
 	const currentCategory = req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
 	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
 	const popularProducts = await productService.getPopularProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
-
 	res.render("user/catalog", {
 		title: "Vezi Store | " + currentCategory + " " + currentType + " | Catalog",
 		user: req.user,
@@ -76,22 +76,3 @@ const getProducts = async (req,res,next) => {
 	res.json(await productService.getProducts(page, sort, filter, category, subcategory, term));
 }
 exports.getProducts = getProducts;
-
-const addToCart = async (req, res, next) => {
-	const productId = req.params.id;
-	const quantity = req.body.quantity;
-	const userId = req.user.id;
-	// Check for available stock
-	let product = await productService.getProductById(productId);
-	if (product.availability < quantity) {
-		return res.json({ status: "error", message: "Not enough stock" });
-	}
-	
-	product.availability -= quantity;
-	await Product.findByIdAndUpdate(productId, product);
-
-	const result = await userService.addToCart(productId, quantity, userId);
-
-	res.json(result);
-}
-exports.addToCart = addToCart;

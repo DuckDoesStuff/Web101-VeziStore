@@ -2,6 +2,9 @@ const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./user.model");
+const {Product} = require("../product/product.model");
+const productService = require("../product/product.service");
+const userService = require("./user.service");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -148,3 +151,32 @@ const register = async (req, res, next) => {
 	}
 };
 exports.register = register;
+
+const addToCart = async(req,res,next) => {
+	const productId = req.params.id;
+	const quantity = req.body.quantity;
+	// Check for available stock
+	let product = await productService.getProductById(productId);
+	if (product.availability < quantity) {
+		return res.json({status: "error", message: "Not enough stock"});
+	}
+
+	// Check if the user is logged in
+	if (!req.user) {
+		return res.json({status: "error", message: "Please login first"});
+	}
+
+	// Update product availability
+	product.availability -= quantity;
+	await Product.findByIdAndUpdate(productId, product);
+
+	// Add to cart
+	const result = await userService.addToCart(productId, quantity, req.user.id);
+	res.json(result);
+}
+exports.addToCart = addToCart;
+
+const getCart = async (req,res,next) => {
+	res.sendStatus(200);
+}
+exports.getCart = getCart;

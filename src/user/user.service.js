@@ -15,10 +15,10 @@ const addToCart = async (productId, quantity, userId) => {
 			"quantity":quantity
 		});
 	}
-	await user.save();
+	await User.findByIdAndUpdate(userId, user);
 	return {
-		"message": "Product added to cart successfully",
-		"status": 200
+		message: "Product added to cart successfully",
+		status: 200
 	}
 }
 exports.addToCart = addToCart;

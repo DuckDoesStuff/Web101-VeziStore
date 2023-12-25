@@ -57,7 +57,7 @@
 								<p>{{productDetail.description}}</p>
 							</div>
 
-							<form id="order-info" action="product/{{productDetail._id}}" method="post">
+							<form id="order-info" action="/cart/{{productDetail._id}}" method="post">
 								<div class="product-page-options">
 									<div class="pull-left">
 										<label class="control-label">Size:</label>
@@ -72,7 +72,6 @@
 									<div class="product-quantity">
 										<input name="quantity" type="text" max="{{productDetail.availability}}" value="1" class="form-control input-sm">
 									</div>
-									<input type="hidden" name="name" value="{{productDetail.name}}">
 									<button class="btn btn-primary" type="submit">Add to cart</button>
 								</div>
 							</form>
@@ -247,6 +246,21 @@
 				}
 			}
 
+			async function createOrderAndShowMessage(quantity) {
+				const response = await fetch(`/cart/{{productDetail._id}}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						quantity
+					})
+				});
+
+				const result = await response.json();
+				alert(result.message);
+			}
+
 			document.addEventListener('DOMContentLoaded', () => {
 				getReviewData();
 
@@ -264,7 +278,16 @@
 						await createReviewAndRefreshUI(username, review, rating);
 				});
 
+				const orderInfoForm = document.getElementById('order-info');
+				orderInfoForm.addEventListener('submit', async function (event) {
+					event.preventDefault();
 
+					// Get form data
+					const formData = new FormData(orderInfoForm);
+					const quantity = formData.get('quantity');
+
+					await createOrderAndShowMessage(quantity);
+				});
 			});
 
     </script>
