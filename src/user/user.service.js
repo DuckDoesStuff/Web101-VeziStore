@@ -22,3 +22,14 @@ const addToCart = async (productId, quantity, userId) => {
 	}
 }
 exports.addToCart = addToCart;
+
+const getCart = async (userId) => {
+	const user = await User.findById(userId).populate("shopcart.productId");
+	let shopcart = user.shopcart;
+	shopcart = shopcart.map(order => {
+		const total = order.productId.price * order.quantity;
+		return {order, total}
+	});
+	return shopcart;
+}
+exports.getCart = getCart;

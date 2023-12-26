@@ -1,0 +1,31 @@
+<tr>
+	{{#with order}}
+	<td class="goods-page-image">
+		<a href="javascript:;"><img src="https://ucarecdn.com/{{productId.image.[0]}}/-/scale_crop/300x400/smart/" alt="{{productId.name}}"></a>
+	</td>
+
+	<td class="goods-page-description">
+		<h3><a href="/product/{{productId._id}}">{{productId.name}}</a></h3>
+		<!-- <p><strong>Item 1</strong> - Color: Green; Size: S</p>
+		<em>More info is here</em> -->
+	</td>
+
+	<td class="goods-page-quantity">
+		<div class="product-quantity">
+			<input id="product-quantity" type="text" value="{{quantity}}" readonly class="form-control input-sm">
+		</div>
+	</td>
+
+	<td class="goods-page-price">
+		<strong><span>$</span>{{productId.price}}</strong>
+	</td>
+	{{/with}}
+
+	<td class="goods-page-total">
+		<strong><span>$</span>{{total}}</strong>
+	</td>
+
+	<td class="del-goods-col">
+		<button class="del-goods" href="javascript:;">&nbsp;</button>
+	</td>
+</tr>

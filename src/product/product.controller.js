@@ -4,7 +4,6 @@ const categoryService = require('../category/category.service');
 const userService = require('../user/user.service');
 
 const home = async (req,res,next) => {
-	console.log(req.user);
 	res.render("user/home", {
 		title: "Vezi Store | Home",
 		user: req.user,

@@ -104,7 +104,7 @@ const userRouter = require('./src/user');
 // Normal routing
 app.use("/", homeRouter);
 app.use("/home", homeRouter);
-app.use("/products", productRouter);
+app.use("/product", productRouter);
 app.use("/cart", userRouter);
 
 // Subdomain admin routing

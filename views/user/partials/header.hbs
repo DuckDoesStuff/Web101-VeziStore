@@ -33,8 +33,6 @@
         <ul class="list-unstyled list-inline pull-right">
           {{#if user}}
           <li><a href="#">My Account</a></li>
-          <li><a href="/#">My Wishlist</a></li>
-          <li><a href="#">Checkout</a></li>
           <li><a href="/logout">Log out</a></li>
           {{else}}
           <li><a href="signin">Log In</a></li>
@@ -60,8 +58,8 @@
     {{#if user}}
     <div class="top-cart-block">
       <div class="top-cart-info">
-        <a href="javascript:void(0);" class="top-cart-info-count">number_of_items</a>
-        {{!-- <a href="javascript:void(0);" class="top-cart-info-value">$total</a> --}}
+        <a href="/cart" class="top-cart-info-count">0 items</a>
+        <a href="/cart" class="top-cart-info-value">0$ total</a>
       </div>
       <i class="fa fa-shopping-cart"></i>
     </div>
@@ -193,3 +191,28 @@
   </div>
 </div>
 <!-- Header END -->
+
+<script>
+  let cart = [];
+  document.addEventListener('DOMContentLoaded', async function () {
+    if(!document.querySelector('.top-cart-info-count')) return;
+    const totalItemHtml = document.querySelector('.top-cart-info-count');
+    const totalOrderHtml = document.querySelector('.top-cart-info-value');
+    const result = await fetch('/cart/api', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+    cart = result;
+    document.dispatchEvent(new Event('cartLoaded'));
+
+    totalItemHtml.innerHTML = `${result.length} items`;
+
+    let totalOrder = 0;
+    result.forEach(order => {
+      totalOrder += order.total;
+    });
+    totalOrderHtml.innerHTML = `${totalOrder}$ total`;
+  });
+</script>

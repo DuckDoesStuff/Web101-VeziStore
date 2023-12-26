@@ -134,7 +134,7 @@
 									</form>
 									<!-- END FORM-->
 									{{else}}
-									<p>Please <a href="/signin">login</a> to write a review.</p>
+									<p>Please <a href="/signin/?returnUrl=product/{{productDetail._id}}">login</a> to write a review.</p>
 									{{/if}}
 								</div>
 							</div>
@@ -194,21 +194,12 @@
 				}
 
 				reviewDiv.innerHTML = '';
+				const reviewTemplateSrc = await fetch('./assets/reviewItem.html');
+				const reviewTemplate = await reviewTemplateSrc.text();
+				const reviewTemplateCompiled = Handlebars.compile(reviewTemplate);
+
 				reviewData.forEach(review => {
-					const reviewTemplate = `
-						<div class="review-item clearfix">
-							<div class="review-item-submitted">
-								<strong>${review.username}</strong>
-								<em>${review.date}</em>
-								<div id="rateit-${review._id}" class="rateit" data-rateit-value="${review.rating}" data-rateit-ispreset="true" data-rateit-readonly="true">
-								</div>
-							</div>
-							<div class="review-item-content">
-								<p>${review.review}</p>
-							</div>
-						</div>
-					`;
-					reviewDiv.innerHTML += reviewTemplate;
+					reviewDiv.innerHTML += reviewTemplateCompiled(review);
 				});
 
 				$(".rateit").rateit();
@@ -258,6 +249,7 @@
 				});
 
 				const result = await response.json();
+				//TODO: Change to something more beautiful
 				alert(result.message);
 			}
 
@@ -265,7 +257,8 @@
 				getReviewData();
 
 				const reviewForm = document.getElementById('review-form');
-				reviewForm.addEventListener('submit', async function (event) {
+				if(reviewForm) {
+					reviewForm.addEventListener('submit', async function (event) {
 						event.preventDefault();
 
 						// Get form data
@@ -277,6 +270,7 @@
 						// Call the function to create the review and refresh the UI
 						await createReviewAndRefreshUI(username, review, rating);
 				});
+				}
 
 				const orderInfoForm = document.getElementById('order-info');
 				orderInfoForm.addEventListener('submit', async function (event) {

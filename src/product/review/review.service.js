@@ -1,5 +1,6 @@
 const {Review} = require('./review.model');
 const productService = require('../product.service');
+const {Product} = require('../product.model');
 const moment = require('moment');
 
 const getReviewByID = (id) => Review.findById(id).lean();
@@ -8,14 +9,15 @@ const getReviews = (ids) => Promise.all(ids.map((id) => getReviewByID(id)));
 
 const getReviewByProductId = async (productId) => {
   //const productDetail = await productService.getProductById(productId);
-  const productDetail = await productService.getProductById(productId);
+  const productDetail = await Product.findById(productId).populate('review').lean();
 	if (!productDetail) {
 		return null;
 	}
 	if(!productDetail.review) {
 		return [];
 	}
-	let reviews = await getReviews(productDetail.review.map(review => review._id));
+	let reviews = productDetail.review;
+	// let reviews = await getReviews(productDetail.review.map(review => review._id));
 	reviews.sort((a, b) => b.date - a.date);
 	reviews.forEach((review) => {
 		review.date = moment(review.date).format('DD/MM/YYYY, h:mm:ss a');

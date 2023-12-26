@@ -281,6 +281,7 @@ Header and header elements
 	text-decoration: none;
 }
 .del-goods {
+	border:0px;
 	background: #d7dde3 url(../../pages/img/icons/del-goods.png) no-repeat 50% 50%;
 }
 .del-goods:hover {

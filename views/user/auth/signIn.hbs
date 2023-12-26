@@ -48,7 +48,7 @@
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-sm-12 col-xl-6">
-                    <form class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="/signin" method="post">
+                    <form id="signin" class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="/signin" method="post">
                         <h1 class="text-danger font-weight-bold mb-5">{{error}}</h1>
                         <div class="d-flex align-items-center justify-content-between mb-5">
                             <a href="/" class="">
@@ -96,5 +96,17 @@
     <script src="assets/adminjs/js/main.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 </body>
+
+<script>
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const existingParams = url.searchParams;
+    
+    document.getElementById('signin').addEventListener('submit', function(event) {
+        const formAction = this.action; // Get the original form action
+        const newAction = existingParams.toString() ? `${formAction}?${existingParams.toString()}` : formAction;
+        this.action = newAction;
+    });
+</script>
 
 </html>

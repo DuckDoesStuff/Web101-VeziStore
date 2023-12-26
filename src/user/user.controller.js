@@ -3,6 +3,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./user.model");
 const {Product} = require("../product/product.model");
+
+const categoryService = require("../category/category.service");
 const productService = require("../product/product.service");
 const userService = require("./user.service");
 
@@ -77,8 +79,7 @@ const login = (req, res, next) => {
 					error: err.message,
 				});
 			}
-
-			res.redirect(req.session.returnTo || "/");
+			res.redirect(req.query.returnUrl || "/");
 		});
 	})(req, res);
 };
@@ -89,7 +90,7 @@ const logout = (req, res, next) => {
 		if (err) {
 			return next(err);
 		}
-		res.redirect(req.session.returnTo || "/");
+		res.redirect(req.query.returnUrl || "/");
 	});
 };
 exports.logout = logout;
@@ -140,7 +141,7 @@ const register = async (req, res, next) => {
 						"Login after registration failed. Please try logging in manually.",
 				});
 			}
-			return res.redirect(req.session.returnTo || "/");
+			return res.redirect(req.query.returnUrl || "/");
 		});
 	} catch (error) {
 		console.error(error);
@@ -172,11 +173,28 @@ const addToCart = async(req,res,next) => {
 
 	// Add to cart
 	const result = await userService.addToCart(productId, quantity, req.user.id);
-	res.json(result);
+	return res.json(result);
 }
 exports.addToCart = addToCart;
 
-const getCart = async (req,res,next) => {
-	res.sendStatus(200);
+const getCart = async (req, res, next) => {
+	if(!req.user) {
+		return res.json({status: "error", message: "Please login first"});
+	}
+	return res.json(await userService.getCart(req.user.id));
 }
 exports.getCart = getCart;
+
+const viewCart = async (req, res, next) => {
+	if(!req.user) {
+		return res.redirect("/signin/?returnUrl=cart");
+	}
+
+	res.render("user/cart/shopCart", {
+		title: "Shopping cart",
+		user: req.user, 
+		categories: await categoryService.getAllCategory(),
+		subcategories: await categoryService.getAllSubcategory()
+	});
+}
+exports.viewCart = viewCart;
