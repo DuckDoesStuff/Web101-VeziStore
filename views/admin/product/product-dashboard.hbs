@@ -6,11 +6,32 @@
             <h6 class="mb-0">PRODUCTS LIST</h6>
         </div>
         <div class="row d-flex align-items-center justify-content-between mb-4">
-            <form class="col-sm-3">
-                <input class="form-control border-0" type="search" placeholder="Search">
+            <form action="" method="" id="search-info">
+              <div class="input-group">
+                <input type="text" placeholder="Search" class="form-control" id="search" name="search">
+              </div>
             </form>
-            
         </div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+			const searchForm = document.getElementById('search-info');
+
+			searchForm.addEventListener('submit', function (event) {
+				event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+				// Lấy giá trị tìm kiếm từ ô input
+				const searchTerm = document.getElementById('search').value.trim();
+				// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+				if (!searchTerm) {
+				return;
+				}
+				else {
+				window.location.href = `/products/dashboard/?term=${searchTerm}`;
+				}
+
+			});
+			});
+		</script>
         <div class="row d-flex align-items-center justify-content-between mb-4">
             <div class="col-sm-3">
                     <div class="row">
@@ -18,10 +39,10 @@
                         <div class="col">
                             <select required class="form-select form-control"
                                 aria-label="Floating label select example" name="category" id="category">
-                                <option value="">Choose category</option>
-                                <option value="Woman">Woman</option>
-                                <option value="Man">Man</option>
-                                <option value="Kid">Kid</option>
+                                <option value="0">Choose category</option>
+                                <option value="woman">Woman</option>
+                                <option value="man">Man</option>
+                                <option value="kid">Kid</option>
                             </select>
                         </div>
                     </div>
@@ -31,60 +52,22 @@
                         <label for="subcategory" class="col-sm-4 col-form-label">Subcategory</label>
                         <div class="col-sm-8">
                             <select required class="form-select form-control" aria-label="Floating label select example" name="subcategory" id="subcategory">
-                                <option value="">Choose subcategory</option>
+                                <option value="0">Choose subcategory</option>
                             </select>
                             <div id="subcategory-list"></div> <!-- Thêm div để chứa danh sách subcategory -->
                         </div>
                     </div>
-                    <script>
-                        const categorySelect = document.querySelector('#category');
-                        const subcategorySelect = document.querySelector('#subcategory');
-                        const subcategoryListContainer = document.querySelector('#subcategory-list');
-
-                        categorySelect.addEventListener('change', function () {
-                            const selectedCategory = categorySelect.value;
-                            // Kiểm tra nếu là "Choose category" thì xóa danh sách subcategory
-                            if (selectedCategory === "") {
-                                subcategorySelect.innerHTML = '<option value="">Choose subcategory</option>';
-                                subcategoryListContainer.innerHTML = '';
-                                return;
-                            }
-
-                            // Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
-                            fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    const subcategories = data.subcategories;
-                                    console.log('Data from API:', data);
-
-                                    // Xóa tất cả các option hiện tại trong select subcategory
-                                    subcategorySelect.innerHTML = '<option value="">Choose subcategory</option>';
-
-                                    // Thêm các option mới vào select subcategory
-                                    subcategories.forEach(subcategory => {
-                                        const option = document.createElement('option');
-                                        option.value = subcategory;
-                                        option.textContent = subcategory;
-                                        subcategorySelect.appendChild(option);
-                                    });
-
-                                    // Hiển thị danh sách subcategory
-                                    //subcategoryListContainer.innerHTML = subcategories.map(subcategory => subcategory.name).join(', ');
-                                })
-                                .catch(error => console.error('Error:', error));
-                        });
-                    </script>
                 </div>
                 <div class="col-sm-3">
-                <div class="row">    
-                    <label for="sort-by" class="col-sm-3 col-form-label">Sort by</label>
+                <div class="row">
+                    <label for="sort-by" class="col-sm-3 col-form-label">Sort&nbsp;by</label>
                     <div class="col">
                         <select required class="form-select form-control"
-                            aria-label="Floating label select example" name="category" id="category">
-                            <option value="">Default</option>
-                            <option value="Woman">Woman</option>
-                            <option value="Man">Man</option>
-                            <option value="Kid">Kid</option>
+                            aria-label="Floating label select example" name="sort-by" id="sort-by">
+                            <option value="0">Default</option>
+                            <option value="1">New arrivals</option>
+                            <option value="2">Price (Low &gt; High)</option>
+                            <option value="3">Price (High &gt; Low)</option>
                         </select>
                     </div>
                 </div>
@@ -108,7 +91,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12 justify-content-end">
-                <ul class="pagination pull-right" id="paginator">
+                <ul class="pagination pag-styles" id="paginator">
                 </ul>
             </div>
         </div>
@@ -122,7 +105,7 @@
 	let currentPage = 1;
 	let totalPages = 1;
 
-	const urlParams = new URLSearchParams(window.location.search);
+	const urlParams = new URLSearchParams(window.location.href);
 
 	const currentCategory = urlParams.get('cate')
 	const currentType = urlParams.get('type')
@@ -148,9 +131,9 @@
 		if(sort) {
 			existingParams += `&sort=${sort}`;
 		}
-		window.location.href = '/products/' + existingParams;
+		window.location.href = '/products/dashboard/' + existingParams;
 	}
-	
+
 	//Client
 	async function getProducts(apiURL) {
 		apiURL = apiURL.replace('/search', '');
@@ -162,7 +145,7 @@
 		}).then(res => res.json());
 		return result;
 	}
-	
+
 	async function renderProducts(products) {
 		const productItemHtml = await fetch('./assets/productDashboard.html')
 		const productTemplateSrc = await productItemHtml.text();
@@ -214,7 +197,7 @@
 				a.href = 'javascript:void(0);';
 				a.innerText = 'Previous';
 				a.addEventListener('click', () => {
-					getProducts(`/products/${existingParams}&page=${currentPage - 1}`).then(products => {
+					getProducts(`/products/dashboard/${existingParams}&page=${currentPage - 1}`).then(products => {
 						renderProducts(products);
 						currentPage = currentPage - 1;
 					});
@@ -231,7 +214,7 @@
 						a.href = 'javascript:void(0);';
 						a.innerText = i;
 						a.addEventListener('click', () => {
-							getProducts(`/products/${existingParams}&page=${i}`).then(products => {
+							getProducts(`/products/dashboard/${existingParams}&page=${i}`).then(products => {
 								renderProducts(products);
 								currentPage = i;
 							});
@@ -252,7 +235,7 @@
 				a.href = 'javascript:void(0);';
 				a.innerText = 'Next';
 				a.addEventListener('click', () => {
-					getProducts(`/product/${existingParams}&page=${currentPage + 1}`).then(products => {
+					getProducts(`/products/dashboard/${existingParams}&page=${currentPage + 1}`).then(products => {
 						renderProducts(products);
 						currentPage = currentPage + 1;
 					});
@@ -264,14 +247,59 @@
 	}
 
 	document.addEventListener('DOMContentLoaded', function () {
-		/*const sortSelect = document.querySelector('#sort-by');
+		const sortSelect = document.querySelector('#sort-by');
 		sortSelect.value = sort || 0;
 		sortSelect.addEventListener('change', () => {
 			redirectPage(currentCategory, currentType, term, filter, sortSelect.value);
 		});
-		
-		
-		const selectedFilter = document.querySelector(`input[name="price-range"][value="${filter}"]`);
+
+		const cateSelect = document.querySelector('#category');
+		cateSelect.value = currentCategory || 0;
+
+		const subcategorySelect = document.querySelector('#subcategory');
+    	const subcategoryListContainer = document.querySelector('#subcategory-list');
+		cateSelect.addEventListener('change', () => {
+			redirectPage(cateSelect.value, currentType, term, filter, sort);
+		});
+
+		getSubcategories(currentCategory);
+		async function getSubcategories(selectedCategory) {
+			if (selectedCategory === "0") {
+				subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+				subcategoryListContainer.innerHTML = '';
+				return;
+			}
+
+			// Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
+			fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
+				.then(response => response.json())
+				.then(data => {
+					const subcategories = data.subcategories;
+					console.log('Data from API:', data);
+
+					// Xóa tất cả các option hiện tại trong select subcategory
+					subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+
+					// Thêm các option mới vào select subcategory
+					subcategories.forEach(subcategory => {
+						const option = document.createElement('option');
+						option.value = subcategory;
+						option.textContent = subcategory;
+						subcategorySelect.appendChild(option);
+					});
+
+					// Hiển thị danh sách subcategory
+					//subcategoryListContainer.innerHTML = subcategories.map(subcategory => subcategory.name).join(', ');
+				})
+				.catch(error => console.error('Error:', error));
+		}
+
+		subcategorySelect.value = currentType || 0;
+
+		subcategorySelect.addEventListener('change', () => {
+			redirectPage(currentCategory, subcategorySelect.value, term, filter, sort);
+		});
+		/*const selectedFilter = document.querySelector(`input[name="price-range"][value="${filter}"]`);
 		if (selectedFilter) {
 			selectedFilter.click();
 		}
@@ -282,7 +310,7 @@
 				redirectPage(currentCategory, currentType, term, selectedValue, sort);
 			});
 		})*/
-		
+
 		initialLoad();
 	});
 </script>

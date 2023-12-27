@@ -53,6 +53,12 @@
     height: 48px;
 }
 
+.pag-styles {
+    gap: 10px;
+    display: inline-flex;
+    margin-top: 10px;
+}
+
 .btn-square,
 .btn-sm-square,
 .btn-lg-square {

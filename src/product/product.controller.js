@@ -96,14 +96,14 @@ const getSubByCate = async (req, res, next) => {
     // Thay thế logic này bằng cách lấy danh sách subcategory tương ứng với category từ cơ sở dữ liệu hoặc nguồn dữ liệu khác
     let subcategories = [];
     switch (category) {
-        case 'Woman':
-            subcategories = ['Tops', 'Dresses', 'Activewear', 'Accessories', 'Footwear'];
+        case 'woman':
+            subcategories = ['tops', 'dresses', 'activewear', 'accessories', 'footwear'];
             break;
-        case 'Man':
-            subcategories = ['T-Shirts', 'Shirts', 'Bottoms', 'Outterwear'];
+        case 'man':
+            subcategories = ['t-shirts', 'shirts', 'bottoms', 'outterwear'];
             break;
-        case 'Kid':
-        subcategories = ['Sleepwear', 'School', 'Activity', 'Summer'];
+        case 'kid':
+        subcategories = ['sleepwear', 'school', 'activity', 'summer'];
         break;
         // Thêm các trường hợp khác nếu cần
     }
