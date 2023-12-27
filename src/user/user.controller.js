@@ -167,10 +167,6 @@ const addToCart = async(req,res,next) => {
 		return res.json({status: "error", message: "Please login first"});
 	}
 
-	// Update product availability
-	product.availability -= quantity;
-	await Product.findByIdAndUpdate(productId, product);
-
 	// Add to cart
 	const result = await userService.addToCart(productId, quantity, req.user.id);
 	return res.json(result);
@@ -198,3 +194,18 @@ const viewCart = async (req, res, next) => {
 	});
 }
 exports.viewCart = viewCart;
+
+const removeFromCart = async (req, res, next) => {
+	const productId = req.params.id;
+	const result = await userService.removeFromCart(productId, req.user.id);
+	return res.json(result);
+}
+exports.removeFromCart = removeFromCart;
+
+const updateCart = async (req, res, next) => {
+	const productId = req.params.id;
+	const quantity = req.body.quantity;
+	const result = await userService.updateCart(productId, quantity, req.user.id);
+	return res.json(result);
+}
+exports.updateCart = updateCart;

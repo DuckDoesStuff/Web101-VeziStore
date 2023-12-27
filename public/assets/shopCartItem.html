@@ -1,5 +1,5 @@
-<tr>
-	{{#with order}}
+{{#with order}}
+<tr id="{{productId._id}}">
 	<td class="goods-page-image">
 		<a href="javascript:;"><img src="https://ucarecdn.com/{{productId.image.[0]}}/-/scale_crop/300x400/smart/" alt="{{productId.name}}"></a>
 	</td>
@@ -12,7 +12,7 @@
 
 	<td class="goods-page-quantity">
 		<div class="product-quantity">
-			<input id="product-quantity" type="text" value="{{quantity}}" readonly class="form-control input-sm">
+			<input onchange="changeQuantity(this)" id="product-quantity" type="number" min="1" max="{{productId.availability}}" value="{{quantity}}" class="form-control">
 		</div>
 	</td>
 
@@ -26,6 +26,6 @@
 	</td>
 
 	<td class="del-goods-col">
-		<button class="del-goods" href="javascript:;">&nbsp;</button>
+		<button onclick="removeItem(this)" class="del-goods">&nbsp;</button>
 	</td>
 </tr>

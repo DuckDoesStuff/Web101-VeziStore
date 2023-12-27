@@ -23,6 +23,25 @@ const addToCart = async (productId, quantity, userId) => {
 }
 exports.addToCart = addToCart;
 
+const removeFromCart = async (productId, userId) => {
+	const user = await User.findById(userId);
+	const index = user.shopcart.findIndex(product => product.productId == productId);
+	if (index > -1) {
+		user.shopcart.splice(index, 1);
+		await user.save();
+		return {
+			message: "Product removed from cart successfully",
+			status: 200
+		}
+	}else {
+		return {
+			message: "Product not found in cart",
+			status: 404
+		}
+	}
+}
+exports.removeFromCart = removeFromCart;
+
 const getCart = async (userId) => {
 	const user = await User.findById(userId).populate("shopcart.productId");
 	let shopcart = user.shopcart;
@@ -33,3 +52,23 @@ const getCart = async (userId) => {
 	return shopcart;
 }
 exports.getCart = getCart;
+
+const updateCart = async (productId, quantity, userId) => {
+	const user = await User.findById(userId);
+	const index = user.shopcart.findIndex(product => product.productId == productId);
+	if (index > -1) {
+		user.shopcart[index].quantity = quantity;
+		await user.save();
+		return {
+			message: "Cart updated successfully",
+			status: 200
+		}
+	}
+	else {
+		return {
+			message: "Product not found in cart",
+			status: 404
+		}
+	}
+}
+exports.updateCart = updateCart;
