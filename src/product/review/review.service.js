@@ -1,6 +1,6 @@
-const {Review} = require('./review.model');
+const Review = require('./review.model');
 const productService = require('../product.service');
-const {Product} = require('../product.model');
+const Product = require('../product.model');
 const moment = require('moment');
 
 const getReviewByID = (id) => Review.findById(id).lean();

@@ -1,25 +1,23 @@
-{{#with order}}
-<tr id="{{productId._id}}">
+<tr id="{{product._id}}">
 	<td class="goods-page-image">
-		<a href="javascript:;"><img src="https://ucarecdn.com/{{productId.image.[0]}}/-/scale_crop/300x400/smart/" alt="{{productId.name}}"></a>
+		<a href="javascript:;"><img src="https://ucarecdn.com/{{product.image.[0]}}/-/scale_crop/300x400/smart/" alt="{{product.name}}"></a>
 	</td>
 
 	<td class="goods-page-description">
-		<h3><a href="/product/{{productId._id}}">{{productId.name}}</a></h3>
+		<h3><a href="/product/{{product._id}}">{{product.name}}</a></h3>
 		<!-- <p><strong>Item 1</strong> - Color: Green; Size: S</p>
 		<em>More info is here</em> -->
 	</td>
 
 	<td class="goods-page-quantity">
 		<div class="product-quantity">
-			<input onchange="changeQuantity(this)" id="product-quantity" type="number" min="1" max="{{productId.availability}}" value="{{quantity}}" class="form-control">
+			<input onchange="changeQuantity(this)" id="product-quantity" type="number" min="1" max="{{product.availability}}" value="{{quantity}}" class="form-control">
 		</div>
 	</td>
 
 	<td class="goods-page-price">
-		<strong><span>$</span>{{productId.price}}</strong>
+		<strong><span>$</span>{{product.price}}</strong>
 	</td>
-	{{/with}}
 
 	<td class="goods-page-total">
 		<strong><span>$</span>{{total}}</strong>

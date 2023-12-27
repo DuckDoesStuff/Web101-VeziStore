@@ -6,19 +6,17 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    shopcart: [{
-        productId : { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-        quantity: {type:Number}
-    }],
-    checkout_history: [],
-    order_history: [],
+    cart: {type: mongoose.Schema.Types.ObjectId, ref: "Cart"},
+    checkout: [{type: mongoose.Schema.Types.ObjectId, ref: "Checkout"}],
+    order: [{type: mongoose.Schema.Types.ObjectId, ref: "Order"}],
 });
 
 userSchema.pre("save", async function (next) {
     try {
-        console.log(this.password);
-        const hashedPassword = await bcrypt.hash(this.password, 10);
-        this.password = hashedPassword;
+        if (this.isModified('password') || this.isNew) {
+            const hashedPassword = await bcrypt.hash(this.password, 10);
+            this.password = hashedPassword;
+        }
         next();
     } catch (error) {
         next(error);
@@ -33,6 +31,6 @@ userSchema.methods.isValidPassword = async function (password) {
     }
 };
 
-const User = mongoose.model("User", userSchema, "users");
+const User = mongoose.model("User", userSchema, "user");
 
 module.exports = User;

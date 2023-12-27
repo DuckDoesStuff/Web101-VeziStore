@@ -48,7 +48,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-sm-12 col-xl-6">
-                    <form id="signup" class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="/signup" method="post">
+                    <form id="signup" class="bg-light rounded p-4 p-sm-5 my-4 mx-3" action="auth/signup" method="post">
                         <h1 class="text-danger font-weight-bold mb-5">{{error}}</h1>
                         <div class="d-flex align-items-center justify-content-between mb-5">
                             <a href="/" class="">
@@ -76,7 +76,7 @@
                             <a href="" class="label-font-size">Forgot Password</a>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block py-3" style="font-size:15px;">Sign up</button>
-                        <p class="text-center mb-0 label-font-size">Already have an Account? <a href="/signin" class="label-font-size">Sign In</a></p>
+                        <p class="text-center mb-0 label-font-size">Already have an Account? <a href="auth/signin" class="label-font-size">Sign In</a></p>
                     </form>
                 </div>
             </div>
