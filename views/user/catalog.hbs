@@ -129,6 +129,7 @@
 	}
 
 	async function initialLoad() {
+		///product/?cate=woman
 		const apiURL = '/product/' + window.location.search;
 		const products = await getProducts(apiURL);
 		totalPages = Math.ceil(products.productCount / 9);

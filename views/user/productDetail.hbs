@@ -134,7 +134,7 @@
 									</form>
 									<!-- END FORM-->
 									{{else}}
-									<p>Please <a href="/signin/?returnUrl=product/{{productDetail._id}}">login</a> to write a review.</p>
+									<p>Please <a href="auth/signin/?returnUrl=product/{{productDetail._id}}">login</a> to write a review.</p>
 									{{/if}}
 								</div>
 							</div>
@@ -251,6 +251,7 @@
 				const result = await response.json();
 				//TODO: Change to something more beautiful
 				alert(result.message);
+				fetchCart();
 			}
 
 			document.addEventListener('DOMContentLoaded', () => {

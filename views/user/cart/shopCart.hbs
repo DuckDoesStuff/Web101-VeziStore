@@ -9,13 +9,7 @@
 					<div class="goods-data clearfix">
 						<div class="table-wrapper-responsive">
 							<table id="cart-items" summary="Shopping cart">
-								<tr>
-									<th class="goods-page-image">Image</th>
-									<th class="goods-page-description">Description</th>
-									<th class="goods-page-quantity">Quantity</th>
-									<th class="goods-page-price">Price</th>
-									<th class="goods-page-total">Total</th>
-								</tr>
+								
 							</table>
 						</div>
 
@@ -23,15 +17,15 @@
 							<ul>
 								<li>
 									<em>Total order</em>
-									<strong id="total-order" class="price"><span>$</span>47.00</strong>
+									<strong id="total-order" class="price"><span>$</span>0</strong>
 								</li>
 								<li>
 									<em>Shipping cost</em>
-									<strong id="shipping-cost" class="price"><span>$</span>3.00</strong>
+									<strong id="shipping-cost" class="price"><span>$</span>3</strong>
 								</li>
 								<li class="shopping-total-price">
 									<em>Total</em>
-									<strong id="total" class="price"><span>$</span>50.00</strong>
+									<strong id="total" class="price"><span>$</span>0</strong>
 								</li>
 							</ul>
 						</div>
@@ -52,18 +46,26 @@
 <script type="text/javascript">
 	const loadCart = async () => {
 		const cartHtml = document.querySelector('#cart-items');
+		cartHtml.innerHTML = 
+			`<tr>
+				<th class="goods-page-image">Image</th>
+				<th class="goods-page-description">Description</th>
+				<th class="goods-page-quantity">Quantity</th>
+				<th class="goods-page-price">Price</th>
+				<th class="goods-page-total">Total</th>
+			</tr>`;
 		const cartItemHtml = await fetch('./assets/shopCartItem.html')
 		const cartItemTemplateSrc = await cartItemHtml.text();
 		const cartTemplate = Handlebars.compile(cartItemTemplateSrc);
-		let totalOrder = 0;
 		let shippingCost = 3;
 
-		cart.map(item => {
-			totalOrder += item.total;
+		cart.item.map(item => {
+			console.log(item);
 			cartHtml.innerHTML += cartTemplate(item);
-		})
-		document.querySelector('#total-order').innerHTML = `$${totalOrder}`;
-		let total = totalOrder + shippingCost;
+		});
+
+		document.querySelector('#total-order').innerHTML = `$${cart.total}`;
+		let total = cart.total + shippingCost;
 		document.querySelector('#total').innerHTML = `$${total}`;
 	}
 
@@ -74,14 +76,42 @@
 		}
 	}
 
+	const removeItem = async (button) => {
+		const id = button.parentNode.parentNode.id;
+		const result = await fetch(`/cart/${id}`, {
+			method: 'DELETE',
+		}).then(res => res.json());
+		alert(result.message);
+		fetchCart();
+	}
+	
+	let timer;
+	const changeQuantity = async(button) => {
+		clearTimeout(timer);
+
+		timer = await setTimeout(async () => {
+			const id = button.parentNode.parentNode.parentNode.id;
+			const quantity = button.parentNode.querySelector('input').value;
+			const result = await fetch(`/cart/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({quantity})
+			}).then(res => res.json());
+			fetchCart();
+		}, 500);
+	}
+
 	document.addEventListener('cartLoaded', async () => {
-		if(cart.length > 0) {
+		if(cart.item.length > 0) {
 			loadCart();
 		}else {
 			document.querySelector('.goods-data').innerHTML = '<h3>Your cart is empty, go shopping!</h3>';
 			document.querySelector('#checkout').classList.add('disabled');
 		}
-			document.querySelector("#checkout").addEventListener('click', checkout);
+		document.querySelector("#checkout").addEventListener('click', checkout);
 	});
+
 </script>
 {{/section}}

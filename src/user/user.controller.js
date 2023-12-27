@@ -1,12 +1,7 @@
-const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./user.model");
-const {Product} = require("../product/product.model");
-
-const categoryService = require("../category/category.service");
-const productService = require("../product/product.service");
-const userService = require("./user.service");
+const Cart = require("../cart/cart.model");
 
 passport.use(
 	new LocalStrategy(async (username, password, done) => {
@@ -129,7 +124,18 @@ const register = async (req, res, next) => {
 
 		// Create a new user
 		const newUser = new User({ username, email, password });
-		await newUser.save();
+    await newUser.save();
+		
+    // Create a new cart for the user
+    const newCart = new Cart({
+			item: [],
+			total: 0
+		});
+    await newCart.save();
+		
+    // Save the cart and associate it with the user
+    newUser.cart = newCart._id;
+    await newUser.save();
 
 		// Log in the newly registered user
 		req.login(newUser, (err) => {
@@ -152,49 +158,3 @@ const register = async (req, res, next) => {
 	}
 };
 exports.register = register;
-
-const addToCart = async(req,res,next) => {
-	const productId = req.params.id;
-	const quantity = req.body.quantity;
-	// Check for available stock
-	let product = await productService.getProductById(productId);
-	if (product.availability < quantity) {
-		return res.json({status: "error", message: "Not enough stock"});
-	}
-
-	// Check if the user is logged in
-	if (!req.user) {
-		return res.json({status: "error", message: "Please login first"});
-	}
-
-	// Update product availability
-	product.availability -= quantity;
-	await Product.findByIdAndUpdate(productId, product);
-
-	// Add to cart
-	const result = await userService.addToCart(productId, quantity, req.user.id);
-	return res.json(result);
-}
-exports.addToCart = addToCart;
-
-const getCart = async (req, res, next) => {
-	if(!req.user) {
-		return res.json({status: "error", message: "Please login first"});
-	}
-	return res.json(await userService.getCart(req.user.id));
-}
-exports.getCart = getCart;
-
-const viewCart = async (req, res, next) => {
-	if(!req.user) {
-		return res.redirect("/signin/?returnUrl=cart");
-	}
-
-	res.render("user/cart/shopCart", {
-		title: "Shopping cart",
-		user: req.user, 
-		categories: await categoryService.getAllCategory(),
-		subcategories: await categoryService.getAllSubcategory()
-	});
-}
-exports.viewCart = viewCart;

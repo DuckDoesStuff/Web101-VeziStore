@@ -3105,7 +3105,7 @@ fieldset[disabled] .btn-default:hover,
 .btn-default.disabled:focus,
 .btn-default[disabled]:focus,
 fieldset[disabled] .btn-default:focus,
-.btn-default.disabled.focus,
+.btn-default.disabled.focus,btn-primary
 .btn-default[disabled].focus,
 fieldset[disabled] .btn-default.focus,
 .btn-default.disabled:active,
