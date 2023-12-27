@@ -32,6 +32,21 @@ const catalog = async (req,res,next) => {
 }
 exports.catalog = catalog;
 
+const dashboard = async (req, res, next) => {
+	const currentCategory = req.query.cate ? req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1) : "";
+	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
+	res.render("admin/product/product-dashboard", {
+		title: "Vezi Store | " + currentCategory + " " + currentType + " | Dashboard",
+		categories: await categoryService.getAllCategory(),
+		subcategories: await categoryService.getAllSubcategory(),
+		currentCategory: currentCategory,
+		currentType: currentType,
+	});
+}
+
+exports.dashboard = dashboard;
+
+
 const detail = async (req,res,next) => {
 	const productDetail = await productService.getProductById(req.params.id);
 	const similarProducts = await productService.getPopularProductsByCategoryAndSubcategory(productDetail.category, productDetail.subcategory);
@@ -75,3 +90,24 @@ const getProducts = async (req,res,next) => {
 	res.json(await productService.getProducts(page, sort, filter, category, subcategory, term));
 }
 exports.getProducts = getProducts;
+
+const getSubByCate = async (req, res, next) => {
+	const category = req.params.category;
+    // Thay thế logic này bằng cách lấy danh sách subcategory tương ứng với category từ cơ sở dữ liệu hoặc nguồn dữ liệu khác
+    let subcategories = [];
+    switch (category) {
+        case 'Woman':
+            subcategories = ['Tops', 'Dresses', 'Activewear', 'Accessories', 'Footwear'];
+            break;
+        case 'Man':
+            subcategories = ['T-Shirts', 'Shirts', 'Bottoms', 'Outterwear'];
+            break;
+        case 'Kid':
+        subcategories = ['Sleepwear', 'School', 'Activity', 'Summer'];
+        break;
+        // Thêm các trường hợp khác nếu cần
+    }
+
+    res.json({ subcategories });
+}
+exports.getSubByCate = getSubByCate;
