@@ -23,13 +23,19 @@
 				const searchTerm = document.getElementById('search').value.trim();
 				// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
 				if (!searchTerm) {
-				return;
+				window.location.href = `/products/dashboard/`;
 				}
 				else {
 				window.location.href = `/products/dashboard/?term=${searchTerm}`;
 				}
 
 			});
+			const searchInput = document.getElementById('search');
+			const urlParams = new URLSearchParams(window.location.search);
+			const searchTermFromURL = urlParams.get('term');
+			if (searchTermFromURL) {
+				searchInput.value = searchTermFromURL;
+			}
 			});
 		</script>
         <div class="row d-flex align-items-center justify-content-between mb-4">
@@ -105,7 +111,7 @@
 	let currentPage = 1;
 	let totalPages = 1;
 
-	const urlParams = new URLSearchParams(window.location.href);
+	const urlParams = new URLSearchParams(window.location.search);
 
 	const currentCategory = urlParams.get('cate')
 	const currentType = urlParams.get('type')
@@ -116,20 +122,43 @@
 	function redirectPage(currentCategory, currentType, term, filter, sort) {
 		let existingParams = `?`;
 		if (term) {
-			existingParams = `search/?`;
+			//existingParams = `search/?`;
 			existingParams += `&term=${term}`;
 		}
 		if(currentCategory) {
-			existingParams += `cate=${currentCategory}`;
+			if (currentCategory == 0) {
+				const noCate = `&cate=0`;
+				existingParams = existingParams.replace(noCate, ``);
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			} else {
+				existingParams += `&cate=${currentCategory}`;
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			}
 		}
 		if(currentType) {
-			existingParams += `&type=${currentType}`;
+			if (currentType == 0) {
+				const noType = `&type=0`;
+				existingParams = existingParams.replace(noType, ``);
+			} else {
+				existingParams += `&type=${currentType}`;
+			}
 		}
 		if(filter) {
 			existingParams += `&filter=${filter}`;
 		}
 		if(sort) {
-			existingParams += `&sort=${sort}`;
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
 		}
 		window.location.href = '/products/dashboard/' + existingParams;
 	}
@@ -173,20 +202,43 @@
 		paginator.innerHTML = '';
 		let existingParams = `?`;
 		if (term) {
-			existingParams = `search/?`;
+			//existingParams = `search/?`;
 			existingParams += `&term=${term}`;
 		}
 		if(currentCategory) {
-			existingParams += `cate=${currentCategory}`;
+			if (currentCategory == 0) {
+				const noCate = `&cate=0`;
+				existingParams = existingParams.replace(noCate, ``);
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			} else {
+				existingParams += `&cate=${currentCategory}`;
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			}
 		}
 		if(currentType) {
-			existingParams += `&type=${currentType}`;
-		}
-		if(sort) {
-			existingParams += `&sort=${sort}`;
+			if (currentType == 0) {
+				const noType = `&type=0`;
+				existingParams = existingParams.replace(noType, ``);
+			} else {
+				existingParams += `&type=${currentType}`;
+			}
 		}
 		if(filter) {
 			existingParams += `&filter=${filter}`;
+		}
+		if(sort) {
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
 		}
 
 		if (totalPages > 1) {
@@ -257,44 +309,59 @@
 		cateSelect.value = currentCategory || 0;
 
 		const subcategorySelect = document.querySelector('#subcategory');
+		subcategorySelect.value = currentType || 0;
     	const subcategoryListContainer = document.querySelector('#subcategory-list');
 		cateSelect.addEventListener('change', () => {
-			redirectPage(cateSelect.value, currentType, term, filter, sort);
+			subcategorySelect.value = null;
+			redirectPage(cateSelect.value, subcategorySelect.value, term, filter, sort);
 		});
 
-		getSubcategories(currentCategory);
+		getSubcategories(cateSelect.value);
 		async function getSubcategories(selectedCategory) {
-			if (selectedCategory === "0") {
+			if (selectedCategory) {
+				if (selectedCategory === 0) {
+					subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+					subcategoryListContainer.innerHTML = '';
+					console.log("0");
+					return;
+				} else {
+					// Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
+					console.log("1");
+				
+					fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
+						.then(response => response.json())
+						.then(data => {
+							const subcategories = data.subcategories;
+							console.log('Data from API:', data);
+
+							// Xóa tất cả các option hiện tại trong select subcategory
+							subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+							
+							// Thêm các option mới vào select subcategory
+							subcategories.forEach(subcategory => {
+								const option = document.createElement('option');
+								option.value = subcategory;
+								option.textContent = subcategory;
+								subcategorySelect.appendChild(option);
+							});
+
+							// Hiển thị danh sách subcategory
+							//subcategoryListContainer.innerHTML = subcategories.map(subcategory => subcategory.name).join(', ');
+							subcategorySelect.value = currentType || 0;
+						})
+						.catch(error => console.error('Error:', error));
+					
+				}
+
+			} else {
 				subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
 				subcategoryListContainer.innerHTML = '';
+				console.log("error");
+
 				return;
 			}
-
-			// Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
-			fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
-				.then(response => response.json())
-				.then(data => {
-					const subcategories = data.subcategories;
-					console.log('Data from API:', data);
-
-					// Xóa tất cả các option hiện tại trong select subcategory
-					subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
-
-					// Thêm các option mới vào select subcategory
-					subcategories.forEach(subcategory => {
-						const option = document.createElement('option');
-						option.value = subcategory;
-						option.textContent = subcategory;
-						subcategorySelect.appendChild(option);
-					});
-
-					// Hiển thị danh sách subcategory
-					//subcategoryListContainer.innerHTML = subcategories.map(subcategory => subcategory.name).join(', ');
-				})
-				.catch(error => console.error('Error:', error));
 		}
 
-		subcategorySelect.value = currentType || 0;
 
 		subcategorySelect.addEventListener('change', () => {
 			redirectPage(currentCategory, subcategorySelect.value, term, filter, sort);
