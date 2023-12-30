@@ -102,7 +102,6 @@
 		window.location.href = '/product/' + existingParams;
 	}
 	
-	//Client
 	async function getProducts(apiURL) {
 		apiURL = apiURL.replace('/search', '');
 		const result = await fetch(apiURL, {

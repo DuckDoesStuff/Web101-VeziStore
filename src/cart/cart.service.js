@@ -51,8 +51,20 @@ const removeFromCart = async (productId, userId) => {
 exports.removeFromCart = removeFromCart;
 
 const getCart = async (userId) => {
-	const user = await User.findById(userId);
-	return await Cart.findById(user.cart).populate("item.product")
+	try {
+		const user = await User.findById(userId);
+		console.log(user);
+		if(!user) {
+			return {
+				message: "User not found",
+				status: 404
+			}
+		}
+		return await Cart.findById(user.cart).populate("item.product")
+	}
+	catch(err) {
+		console.log(err);
+	}
 }
 exports.getCart = getCart;
 

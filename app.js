@@ -81,7 +81,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: true,
 	store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
-	cookie: { maxAge: 24 * 60 * 60 * 1000 } // 12h in ms
+	cookie: { maxAge: 12 * 60 * 60 * 1000 } // 12h in ms
 }));
 
 // Passport initialize and session

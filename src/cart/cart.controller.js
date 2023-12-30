@@ -23,7 +23,7 @@ const addToCart = async(req,res,next) => {
 exports.addToCart = addToCart;
 
 const getCart = async (req, res, next) => {
-	if(!req.user) {
+	if(!req.user.id) {
 		return res.json({status: "error", message: "Please login first"});
 	}
 	return res.json(await cartService.getCart(req.user.id));

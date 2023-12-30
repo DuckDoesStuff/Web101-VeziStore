@@ -1,7 +1,5 @@
 const productService = require("./product.service");
-const {Product} = require("./product.model");
 const categoryService = require('../category/category.service');
-const userService = require('../user/user.service');
 
 const home = async (req,res,next) => {
 	res.render("user/home", {
