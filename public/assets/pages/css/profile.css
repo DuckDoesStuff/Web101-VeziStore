@@ -1,0 +1,7 @@
+.profile-header {
+	display:flex;
+	align-items: center;
+	gap:20px;
+	justify-content: space-around;
+	flex-direction: column;
+}

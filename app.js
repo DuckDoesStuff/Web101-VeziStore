@@ -93,6 +93,7 @@ const homeRouter = require("./src");
 const productRouter = require("./src/product");
 const authRouter = require("./src/user/auth");
 const cartRouter = require("./src/cart");
+const userRouter = require("./src/user");
 
 // Admin router
 // const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
@@ -108,6 +109,7 @@ app.use("/home", homeRouter);
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/profile", userRouter);
 
 // Subdomain admin routing
 // admin.use("/", usersDashboardRouter);

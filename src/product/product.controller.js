@@ -9,7 +9,7 @@ const home = async (req,res,next) => {
 		saleProducts: await productService.getSaleProducts(),
 		popularProducts: await productService.getPopularProducts(),
 		categories: await categoryService.getAllCategory(),
-		subcategories: await categoryService.getAllSubcategory(),
+		// subcategories: await categoryService.getAllSubcategory(),
 	});
 }
 exports.home = home;
@@ -22,7 +22,7 @@ const catalog = async (req,res,next) => {
 		title: "Vezi Store | " + currentCategory + " " + currentType + " | Catalog",
 		user: req.user,
 		categories: await categoryService.getAllCategory(),
-		subcategories: await categoryService.getAllSubcategory(),
+		// subcategories: await categoryService.getAllSubcategory(),
 		currentCategory: currentCategory,
 		currentType: currentType,
 		popularProducts: popularProducts,
@@ -38,7 +38,7 @@ const detail = async (req,res,next) => {
 		title: "Vezi Store | " + productDetail.category + " " + productDetail.subcategory + " | Catalog",
 		user: req.user,
 		categories: await categoryService.getAllCategory(),
-		subcategories: await categoryService.getAllSubcategory(),
+		// subcategories: await categoryService.getAllSubcategory(),
 		currentCategory: productDetail.category[0],
 		currentType: productDetail.subcategory[0],
 		similarProducts: similarProducts,
@@ -55,7 +55,7 @@ const search = async (req,res,next) => {
 		title: "Vezi Store | Search",
 		user: req.user,
 		categories: await categoryService.getAllCategory(),
-		subcategories: await categoryService.getAllSubcategory(),
+		// subcategories: await categoryService.getAllSubcategory(),
 		currentCategory: "",
 		currentType: "",
 		searchName: term,
