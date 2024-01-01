@@ -15,7 +15,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">CREATE PRODUCT</h6>
-        <form id="product-info" class="row mb-3" action="/product-create" method="post" enctype="multipart/form-data">
+        <form id="product-info" class="row mb-3" action="/products/create/" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="formFileMultiple" class="form-label">Thumbnail</label>
                 <input required class="form-control" type="file" id="formFileMultiple" name="files" multiple>
@@ -50,21 +50,7 @@
                     </div>
                 </div>
             </div>
-            <script>
-                // Add a submit event listener to the form
-                const form = document.getElementById('product-info');
-                form.addEventListener('submit', function(event) {
-                    const checkboxes = document.querySelectorAll('input[name="size"]');
-                    const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
 
-                    // Check if at least one checkbox is checked
-                    if (!atLeastOneChecked) {
-                        event.preventDefault(); // Prevent form submission
-                        alert('Please select at least one size.'); // You can customize the error message
-                        checkboxes[0].focus();
-                    }
-                });
-            </script>
 
             <label for="availability" class="col-sm-2 col-form-label">Availability</label>
             <div class="col-sm-10">
@@ -75,10 +61,11 @@
             <div class="col-sm-10">
                 <select required class="form-select form-control"
                     aria-label="Floating label select example" name="category" id="category">
-                    <option value="">Choose category</option>
-                    <option value="Woman">Woman</option>
-                    <option value="Man">Man</option>
-                    <option value="Kid">Kid</option>
+                    <option value="0">Choose category</option>
+                    
+                    <option value="woman">Woman</option>
+                    <option value="man">Man</option>
+                    <option value="kid">Kid</option>
                 </select>
             </div>
 
@@ -126,7 +113,7 @@
                     }
 
                     // Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
-                    fetch(`/product-create/api/subcategories/${selectedCategory}`)
+                    fetch(`/products/create/api/subcategories/${selectedCategory}`)
                         .then(response => response.json())
                         .then(data => {
                             const subcategories = data.subcategories;
@@ -179,4 +166,20 @@
 
     </div>
 </div>
+
+<script>
+    // Add a submit event listener to the form
+    const form = document.getElementById('product-info');
+    form.addEventListener('submit', function(event) {
+        const checkboxes = document.querySelectorAll('input[name="size"]');
+        const atLeastOneChecked = [...checkboxes].some(checkbox => checkbox.checked);
+
+        // Check if at least one checkbox is checked
+        if (!atLeastOneChecked) {
+            event.preventDefault(); // Prevent form submission
+            alert('Please select at least one size.'); // You can customize the error message
+            checkboxes[0].focus();
+        }
+    });
+</script>
 

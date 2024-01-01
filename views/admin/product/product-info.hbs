@@ -3,54 +3,53 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">PRODUCT DETAIL</h6>
-        <div class="d-flex align-items-center mb-4">
-            <div class="position-relative">
                 <div class="row">
                     <div class="col-md-4">
-                        <img class="img-thumbnail" src="assets/pages/img/products/model7.jpg" alt="">
+                        <div class="product-main-image">
+                            <img class="img-responsive" src="https://ucarecdn.com/{{productDetail.image.[0]}}/-/preview/300x400/" alt="{{productDetail.name}}" data-BigImgsrc="https://ucarecdn.com/{{productDetail.image.[0]}}/-/preview/300x400/">
+                        </div>
+                        <div class="product-other-images">
+                            {{#each productDetail.image}}
+                            <a href="https://ucarecdn.com/{{this}}/-/preview/300x400/" class="other-image-link">
+                            <img alt="{{productDetail.name}}" src="https://ucarecdn.com/{{this}}/-/preview/300x400/"></a>
+                            {{/each}}
+                        </div>
                     </div>
-                    {{#with product_info}}
                     <div class="col-md-8">
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Product ID</h6>
+                            <h6 class="col-md-4 text-gray">Product name</h6>
                             <div class="col-8">
-                                <h6 class="mb-4">{{id}}</h6>
+                                <h6 class="mb-4">{{productDetail.name}}</h6>
                             </div>
                         </div>
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Product name</h6>
+                            <h6 class="col-md-4 text-gray">Amount</h6>
                             <div class="col-8">
-                                <h6 class="mb-4">{{name}}</h6>
+                                <h6 class="mb-4">{{productDetail.availability}}</h6>
                             </div>
                         </div>
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Amount</h6>
-                            <div class="col-8">
-                                <h6 class="mb-4">{{availability}}</h6>
-                            </div>
-                        </div>
-                        <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Quantity sold</h6>
+                            <h6 class="col-md-4 text-gray">Quantity sold</h6>
                             <div class="col-8">
                                 <h6 class="mb-4">{{sold}}</h6>
                             </div>
                         </div>
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Price</h6>
+                            <h6 class="col-md-4 text-gray">Price</h6>
                             <div class="col-8">
-                                <h6 class="mb-4">${{price}}</h6>
+                                <h6 class="mb-4">{{productDetail.price}}<h6>
                             </div>
                         </div>
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Discount</h6>
+                            <h6 class="col-md-4 text-gray">Discount</h6>
                             <div class="col-8">
-                                <h6 class="mb-4">${{discount}}</h6>
+                                <h6 class="mb-4">{{productDetail.price}}</h6>
                             </div>
                         </div>
                         <div class="row mb-0">
-                            <h6 class="col-md-3 text-gray">Rate</h6>
+                            <h6 class="col-md-4 text-gray">Rate</h6>
                             <div class="col-8">
-                                <h6 class="mb-4">{{rating}}</h6>
+                                <h6 class="mb-4">{{productDetail.rating}}</h6>
                             </div>
                         </div>
                         <div class="row"> 
@@ -59,9 +58,20 @@
                             </div>
                         </div>
                     </div>
-                    {{/with}}
                 </div>
-            </div>
-        </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.other-image-link').on('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+
+            // Get the clicked image source
+            var newImageSrc = $(this).find('img').attr('src');
+
+            // Set the main image source
+            $('.product-main-image img').attr('src', newImageSrc);
+        });
+    });
+</script>
