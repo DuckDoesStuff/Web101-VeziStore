@@ -1,21 +1,10 @@
 const productService = require("./product.service");
 const categoryService = require('../category/category.service');
-const { Product } = require("./product.model");
-const categoryService = require("../category/category.service");
-const userService = require("../user/user.service");
 
 const { UploadClient } = require("@uploadcare/upload-client");
-const multer = require("multer");
-const dotenv = require("dotenv");
-dotenv.config();
-
-// Set up uploadcare client
 const uploadcare = new UploadClient({
     publicKey: process.env.UPLOADCARE_PUBLIC_KEY,
 });
-// Set up multer with memory storage
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 const home = async (req, res, next) => {
     res.render("user/home", {
@@ -30,32 +19,6 @@ const home = async (req, res, next) => {
 };
 exports.home = home;
 
-const catalog = async (req, res, next) => {
-    const currentCategory =
-        req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
-    const currentType = req.query.type
-        ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1)
-        : "";
-    const popularProducts =
-        await productService.getPopularProductsByCategoryAndSubcategory(
-            req.query.cate,
-            req.query.type
-        );
-    res.render("user/catalog", {
-        title:
-            "Vezi Store | " +
-            currentCategory +
-            " " +
-            currentType +
-            " | Catalog",
-        user: req.user,
-        categories: await categoryService.getAllCategory(),
-        subcategories: await categoryService.getAllSubcategory(),
-        currentCategory: currentCategory,
-        currentType: currentType,
-        popularProducts: popularProducts,
-    });
-};
 const catalog = async (req,res,next) => {
 	const currentCategory = req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
 	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
@@ -95,31 +58,6 @@ const dashboard = async (req, res, next) => {
 
 exports.dashboard = dashboard;
 
-const detail = async (req, res, next) => {
-    const productDetail = await productService.getProductById(req.params.id);
-    const similarProducts =
-        await productService.getPopularProductsByCategoryAndSubcategory(
-            productDetail.category,
-            productDetail.subcategory
-        );
-    const popularProducts = await productService.getPopularProducts(6);
-    res.render("user/productDetail", {
-        title:
-            "Vezi Store | " +
-            productDetail.category +
-            " " +
-            productDetail.subcategory +
-            " | Catalog",
-        user: req.user,
-        categories: await categoryService.getAllCategory(),
-        subcategories: await categoryService.getAllSubcategory(),
-        currentCategory: productDetail.category[0],
-        currentType: productDetail.subcategory[0],
-        similarProducts: similarProducts,
-        productDetail: productDetail,
-        popularProducts: popularProducts,
-    });
-};
 const detail = async (req,res,next) => {
 	const productDetail = await productService.getProductById(req.params.id);
 	const similarProducts = await productService.getPopularProductsByCategoryAndSubcategory(productDetail.category, productDetail.subcategory);
