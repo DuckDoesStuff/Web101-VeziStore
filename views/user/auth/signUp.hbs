@@ -58,7 +58,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label label-font-size">Username</label>
-                            <input required type="text" class="form-control label-font-size" id="username" name="username">
+                            <input onchange="checkUsername()" required type="text" class="form-control label-font-size" id="username" name="username">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label label-font-size">Email address</label>
@@ -156,6 +156,18 @@
             if (password.value !== confirm.value) {
                 resultDiv.textContent = 'Passwords do not match';
             } else {
+                resultDiv.textContent = '';
+            }
+        }
+
+        const checkUsername = () => {
+            const username = document.querySelector('#username');
+            if (username.value.length < 3) {
+                resultDiv.textContent = 'Username should be at least 3 characters long.';
+            } else if (username.value.includes(" ")) {
+                resultDiv.textContent = 'Username should not contain spaces.';
+            }
+            else {
                 resultDiv.textContent = '';
             }
         }

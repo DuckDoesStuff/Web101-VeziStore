@@ -92,7 +92,6 @@ app.use(passport.session());
 const homeRouter = require("./src");
 const productRouter = require("./src/product");
 const authRouter = require("./src/user/auth");
-const cartRouter = require("./src/cart");
 const userRouter = require("./src/user");
 
 // Admin router
@@ -104,12 +103,18 @@ const userRouter = require("./src/user");
 // const productInfoRouter = require("./routes/admin/product/product-info");
 
 // Normal routing
+const isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/auth/signin");
+};
+
 app.use("/", homeRouter);
 app.use("/home", homeRouter);
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
-app.use("/cart", cartRouter);
-app.use("/profile", userRouter);
+app.use("/user", isAuthenticated, userRouter);
 
 // Subdomain admin routing
 // admin.use("/", usersDashboardRouter);

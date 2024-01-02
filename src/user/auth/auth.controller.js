@@ -31,7 +31,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-	done(null, { id: user.id, username: user.username, email: user.email });
+	done(null, { id: user.id, username: user.username, email: user.email, picture: user.picture, verified: user.verified });
 });
 
 passport.deserializeUser(async (user, done) => {
@@ -129,7 +129,7 @@ const register = async (req, res, next) => {
 	await newUser.save();
 
 	// Generate an activation token
-	const token = await authService.generateToken();
+	const token = authService.generateToken();
 	const newToken = new Token({ token: token, email: email });
 	await newToken.save();
 	authService.sendActivationEmail(email, token);

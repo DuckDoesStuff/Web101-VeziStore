@@ -53,7 +53,6 @@ exports.removeFromCart = removeFromCart;
 const getCart = async (userId) => {
 	try {
 		const user = await User.findById(userId);
-		console.log(user);
 		if(!user) {
 			return {
 				message: "User not found",

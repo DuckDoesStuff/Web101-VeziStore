@@ -32,7 +32,7 @@
       <div class="col-md-6 col-sm-6 additional-nav">
         <ul class="list-unstyled list-inline pull-right">
           {{#if user}}
-          <li><a href="/profile">My Account</a></li>
+          <li><a href="user/profile">My Account</a></li>
           <li><a href="auth/logout">Log out</a></li>
           {{else}}
           <li><a href="auth/signin">Log In</a></li>
@@ -58,8 +58,8 @@
     {{#if user}}
     <div class="top-cart-block">
       <div class="top-cart-info">
-        <a href="/cart" class="top-cart-info-count">0 items</a>
-        <a href="/cart" class="top-cart-info-value">0$ total</a>
+        <a href="user/cart" class="top-cart-info-count">0 items</a>
+        <a href="user/cart" class="top-cart-info-value">0$ total</a>
       </div>
       <i class="fa fa-shopping-cart"></i>
     </div>
@@ -67,6 +67,7 @@
     <!--END CART -->
 
     <!-- BEGIN NAVIGATION -->
+    {{#if categories}}
     <div class="header-navigation">
       <ul>
         {{#each categories}}
@@ -187,6 +188,7 @@
         <!-- END TOP SEARCH -->
       </ul>
     </div>
+    {{/if}}
     <!-- END NAVIGATION -->
   </div>
 </div>
@@ -204,7 +206,7 @@
 
   const fetchCart = async () => {
     if(!document.querySelector('.top-cart-info-count')) return;
-    cart = await fetch('/cart/api', {
+    cart = await fetch('user/cart/api', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

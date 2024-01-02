@@ -7,18 +7,14 @@
 			<!-- BEGIN SIDEBAR -->
 			<div class="sidebar col-md-3 col-sm-5">
 				<ul class="list-group margin-bottom-25 sidebar-menu">
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i>
-							Login/Register</a></li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Restore
-							Password</a></li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> My account</a>
+					<li class="list-group-item clearfix active">
+						<a href="javascript:;"><i class="fa-solid fa-user"></i> Your profile</a>
 					</li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Address book</a>
+					<li class="list-group-item clearfix">
+						<a href="javascript:;"><i class="fa-solid fa-shirt"></i> Order history</a>
 					</li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Wish list</a>
-					</li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Returns</a></li>
-					<li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Newsletter</a>
+					<li class="list-group-item clearfix">
+						<a href="/user/profile/change-password"><i class="fa-solid fa-key"></i> Change your password</a>
 					</li>
 				</ul>
 			</div>
@@ -27,56 +23,63 @@
 			<!-- BEGIN CONTENT -->
 			<div class="col-md-9 col-sm-7">
 				<div class="content-page">
-					<div class="profile-header row">
-						<img src="https://mdbcdn.b-cdn.net/img/new/avatars/9.webp" alt="" class="img-circle">
-						<h1>username</h1>
-					</div>
+					<form id="user-info" class="" action="">
 
-					<div class="profile-body container-fluid">
-						<form class="" action="">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="control-label" for="first-name">First name</label>
-										<input type="text" class="form-control" id="first-name" placeholder="First name">
-									</div>
-
-									<div class="form-group">
-										<label for="last-name">Last name</label>
-										<input type="text" class="form-control" id="last-name" placeholder="Last name">
-									</div>
-
-
+						<div class="profile-header row">
+							<div class="image-container">
+								<div class="overlay">
+									<button onclick="openFileInput()" class="btn btn-primary">
+										<i class="fa-solid fa-pen"></i>
+									</button>
 								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="email">Email</label>
-										<input type="email" class="form-control" id="email" placeholder="Email">
-									</div>
-									
-									<div class="form-group">
-										<label for="password">Password</label>
-										<input type="password" class="form-control" id="password" placeholder="Password">
-									</div>
-								</div>
-
+								<img src="https://ucarecdn.com/{{picture}}/-/preview/500x500/-/format/auto/" alt="" class="img-circle" onerror="this.src='https://ucarecdn.com/c64123e4-8e93-402d-805b-4e5fbae247ca/-/preview/500x500/-/format/auto/'">
 							</div>
+							<input class="hidden" type="file" id="fileInput" accept="image/*" onchange="handleImageChange()" name="picture">
+							<h1>{{user.username}}</h1>
 
-							<div class="row">
-								<div class="col-md-12">
-									<div class="form-group">
-										<label for="address">Address</label>
-										<input type="text" class="form-control" id="address" placeholder="Address">
+						</div>
+
+						<div class="profile-body container-fluid">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label" for="first-name">First name</label>
+											<input required type="text" class="form-control" readonly id="first-name" value="{{first_name}}">
+										</div>
+
+										<div class="form-group">
+											<label for="last-name">Last name</label>
+											<input required type="text" class="form-control" readonly id="last-name" value="{{last_name}}">
+										</div>
+
+
+									</div>
+
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="email">Email</label>
+											<input required type="email" class="form-control" readonly id="email" value="{{email}}">
+										</div>
 									</div>
 
 								</div>
 
-							</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="address">Address</label>
+											<input required type="text" class="form-control" readonly id="address" value="{{address}}">
+										</div>
 
-							<button class="btn btn-primary pull-right">Edit <i class="fa-solid fa-pen"></i></button>
-						</form>
-					</div>
+									</div>
+
+								</div>
+
+							<button id="edit" class="btn btn-primary pull-right">Edit <i class="fa-solid fa-pen"></i></button>
+							<button id="save" class="btn btn-primary pull-left hide">Save <i class="fa-solid fa-floppy-disk"></i></button>
+							<button id="cancel" class="btn btn-secondary pull-right hide">Cancel <i class="fa-solid fa-xmark"></i></button>
+						</div>
+					</form>
 				</div>
 			</div>
 			<!-- END CONTENT -->
@@ -84,3 +87,84 @@
 		<!-- END SIDEBAR & CONTENT -->
 	</div>
 </div>
+
+<script>
+	const openFileInput = () => {
+		document.querySelector("#fileInput").click();
+	}
+
+	const handleImageChange = () => {
+		const fileInput = document.querySelector("#fileInput")
+		const avatarImage = document.querySelector(".img-circle")
+
+		const file = fileInput.files[0];
+
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onload = function (e) {
+				avatarImage.src = e.target.result;
+			};
+
+			reader.readAsDataURL(file);
+
+			const formData = new FormData();
+			formData.append("image", file);
+
+			fetch("/user/profile/upload-avatar", {
+				method: "POST",
+				body: formData
+			});
+		}
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		document.querySelector("#user-info").addEventListener("submit", (e) => {
+			e.preventDefault();
+		});
+		
+		document.querySelector("#edit").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.removeAttribute("readonly");
+			});
+
+			document.querySelector("#edit").classList.add("hide");
+			document.querySelector("#save").classList.remove("hide");
+			document.querySelector("#cancel").classList.remove("hide");
+		});
+
+		document.querySelector("#cancel").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.setAttribute("readonly", "");
+				input.value = input.getAttribute("value");
+			});
+
+			document.querySelector("#edit").classList.remove("hide");
+			document.querySelector("#save").classList.add("hide");
+			document.querySelector("#cancel").classList.add("hide");
+		});
+
+		document.querySelector("#save").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.setAttribute("readonly", "");
+			});
+
+			const result = fetch("/user/profile", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					first_name: document.querySelector("#first-name").value,
+					last_name: document.querySelector("#last-name").value,
+					email: document.querySelector("#email").value,
+					address: document.querySelector("#address").value,
+				}),
+			})
+
+			document.querySelector("#edit").classList.remove("hide");
+			document.querySelector("#save").classList.add("hide");
+			document.querySelector("#cancel").classList.add("hide");
+		});
+	});
+</script>

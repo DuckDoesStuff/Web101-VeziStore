@@ -78,7 +78,7 @@
 
 	const removeItem = async (button) => {
 		const id = button.parentNode.parentNode.id;
-		const result = await fetch(`/cart/${id}`, {
+		const result = await fetch(`user/cart/${id}`, {
 			method: 'DELETE',
 		}).then(res => res.json());
 		alert(result.message);
@@ -92,7 +92,7 @@
 		timer = await setTimeout(async () => {
 			const id = button.parentNode.parentNode.parentNode.id;
 			const quantity = button.parentNode.querySelector('input').value;
-			const result = await fetch(`/cart/${id}`, {
+			const result = await fetch(`user/cart/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'

@@ -57,7 +57,7 @@
 								<p>{{productDetail.description}}</p>
 							</div>
 
-							<form id="order-info" action="/cart/{{productDetail._id}}" method="post">
+							<form id="order-info" action="user/cart/{{productDetail._id}}" method="post">
 								<div class="product-page-options">
 									<div class="pull-left">
 										<label class="control-label">Size:</label>
@@ -238,7 +238,7 @@
 			}
 
 			async function createOrderAndShowMessage(quantity) {
-				const response = await fetch(`/cart/{{productDetail._id}}`, {
+				const response = await fetch(`user/cart/{{productDetail._id}}`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
