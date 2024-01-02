@@ -59,6 +59,7 @@ const adminHbs = exphbs.create({
         },
     },
 });
+express_handlebars_sections(adminHbs);
 
 // Setup view engine for both admin and normal routing
 app.engine("hbs", hbs.engine);
@@ -96,7 +97,7 @@ const userRouter = require("./src/user");
 
 // Admin router
 // const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
-// const productsDashboardRouter = require("./routes/admin/product/product-dashboard");
+const adminProductRouter = require("./src/product/index-admin");
 // const userInfoRouter = require("./routes/admin/account/user-info");
 // const orderInfoRouter = require("./routes/admin/order-info/order-info");
 // const productCreateRouter = require("./routes/admin/product/product-create");
@@ -117,7 +118,10 @@ app.use("/product", productRouter);
 app.use("/user", isAuthenticated, userRouter);
 
 // Subdomain admin routing
-// admin.use("/", usersDashboardRouter);
+//admin.use("/", adminProductRouter);
+admin.use("/products", adminProductRouter);
+
+//admin.use("/", productRouter);
 // admin.use("/users-dashboard", usersDashboardRouter);
 // admin.use("/products-dashboard", productsDashboardRouter);
 

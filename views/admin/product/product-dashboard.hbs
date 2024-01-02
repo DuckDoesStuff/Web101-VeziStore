@@ -4,7 +4,80 @@
     <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">PRODUCTS LIST</h6>
-            <a href="">Show All</a>
+        </div>
+        <div class="row d-flex align-items-center justify-content-between mb-4">
+            <form action="" method="" id="search-info">
+              <div class="input-group">
+                <input type="text" placeholder="Search" class="form-control" id="search" name="search">
+              </div>
+            </form>
+        </div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+			const searchForm = document.getElementById('search-info');
+
+			searchForm.addEventListener('submit', function (event) {
+				event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+				// Lấy giá trị tìm kiếm từ ô input
+				const searchTerm = document.getElementById('search').value.trim();
+				// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+				if (!searchTerm) {
+				window.location.href = `/products/dashboard/`;
+				}
+				else {
+				window.location.href = `/products/dashboard/?term=${searchTerm}`;
+				}
+
+			});
+			const searchInput = document.getElementById('search');
+			const urlParams = new URLSearchParams(window.location.search);
+			const searchTermFromURL = urlParams.get('term');
+			if (searchTermFromURL) {
+				searchInput.value = searchTermFromURL;
+			}
+			});
+		</script>
+        <div class="row d-flex align-items-center justify-content-between mb-4">
+            <div class="col-sm-3">
+                    <div class="row">
+                        <label for="category" class="col-sm-3 col-form-label">Category</label>
+                        <div class="col">
+                            <select required class="form-select form-control"
+                                aria-label="Floating label select example" name="category" id="category">
+                                <option value="0">Choose category</option>
+                                <option value="woman">Woman</option>
+                                <option value="man">Man</option>
+                                <option value="kid">Kid</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <label for="subcategory" class="col-sm-4 col-form-label">Subcategory</label>
+                        <div class="col-sm-8">
+                            <select required class="form-select form-control" aria-label="Floating label select example" name="subcategory" id="subcategory">
+                                <option value="0">Choose subcategory</option>
+                            </select>
+                            <div id="subcategory-list"></div> <!-- Thêm div để chứa danh sách subcategory -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                <div class="row">
+                    <label for="sort-by" class="col-sm-3 col-form-label">Sort&nbsp;by</label>
+                    <div class="col">
+                        <select required class="form-select form-control"
+                            aria-label="Floating label select example" name="sort-by" id="sort-by">
+                            <option value="0">Default</option>
+                            <option value="1">New arrivals</option>
+                            <option value="2">Price (Low &gt; High)</option>
+                            <option value="3">Price (High &gt; Low)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -17,21 +90,295 @@
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{#each allProducts}}
-                    {{#with this}}
-                    <tr>
-                        <td>{{name}}</td>
-                        <td>${{price}}</td>
-                        <td>${{discount}}</td>
-                        <td>{{availability}}</td>
-                        <td><a class="btn btn-sm btn-detail" href="/product-info">Detail</a> <a class="btn btn-sm btn-primary" href="">Delete</a></td>
-                    </tr>
-                    {{/with}}
-                    {{/each}}
+                <tbody id="products-dashboard">
+
                 </tbody>
             </table>
         </div>
-            
+        <div class="row">
+            <div class="col-md-12 col-sm-12 justify-content-end">
+                <ul class="pagination pag-styles" id="paginator">
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+
+{{#section "scripts"}}
+<script>
+	let productTemplate;
+	let currentPage = 1;
+	let totalPages = 1;
+
+	const urlParams = new URLSearchParams(window.location.search);
+
+	const currentCategory = urlParams.get('cate')
+	const currentType = urlParams.get('type')
+	const term = urlParams.get('term')
+	const filter = urlParams.get('filter');
+	const sort = urlParams.get('sort');
+
+	function redirectPage(currentCategory, currentType, term, filter, sort) {
+		let existingParams = `?`;
+		if (term) {
+			//existingParams = `search/?`;
+			existingParams += `&term=${term}`;
+		}
+		if(currentCategory) {
+			if (currentCategory == 0) {
+				const noCate = `&cate=0`;
+				existingParams = existingParams.replace(noCate, ``);
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			} else {
+				existingParams += `&cate=${currentCategory}`;
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			}
+		}
+		if(currentType) {
+			if (currentType == 0) {
+				const noType = `&type=0`;
+				existingParams = existingParams.replace(noType, ``);
+			} else {
+				existingParams += `&type=${currentType}`;
+			}
+		}
+		if(filter) {
+			existingParams += `&filter=${filter}`;
+		}
+		if(sort) {
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
+		}
+		window.location.href = '/products/dashboard/' + existingParams;
+	}
+
+	//Client
+	async function getProducts(apiURL) {
+		apiURL = apiURL.replace('/search', '');
+		const result = await fetch(apiURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+		return result;
+	}
+
+	async function renderProducts(products) {
+		const productItemHtml = await fetch('./assets/productDashboard.html')
+		const productTemplateSrc = await productItemHtml.text();
+		productTemplate = Handlebars.compile(productTemplateSrc);
+		const productContainer = document.getElementById('products-dashboard');
+
+		productContainer.innerHTML = productTemplate(products);
+        console.log(productTemplate(products));
+		generatePagination();
+		window.scrollTo({
+			top: 200,
+			behavior: 'smooth'
+		});
+	}
+
+	async function initialLoad() {
+		const apiURL = '/products/dashboard/' + window.location.search;
+		const products = await getProducts(apiURL);
+		totalPages = Math.ceil(products.productCount / 9);
+		renderProducts(products);
+	}
+
+	function generatePagination() {
+		let paginator = document.getElementById('paginator');
+		paginator.innerHTML = '';
+		let existingParams = `?`;
+		if (term) {
+			//existingParams = `search/?`;
+			existingParams += `&term=${term}`;
+		}
+		if(currentCategory) {
+			if (currentCategory == 0) {
+				const noCate = `&cate=0`;
+				existingParams = existingParams.replace(noCate, ``);
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			} else {
+				existingParams += `&cate=${currentCategory}`;
+				if (currentType) {
+					const noType = `&type=0`;
+					existingParams = existingParams.replace(noType, ``);
+				}
+			}
+		}
+		if(currentType) {
+			if (currentType == 0) {
+				const noType = `&type=0`;
+				existingParams = existingParams.replace(noType, ``);
+			} else {
+				existingParams += `&type=${currentType}`;
+			}
+		}
+		if(filter) {
+			existingParams += `&filter=${filter}`;
+		}
+		if(sort) {
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
+		}
+
+		if (totalPages > 1) {
+			// Left arrow
+			if(currentPage > 1) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Previous';
+				a.addEventListener('click', () => {
+					getProducts(`/products/dashboard/${existingParams}&page=${currentPage - 1}`).then(products => {
+						renderProducts(products);
+						currentPage = currentPage - 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+
+			// Number
+			for (let i = 1; i <= totalPages; i++) {
+				let li = document.createElement('li');
+				if (i !== currentPage) {
+					let a = document.createElement('a');
+						a.href = 'javascript:void(0);';
+						a.innerText = i;
+						a.addEventListener('click', () => {
+							getProducts(`/products/dashboard/${existingParams}&page=${i}`).then(products => {
+								renderProducts(products);
+								currentPage = i;
+							});
+						});
+					li.appendChild(a);
+				}else {
+					let span = document.createElement('span');
+					span.innerText = i;
+					li.appendChild(span);
+				}
+				paginator.appendChild(li);
+			}
+
+			// Right arrow
+			if(currentPage < totalPages) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Next';
+				a.addEventListener('click', () => {
+					getProducts(`/products/dashboard/${existingParams}&page=${currentPage + 1}`).then(products => {
+						renderProducts(products);
+						currentPage = currentPage + 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const sortSelect = document.querySelector('#sort-by');
+		sortSelect.value = sort || 0;
+		sortSelect.addEventListener('change', () => {
+			redirectPage(currentCategory, currentType, term, filter, sortSelect.value);
+		});
+
+		const cateSelect = document.querySelector('#category');
+		cateSelect.value = currentCategory || 0;
+
+		const subcategorySelect = document.querySelector('#subcategory');
+		subcategorySelect.value = currentType || 0;
+    	const subcategoryListContainer = document.querySelector('#subcategory-list');
+		cateSelect.addEventListener('change', () => {
+			subcategorySelect.value = null;
+			redirectPage(cateSelect.value, subcategorySelect.value, term, filter, sort);
+		});
+
+		getSubcategories(cateSelect.value);
+		async function getSubcategories(selectedCategory) {
+			if (selectedCategory) {
+				if (selectedCategory === 0) {
+					subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+					subcategoryListContainer.innerHTML = '';
+					console.log("0");
+					return;
+				} else {
+					// Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
+					console.log("1");
+				
+					fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
+						.then(response => response.json())
+						.then(data => {
+							const subcategories = data.subcategories;
+							console.log('Data from API:', data);
+
+							// Xóa tất cả các option hiện tại trong select subcategory
+							subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+							
+							// Thêm các option mới vào select subcategory
+							subcategories.forEach(subcategory => {
+								const option = document.createElement('option');
+								option.value = subcategory;
+								option.textContent = subcategory;
+								subcategorySelect.appendChild(option);
+							});
+
+							// Hiển thị danh sách subcategory
+							//subcategoryListContainer.innerHTML = subcategories.map(subcategory => subcategory.name).join(', ');
+							subcategorySelect.value = currentType || 0;
+						})
+						.catch(error => console.error('Error:', error));
+					
+				}
+
+			} else {
+				subcategorySelect.innerHTML = '<option value="0">Choose subcategory</option>';
+				subcategoryListContainer.innerHTML = '';
+				console.log("error");
+
+				return;
+			}
+		}
+
+
+		subcategorySelect.addEventListener('change', () => {
+			redirectPage(currentCategory, subcategorySelect.value, term, filter, sort);
+		});
+		/*const selectedFilter = document.querySelector(`input[name="price-range"][value="${filter}"]`);
+		if (selectedFilter) {
+			selectedFilter.click();
+		}
+		const radioList = document.querySelectorAll('input[name="price-range"]');
+
+		radioList.forEach((radio, selectedValue) => {
+			radio.addEventListener('click', () => {
+				redirectPage(currentCategory, currentType, term, selectedValue, sort);
+			});
+		})*/
+
+		initialLoad();
+	});
+</script>
+{{/section}}

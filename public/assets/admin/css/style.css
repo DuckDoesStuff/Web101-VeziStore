@@ -34,7 +34,8 @@
 
 .btn.btn-primary {
     color: #ffffff;
-}.btn.btn-detail {
+}
+.btn.btn-detail {
     color: #ce4141;
 }
 
@@ -51,6 +52,12 @@
 .btn-lg-square {
     width: 48px;
     height: 48px;
+}
+
+.pag-styles {
+    gap: 10px;
+    display: inline-flex;
+    margin-top: 10px;
 }
 
 .btn-square,
@@ -273,4 +280,17 @@
 .testimonial-carousel .owl-dot.active {
     background: var(--dark);
     border-color: var(--primary);
+}
+
+.product-other-images {
+    text-align: left;
+}
+.product-other-images img {
+    width: 58px;
+    height: auto;
+    margin: 0 12px 12px 0;
+}
+.product-other-images a:hover img,
+.product-other-images a.active img {
+    box-shadow: 0 0 0 2px #c7ced5;
 }

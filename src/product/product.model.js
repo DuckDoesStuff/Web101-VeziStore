@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
 	subcategory: [String],
 	size: [String],
 	color: [String],
-	rating: Number,
+	rating: {type:Number, default: 0.0},
 	description: [String],
 	information: [String],
 	review: [{type: mongoose.Schema.Types.ObjectId, ref:'Review'}],

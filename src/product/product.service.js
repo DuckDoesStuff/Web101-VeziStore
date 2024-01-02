@@ -74,7 +74,7 @@ exports.getProducts = getProducts;
 
 
 
-const createProduct = async (name, image, price, discount, availability, category, subcategory, size, color=[], rating=0, description, information, review=[]) => {
+const createProduct = async (name, image, price, discount, availability, category, subcategory, size, description, information) => {
 	const newProduct = new Product({
 		name: name,
 		image: image,
@@ -84,14 +84,14 @@ const createProduct = async (name, image, price, discount, availability, categor
 		category: category,
 		subcategory: subcategory,
 		size: size,
-		color: color,
-		rating: rating,
 		description: description,
 		information: information,
-		review: review,
 	});
-	return await newProduct.save();
+	await newProduct.save();
+	return newProduct;
 }
+
+exports.createProduct = createProduct;
 
 const addReviewToProduct = async (id, review) => {
 	const product = await Product.findById(id);
