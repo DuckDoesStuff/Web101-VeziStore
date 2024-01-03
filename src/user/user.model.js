@@ -8,12 +8,13 @@ const userSchema = new mongoose.Schema({
     first_name: { type: String, default: "" },
     last_name: { type: String, default: "" },
     address: { type: String, default: "" },
+    googleId: { type: String, default: "" },
+    facebookId: { type: String, default: "" },
     verified: { type: Boolean, default: false },
     password: { type: String, required: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     created: { type: Date, default: Date.now },
     cart: {type: mongoose.Schema.Types.ObjectId, ref: "Cart"},
-    checkout: [{type: mongoose.Schema.Types.ObjectId, ref: "Checkout"}],
     order: [{type: mongoose.Schema.Types.ObjectId, ref: "Order"}],
 });
 

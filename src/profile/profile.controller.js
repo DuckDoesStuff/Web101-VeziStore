@@ -72,6 +72,13 @@ exports.changePassword = changePassword;
 
 const updatePassword = async (req, res, next) => {
 	const user = await User.findById(req.user.id);
+
+	if(user.googleId || user.facebookId) {
+		return res.json({
+			msg: "OAuth 2.0 account cannot update password.",
+		});
+	}
+
 	const isValidPassword = await user.isValidPassword(req.body.current);
 	if(!isValidPassword) {
 		return res.json({message: "Current password is incorrect"});

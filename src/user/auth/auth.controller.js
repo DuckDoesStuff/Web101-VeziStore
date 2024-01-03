@@ -190,6 +190,18 @@ const resetPassword = async (req, res, next) => {
 		});
 	}
 
+	if(existingEmail.googleId) {
+		return res.json({
+			msg: "Please login with Google.",
+		});
+	}
+
+	if(existingEmail.facebookId) {
+		return res.json({
+			msg: "Please login with Facebook.",
+		});
+	}
+
 	// Generate a reset password token
 	const token = await authService.generateToken();
 	const newToken = new Token({ token: token, email: email });
@@ -240,6 +252,7 @@ const updatePassword = async (req, res, next) => {
 	}
 
 	const user = await User.findOne({ email: result.email });
+
 	user.password = password;
 	await user.save();
 	
