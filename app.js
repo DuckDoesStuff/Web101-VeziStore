@@ -103,6 +103,8 @@ const userRouter = require("./src/user");
 // Admin router
 // const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
 const adminProductRouter = require("./src/product/index-admin");
+const adminUserRouter = require("./src/user/index-admin");
+
 // const userInfoRouter = require("./routes/admin/account/user-info");
 // const orderInfoRouter = require("./routes/admin/order-info/order-info");
 // const productCreateRouter = require("./routes/admin/product/product-create");
@@ -125,6 +127,8 @@ app.use("/user", isAuthenticated, userRouter);
 // Subdomain admin routing
 //admin.use("/", adminProductRouter);
 admin.use("/products", adminProductRouter);
+admin.use("/users", adminUserRouter);
+
 
 //admin.use("/", productRouter);
 // admin.use("/users-dashboard", usersDashboardRouter);
