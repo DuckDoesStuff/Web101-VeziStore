@@ -58,3 +58,15 @@ const updateCart = async (req, res, next) => {
 	return res.json(result);
 }
 exports.updateCart = updateCart;
+
+const viewCheckout = async (req, res, next) => {
+	if(!req.user) {
+		return res.redirect("/signin/?returnUrl=cart/checkout");
+	}
+
+	res.render("user/cart/checkout", {
+		title: "Checkout",
+		user: req.user,
+	});
+}
+exports.viewCheckout = viewCheckout;
