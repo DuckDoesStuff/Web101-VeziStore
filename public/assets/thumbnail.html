@@ -1,0 +1,9 @@
+<div class="product-main-image">
+    <img class="img-responsive" src="https://ucarecdn.com/{{image.[0]}}/-/preview/300x400/" alt="{{name}}" data-BigImgsrc="https://ucarecdn.com/{{image.[0]}}/-/preview/300x400/">
+</div>
+<div class="product-other-images">
+    {{#each image}}
+    <a href="https://ucarecdn.com/{{this}}/-/preview/300x400/" class="other-image-link">
+    <img alt="{{name}}" src="https://ucarecdn.com/{{this}}/-/preview/300x400/"></a>
+    {{/each}}
+</div>

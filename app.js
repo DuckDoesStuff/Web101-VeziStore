@@ -11,7 +11,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 const dotenv = require("dotenv");
 const setLayout = require("./src/middleware");
-const express_handlebars_sections = require('express-handlebars-sections');
+const express_handlebars_sections = require("express-handlebars-sections");
 dotenv.config();
 
 db();
@@ -57,6 +57,9 @@ const adminHbs = exphbs.create({
         lowercase: function (str) {
             return str.toLowerCase();
         },
+        contains: function (array, value) {
+            return array.includes(value);
+        },
     },
 });
 express_handlebars_sections(adminHbs);
@@ -77,13 +80,15 @@ app.use(express.static(path.join(__dirname, "public")));
 admin.use(express.json());
 admin.use(express.urlencoded({ extended: true }));
 // Express session setup
-app.use(session({
-	secret: process.env.SECRET_KEY,
-	resave: false,
-	saveUninitialized: true,
-	store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
-	cookie: { maxAge: 12 * 60 * 60 * 1000 } // 12h in ms
-}));
+app.use(
+    session({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: true,
+        store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
+        cookie: { maxAge: 12 * 60 * 60 * 1000 }, // 12h in ms
+    })
+);
 
 // Passport initialize and session
 app.use(passport.initialize());
@@ -129,7 +134,6 @@ admin.use("/products", adminProductRouter);
 // admin.use("/order-info", orderInfoRouter);
 // admin.use("/product-create", productCreateRouter);
 // admin.use("/product-info", productInfoRouter);
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

@@ -4873,6 +4873,9 @@ fieldset:disabled .btn {
 .toast.hide {
     display: none;
 }
+.hide {
+    display: none !important;
+}
 .toast-container {
     width: max-content;
     max-width: 100%;

@@ -1,5 +1,5 @@
 const productService = require("./product.service");
-const categoryService = require('../category/category.service');
+const categoryService = require("../category/category.service");
 
 const { UploadClient } = require("@uploadcare/upload-client");
 const uploadcare = new UploadClient({
@@ -19,20 +19,32 @@ const home = async (req, res, next) => {
 };
 exports.home = home;
 
-const catalog = async (req,res,next) => {
-	const currentCategory = req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
-	const currentType = req.query.type ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1) : "";
-	const popularProducts = await productService.getPopularProductsByCategoryAndSubcategory(req.query.cate, req.query.type);
-	res.render("user/catalog", {
-		title: "Vezi Store | " + currentCategory + " " + currentType + " | Catalog",
-		user: req.user,
-		categories: await categoryService.getAllCategory(),
-		// subcategories: await categoryService.getAllSubcategory(),
-		currentCategory: currentCategory,
-		currentType: currentType,
-		popularProducts: popularProducts,
-	});
-}
+const catalog = async (req, res, next) => {
+    const currentCategory =
+        req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1);
+    const currentType = req.query.type
+        ? req.query.type.charAt(0).toUpperCase() + req.query.type.slice(1)
+        : "";
+    const popularProducts =
+        await productService.getPopularProductsByCategoryAndSubcategory(
+            req.query.cate,
+            req.query.type
+        );
+    res.render("user/catalog", {
+        title:
+            "Vezi Store | " +
+            currentCategory +
+            " " +
+            currentType +
+            " | Catalog",
+        user: req.user,
+        categories: await categoryService.getAllCategory(),
+        // subcategories: await categoryService.getAllSubcategory(),
+        currentCategory: currentCategory,
+        currentType: currentType,
+        popularProducts: popularProducts,
+    });
+};
 exports.catalog = catalog;
 
 const dashboard = async (req, res, next) => {
@@ -58,37 +70,46 @@ const dashboard = async (req, res, next) => {
 
 exports.dashboard = dashboard;
 
-const detail = async (req,res,next) => {
-	const productDetail = await productService.getProductById(req.params.id);
-	const similarProducts = await productService.getPopularProductsByCategoryAndSubcategory(productDetail.category, productDetail.subcategory);
-	const popularProducts = await productService.getPopularProducts(6);
-	res.render("user/productDetail", {
-		title: "Vezi Store | " + productDetail.category + " " + productDetail.subcategory + " | Catalog",
-		user: req.user,
-		categories: await categoryService.getAllCategory(),
-		// subcategories: await categoryService.getAllSubcategory(),
-		currentCategory: productDetail.category[0],
-		currentType: productDetail.subcategory[0],
-		similarProducts: similarProducts,
-		productDetail: productDetail,
-		popularProducts: popularProducts,
-	});
-}
+const detail = async (req, res, next) => {
+    const productDetail = await productService.getProductById(req.params.id);
+    const similarProducts =
+        await productService.getPopularProductsByCategoryAndSubcategory(
+            productDetail.category,
+            productDetail.subcategory
+        );
+    const popularProducts = await productService.getPopularProducts(6);
+    res.render("user/productDetail", {
+        title:
+            "Vezi Store | " +
+            productDetail.category +
+            " " +
+            productDetail.subcategory +
+            " | Catalog",
+        user: req.user,
+        categories: await categoryService.getAllCategory(),
+        // subcategories: await categoryService.getAllSubcategory(),
+        currentCategory: productDetail.category[0],
+        currentType: productDetail.subcategory[0],
+        similarProducts: similarProducts,
+        productDetail: productDetail,
+        popularProducts: popularProducts,
+    });
+};
 exports.detail = detail;
 
 const search = async (req, res, next) => {
     const term = req.query.term;
 
-	res.render("user/catalog", {
-		title: "Vezi Store | Search",
-		user: req.user,
-		categories: await categoryService.getAllCategory(),
-		// subcategories: await categoryService.getAllSubcategory(),
-		currentCategory: "",
-		currentType: "",
-		searchName: term,
-	});
-}
+    res.render("user/catalog", {
+        title: "Vezi Store | Search",
+        user: req.user,
+        categories: await categoryService.getAllCategory(),
+        // subcategories: await categoryService.getAllSubcategory(),
+        currentCategory: "",
+        currentType: "",
+        searchName: term,
+    });
+};
 exports.search = search;
 
 const getProducts = async (req, res, next) => {
@@ -128,7 +149,7 @@ const getSubByCate = async (req, res, next) => {
         case "man":
             subcategories = ["t-shirts", "shirts", "bottoms", "outterwear"];
             break;
-        case "kid":
+        case "kids":
             subcategories = ["sleepwear", "school", "activity", "summer"];
             break;
         // Thêm các trường hợp khác nếu cần
@@ -192,17 +213,52 @@ const createProduct = async (req, res, next) => {
         description,
         information
     );
-    
-    if(product) {
+
+    if (product) {
         categoryService.addProductToCategoryAndSubcategory(
             category,
             subcategory,
             product._id
         );
         res.redirect("/");
-        }
-    else {
-        res.redirect("/products/create")
+    } else {
+        res.redirect("/products/create");
     }
 };
 exports.createProduct = createProduct;
+
+const updateProduct = async (req, res, next) => {
+    const productID = req.params.id;
+    const name = req.body.product_name;
+    const price = req.body.product_price;
+    const discount = req.body.product_discount;
+    const size = req.body.product_size;
+    const availability = req.body.product_availability;
+    const sold = req.body.product_sold;
+    const cate = req.body.product_cate;
+    const type = req.body.product_type;
+    const description = req.body.product_description;
+    const information = req.body.product_information;
+
+    await productService.updateProduct(
+        productID,
+        name,
+        price,
+        discount,
+        size,
+        availability,
+        cate,
+        type,
+        description,
+        information
+    );
+    res.json({ message: "Update product successfully" });
+};
+exports.updateProduct = updateProduct;
+
+const getProduct = async (req, res, next) => {
+    const productID = req.params.id;
+    const product = await productService.findProductByID(productID);
+    return res.json(product);
+};
+exports.getProduct = getProduct;
