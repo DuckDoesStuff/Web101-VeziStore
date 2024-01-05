@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     password: { type: String, required: true },
     phone: { type: String, default: "" },
-    isAdmin: { type: Boolean, default: false},
+    role: { type: String, default: "user"},
     //wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     created: { type: Date, default: Date.now },
     cart: {type: mongoose.Schema.Types.ObjectId, ref: "Cart"},
