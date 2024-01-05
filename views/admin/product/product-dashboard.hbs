@@ -326,7 +326,6 @@
 					return;
 				} else {
 					// Gửi yêu cầu AJAX để lấy danh sách subcategory từ server
-					console.log("1");
 				
 					fetch(`/products/dashboard/api/subcategories/${selectedCategory}`)
 						.then(response => response.json())

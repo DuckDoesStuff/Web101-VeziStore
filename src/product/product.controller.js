@@ -262,3 +262,26 @@ const getProduct = async (req, res, next) => {
     return res.json(product);
 };
 exports.getProduct = getProduct;
+
+const removeImage = async (req, res, next) => {
+    const productID = req.params.id;
+    const deleteImage = req.body.product_thumbnail_delete;
+    await productService.deleteProductImage(productID, deleteImage);
+    return res.sendStatus(200);
+};
+exports.removeImage = removeImage;
+
+const addImage = async (req, res, next) => {
+    const productID = req.params.id;
+    const addThumbnail = req.files;
+
+    const images = await Promise.all(
+        addThumbnail.map(async (file) => {
+            const uploadedFile = await uploadcare.uploadFile(file.buffer);
+            return uploadedFile.uuid;
+        })
+    );
+    await productService.addImage(productID, images);
+    return res.sendStatus(200);
+};
+exports.addImage = addImage;

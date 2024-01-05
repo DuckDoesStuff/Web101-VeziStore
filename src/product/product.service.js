@@ -245,3 +245,19 @@ const updateProduct = async (
     await product.save();
 };
 exports.updateProduct = updateProduct;
+
+const deleteProductImage = async (id, deleteImages) => {
+    const product = await Product.findById(id);
+	product.image = product.image.filter(image => !deleteImages.includes(image));
+	await product.save();
+};
+exports.deleteProductImage = deleteProductImage;
+
+const addImage = async (id, addImages) => {
+    const product = await Product.findById(id);
+    addImages.forEach((image) => {
+        product.image.push(image);
+    });
+	await product.save();
+}
+exports.addImage = addImage;

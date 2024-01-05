@@ -21,9 +21,14 @@ router.get('/create/', productController.productCreateDirect);
 router.post('/create/', upload.array("files"), productController.createProduct);
 
 router.get('/:id', productController.productDetailAdmin);
+
 router.post('/:id', productController.getProduct);
 
 router.post('/update/:id', productController.updateProduct);
+
+router.post('/delete-thumbnail/:id', productController.removeImage);
+
+router.post('/add-thumbnail/:id', upload.array("image"), productController.addImage);
 
 
 module.exports = router;
