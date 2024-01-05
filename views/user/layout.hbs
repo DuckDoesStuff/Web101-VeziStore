@@ -58,7 +58,9 @@
   {{> header}}
   {{/if}}
 
-
+  <div class="alert-container">
+	  <p class="alert-msg"></p>
+  </div>
   {{{body}}}
 
   {{#if showHeaderFooter}}
@@ -92,6 +94,17 @@
       Layout.initTouchspin();
       Layout.initUniform();
     });
+  </script>
+  <script>
+    const showAlert = (message, time=2000) => {
+      const alertContainer = document.querySelector('.alert-container');
+      const alertMsg = document.querySelector('.alert-msg');
+      alertMsg.innerHTML = message;
+      alertContainer.style.display = 'block';
+      setTimeout(() => {
+        alertContainer.style.display = 'none';
+      }, time);
+    }
   </script>
   {{{_sections.scripts}}}
     <!-- END PAGE LEVEL JAVASCRIPTS -->

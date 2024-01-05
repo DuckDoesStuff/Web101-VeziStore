@@ -1,4 +1,3 @@
-const categoryService = require("../category/category.service");
 const User = require("../user/user.model");
 const authService = require("../user/auth/auth.service");
 const Token = require("../user/auth/auth.token");
@@ -20,6 +19,7 @@ const viewProfile = async (req, res, next) => {
 		last_name: user.last_name,
 		email: user.email,
 		address: user.address,
+		phone: user.phone,
 	});
 }
 exports.viewProfile = viewProfile;
@@ -44,6 +44,7 @@ const updateProfile = async (req, res, next) => {
 	user.last_name = req.body.last_name;
 	user.email = req.body.email;
 	user.address = req.body.address;
+	user.phone = req.body.phone;
 
 	await user.save();
 	res.json({ message: "Update profile successfully" })

@@ -3086,3 +3086,33 @@ Styler Panel
 	justify-content: space-between;
 	align-items: center;
 }
+
+.alert-container {
+	display:block;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	
+	top: 20px;
+	left: 50%;
+
+	
+	transform: translateX(-50%);
+	padding: 10px 20px;
+	background: #E84D1C;
+	border-radius: 20px;
+	z-index: 100;
+
+	animation: fadeOut 2s ease-in-out;
+	display:none;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.alert-msg {
+	color: #fff;
+	font-size: 1.5em;
+}

@@ -32,7 +32,7 @@
 					</div>
 					<a href="/home" class="btn btn-default" type="submit">Continue shopping <i
 							class="fa fa-shopping-cart"></i></a>
-					<button id="checkout" class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
+					<a id="checkout" class="btn btn-primary" type="submit" href="/user/cart/checkout">Checkout <i class="fa fa-check"></i></a>
 				</div>
 			</div>
 			<!-- END CONTENT -->
@@ -81,7 +81,7 @@
 		const result = await fetch(`user/cart/${id}`, {
 			method: 'DELETE',
 		}).then(res => res.json());
-		alert(result.message);
+		showAlert(result.message);
 		fetchCart();
 	}
 	
