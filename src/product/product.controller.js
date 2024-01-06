@@ -285,3 +285,21 @@ const addImage = async (req, res, next) => {
     return res.sendStatus(200);
 };
 exports.addImage = addImage;
+
+const deleteProduct = async (req, res, next) => {
+    const productID = req.params.id;
+    try {
+        const deletedProduct = await productService.findAndDeleteProduct(productID);
+
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ message: 'Product deleted successfully', deletedProduct });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+exports.deleteProduct = deleteProduct;
+

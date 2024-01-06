@@ -1,12 +1,12 @@
 {{#if products.length}}
 {{#each products}}
 {{#with this}}
-<tr>
+<tr id="product-line">
     <td>{{name}}</td>
     <td>${{price}}</td>
     <td>${{discount}}</td>
     <td>{{availability}}</td>
-    <td><a class="btn btn-sm btn-detail" href="/products/{{_id}}">Detail</a> <a class="btn btn-sm btn-primary" href="">Delete</a></td>
+    <td><a class="btn btn-sm btn-detail" href="/products/{{_id}}">Detail</a> <button id="{{_id}}" class="btn btn-sm btn-primary">Delete</button></td>
 </tr>
 {{/with}}
 {{/each}}

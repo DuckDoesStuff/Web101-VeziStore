@@ -259,5 +259,11 @@ const addImage = async (id, addImages) => {
         product.image.push(image);
     });
 	await product.save();
-}
+};
 exports.addImage = addImage;
+
+const findAndDeleteProduct = async (id) => {
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    return deletedProduct;
+};
+exports.findAndDeleteProduct = findAndDeleteProduct;

@@ -105,7 +105,7 @@
                         </div>
                         <div class="row justify-content-end">
                             <button class="btn btn-sm btn-detail col-3" id="update">Update</button>
-                            <button class="btn btn-sm btn-primary col-3" id="delete">Delete this product</button>
+                            <button class="btn btn-sm btn-primary col-3" id="delete-product">Delete this product</button>
                             <button class="btn btn-sm btn-primary col-3 hide" id="save">Save</button>
                             <button class="btn btn-sm btn-detail col-3 hide" id="cancel">Cancel</button>
                         </div>
@@ -248,10 +248,12 @@
             
 
             document.querySelector("#update").classList.add("hide");
-            document.querySelector("#delete").classList.add("hide");
+            document.querySelector("#delete-product").classList.add("hide");
             document.querySelector("#save").classList.remove("hide");
             document.querySelector("#cancel").classList.remove("hide");
         });
+
+        
 
         document.querySelector('#cancel').addEventListener("click", () => {
             deleteImage.length = 0;
@@ -271,11 +273,13 @@
             document.querySelector('#update-thumbnail').classList.add("hide");
 
             document.querySelector("#update").classList.remove("hide");
-            document.querySelector("#delete").classList.remove("hide");
+            document.querySelector("#delete-product").classList.remove("hide");
             document.querySelector("#save").classList.add("hide");
             document.querySelector("#cancel").classList.add("hide");
             renderUpdateThumbnail(id);
         });
+
+        
 
         document.querySelector("#save").addEventListener("click", async () => {
             document.querySelectorAll("input").forEach((input) => {
@@ -343,7 +347,7 @@
             document.querySelector("#subcategory").classList.add("hide");
 
             document.querySelector("#update").classList.remove("hide");
-            document.querySelector("#delete").classList.remove("hide");
+            document.querySelector("#delete-product").classList.remove("hide");
             document.querySelector("#save").classList.add("hide");
             document.querySelector("#cancel").classList.add("hide");
 
@@ -352,9 +356,34 @@
             document.querySelector('#thumbnail').classList.remove("hide");
             document.querySelector('#update-thumbnail').classList.add("hide");
         });
+
+        
         renderThumbnail(id);
-            console.log("here");
+        console.log("here");
 
         renderUpdateThumbnail(id);
+        document.querySelector("#delete-product").addEventListener("click", async () => {
+            if (confirm("Are you sure you want to delete this product?")) {
+                await fetch(`/products/dashboard/api/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Product deleted successfully:', data);
+                    window.location.href = `/products/dashboard/`;
+                })
+                .catch(error => {
+                    console.error('Error deleting product:', error);
+                });
+            }
+        });
     });
 </script>
