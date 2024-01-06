@@ -6,6 +6,8 @@ const profileController = require('../profile/profile.controller');
 
 router.get('/profile/', userController.adminProfile);
 
+router.get('/create-new-admin-account/', userController.newAdminAccount);
+
 router.post('/profile/', profileController.updateProfile);
 
 

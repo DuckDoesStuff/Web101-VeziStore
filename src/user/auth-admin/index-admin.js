@@ -13,7 +13,6 @@ router.get('/forgot-password/', authController.forgotPassword);
 router.post('/forgot-password/', authController.resetPassword);
 
 router.get('/signin', authController.signin);
-router.get('/signup', authController.signup);
 
 router.post('/signin', authController.login);
 router.post('/signup', authController.register);

@@ -1,0 +1,150 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded h-100 p-4">
+		<h6 class="mb-4"> CREATE NEW ADMIN ACCOUNT </h6>
+        <form id="create-account-info" class="" action="auth/signup" method="post">
+			<div class="row">
+				<label for="username" class="col-sm-2 col-form-label">Username</label>
+				<div class="col-sm-10">
+					<input required type="text" onchange="checkUsername()" class="form-control col-sm-10" id="username" name="username">
+				</div>
+			</div>
+			<div class="row">
+				<label for="email" class="col-sm-2 col-form-label">Email</label>
+				<div class="col-sm-10">
+					<input required type="text" class="form-control col-sm-10" id="email" name="email">
+				</div>
+			</div>
+			<div class="row">
+				<label for="email" class="col-sm-2 col-form-label">Password</label>
+				<div class="col-sm-10">
+					<input onchange="checkPassword()"  required type="password" class="form-control col-sm-10" id="password" name="password">
+				</div>
+			</div>
+			<div class="row mb-4">
+				<label for="email" class="col-sm-2 col-form-label">Confirm password</label>
+				<div class="col-sm-10">
+					<input onchange="checkPassword()"  required type="password" class="form-control col-sm-10" id="confirm" name="confirm">
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-check label-font-size">
+					<input type="checkbox" id="exampleCheck1">
+					<label class="form-check-label" for="exampleCheck1">Show password</label>
+				</div>
+			</div>
+			<div class="d-flex align-items-center justify-content-center mb-4">
+            	<button type="submit" class="btn btn-success col-4 align-self-center" style="font-size:15px;">Create new admin account</button>
+			</div>
+
+		</form>
+		<h5 class="text-danger font-weight-bold mb-5">{{message}}</h5>
+	</div>
+</div>
+
+<script>
+	const currentUrl = window.location.href;
+	const url = new URL(currentUrl);
+	const existingParams = url.searchParams;
+	const resultDiv = document.querySelector('.text-danger');
+
+	function checkPasswordComplexity(password) {
+		const minLength = 8;
+		const maxLength = 20;
+
+		if (password.length < minLength) {
+			return "Password should be at least " + minLength + " characters long.";
+		}
+
+		if (password.length > maxLength) {
+			return "Password should not exceed " + maxLength + " characters.";
+		}
+
+		if (!/[A-Z]/.test(password)) {
+			return "Password should contain at least one uppercase letter.";
+		}
+
+		if (!/[a-z]/.test(password)) {
+			return "Password should contain at least one lowercase letter.";
+		}
+
+		if (!/\d/.test(password)) {
+			return "Password should contain at least one digit.";
+		}
+
+		if (/\s/.test(password)) {
+			return "Password should not contain spaces.";
+		}
+
+		return true;
+	}
+
+	const checkPassword = () => {
+		const password = document.querySelector('#password');
+		const confirm = document.querySelector('#confirm');
+
+		if(checkPasswordComplexity(password.value) !== true) {
+			resultDiv.textContent = checkPasswordComplexity(password.value);
+			return;
+		}
+
+
+		if (password.value !== confirm.value) {
+			resultDiv.textContent = 'Passwords do not match';
+		} else {
+			resultDiv.textContent = '';
+		}
+	}
+
+	const checkUsername = () => {
+		const username = document.querySelector('#username');
+		if (username.value.length < 3) {
+			resultDiv.textContent = 'Username should be at least 3 characters long.';
+		} else if (username.value.includes(" ")) {
+			resultDiv.textContent = 'Username should not contain spaces.';
+		}
+		else {
+			resultDiv.textContent = '';
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function() {
+		document.getElementById('create-account-info').addEventListener('submit', async function(e) {
+			e.preventDefault();
+			const formAction = this.action; // Get the original form action
+			const newAction = existingParams.toString() ? `${formAction}?${existingParams.toString()}` : formAction;
+			this.action = newAction;
+
+			const result = await fetch(this.action, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					"username": document.querySelector('#username').value,
+					"email": document.querySelector('#email').value,
+					"password": document.querySelector('#password').value
+				})
+			}).then(response => response.json())
+
+			if (result.success) {
+				alert(result.message);
+				window.location.href = result.redirect;
+				return;
+			}
+
+			resultDiv.innerHTML = result.msg;
+		}); 
+		
+		document.querySelector('#exampleCheck1').addEventListener('click', function() {
+			const password = document.querySelector('#password');
+			const confirm = document.querySelector('#confirm');
+			if (this.checked) {
+				password.type = 'text';
+				confirm.type = 'text';
+			} else {
+				password.type = 'password';
+				confirm.type = 'password';
+			}
+		});
+	});
+</script>

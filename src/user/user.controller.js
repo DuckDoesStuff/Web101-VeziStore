@@ -63,3 +63,17 @@ const adminProfile = async (req, res, next) => {
 	});
 }
 exports.adminProfile = adminProfile;
+
+const newAdminAccount = async (req, res, next) => {
+    const user = await userService.getUserById(req.user.id);
+    res.render("admin/setting/admin-register", {
+        title:
+            "Vezi Store | Admin Create New Accout",
+            showSideBar: true,
+            mode: false,
+            user: req.user,
+            picture: user.picture,
+	});
+
+}
+exports.newAdminAccount = newAdminAccount;
