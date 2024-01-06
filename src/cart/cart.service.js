@@ -4,15 +4,21 @@ const Product = require('../product/product.model');
 
 const addToCart = async (productId, quantity, userId) => {
 	const user = await User.findById(userId);
-	const cart = await Cart.findById(user.cart).populate("item.product");
-	const index = cart.item.findIndex(item => item.product._id == productId);
+	const cart = await Cart.findById(user.cart);
+	let index;
+	try {
+		index = cart.item.findIndex(item => item.product == productId);
+	}catch(err) {
+		console.log(err);
+		index = -1;
+	}
 
+	const product = await Product.findById(productId).select("price");
 	if (index > -1) {
 		cart.item[index].quantity += parseInt(quantity);
-		cart.item[index].total += quantity * cart.item[index].product.price;
-		cart.total += quantity * cart.item[index].product.price;
+		cart.item[index].total += quantity * product.price;
+		cart.total += quantity * product.price;
 	}else {
-		const product = await Product.findById(productId).select("price");
 		const total = quantity * product.price;
 		cart.total += total;
 		cart.item.push({
@@ -31,8 +37,8 @@ exports.addToCart = addToCart;
 
 const removeFromCart = async (productId, userId) => {
 	const user = await User.findById(userId);
-	const cart = await Cart.findById(user.cart).populate("item.product");
-	const index = cart.item.findIndex(item => item.product._id == productId);
+	const cart = await Cart.findById(user.cart);
+	const index = cart.item.findIndex(item => item.product == productId);
 	if (index > -1) {
 		cart.total -= cart.item[index].total;
 		cart.item.splice(index, 1);
@@ -59,7 +65,24 @@ const getCart = async (userId) => {
 				status: 404
 			}
 		}
-		return await Cart.findById(user.cart).populate("item.product")
+		const cart = await Cart.findById(user.cart).populate("item.product");
+		if(!cart) {
+			const newCart = new Cart({
+				item: [],
+				total: 0
+			});
+			await newCart.save();
+			user.cart = newCart.id;
+			user.save();
+			return cart;
+		}
+		const filteredCart = cart.item.filter(item => item.product != null);
+		if (filteredCart.length < cart.item.length) {
+			cart.total = filteredCart.reduce((acc, item) => acc + item.total, 0);
+			cart.item = filteredCart;
+			cart.save();
+		}
+		return cart;
 	}
 	catch(err) {
 		console.log(err);
@@ -69,12 +92,13 @@ exports.getCart = getCart;
 
 const updateCart = async (productId, quantity, userId) => {
 	const user = await User.findById(userId);
-	const cart = await Cart.findById(user.cart).populate("item.product");
-	const index = cart.item.findIndex(item => item.product._id == productId);
+	const cart = await Cart.findById(user.cart);
+	const index = cart.item.findIndex(item => item.product == productId);
 	if (index > -1) {
-		cart.total = cart.total - cart.item[index].total + quantity * cart.item[index].product.price;
+		const product = await Product.findById(productId);
+		cart.total = cart.total - cart.item[index].total + quantity * product.price;
 		cart.item[index].quantity = quantity;
-		cart.item[index].total = quantity * cart.item[index].product.price;
+		cart.item[index].total = quantity * product.price;
 		await cart.save();
 		return {
 			message: "Cart updated successfully",
