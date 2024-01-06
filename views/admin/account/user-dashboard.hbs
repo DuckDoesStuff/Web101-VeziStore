@@ -5,6 +5,39 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">USERS LIST</h6>
         </div>
+        <div class="row d-flex align-items-center justify-content-between mb-4">
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+            			<form action="" method="" id="search-username">
+                        	<input type="text" placeholder="Username" class="form-control" id="search-username-input" name="search-username-input">	
+						</form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+						<form action="" method="" id="search-email">
+                        	<input type="text" placeholder="Email" class="form-control" id="search-email-input" name="search-email-input">	
+						</form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+                        <select required class="form-select form-control"
+                            aria-label="Floating label select example" name="sort-by" id="sort-by">
+                            <option value="0">Default</option>
+                            <option value="1">New arrivals</option>
+                            <option value="2">Username (Low &gt; High)</option>
+                            <option value="3">Email (Low &gt; High)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
                 <thead>
@@ -12,6 +45,7 @@
                         <th scope="col">Username</th>
                         <th scope="col">Email</th>
                         <th scope="col">Address</th>
+                        <th scope="col">Role</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -22,3 +56,205 @@
         </div>
     </div>
 </div>
+{{#section "scripts"}}
+<script>
+	let userTemplate;
+	let currentPage = 1;
+	let totalPages = 1;
+
+	const urlParams = new URLSearchParams(window.location.search);
+
+	const username = urlParams.get('username')
+	const email = urlParams.get('email');
+	const sort = urlParams.get('sort');
+
+	function redirectPage(username, email, sort) {
+		let existingParams = `?`;
+		if (username) {
+			//existingParams = `search/?`;
+			existingParams += `&username=${username}`;
+		}
+        if (email) {
+			//existingParams = `search/?`;
+			existingParams += `&email=${email}`;
+		}
+		if(sort) {
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
+		}
+		window.location.href = '/users/dashboard/' + existingParams;
+	}
+
+	//Client
+	async function getUsers(apiURL) {
+		apiURL = apiURL.replace('/search', '');
+		const result = await fetch(apiURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+		return result;
+	}
+
+	async function renderUsers(users) {
+		const userItemHtml = await fetch('./assets/userDashboard.html')
+		const userTemplateSrc = await userItemHtml.text();
+		userTemplate = Handlebars.compile(userTemplateSrc);
+		const userContainer = document.getElementById('users-dashboard');
+
+		userContainer.innerHTML = userTemplate(users);
+		generatePagination();
+		window.scrollTo({
+			top: 200,
+			behavior: 'smooth'
+		});
+	}
+
+	async function initialLoad() {
+		const apiURL = '/users/dashboard/' + window.location.search;
+		const users = await getUsers(apiURL);
+		totalPages = Math.ceil(users.userCount / 9);
+		renderUsers(users);
+	}
+
+	function generatePagination() {
+		let paginator = document.getElementById('paginator');
+		paginator.innerHTML = '';
+		let existingParams = `?`;
+		if (username) {
+			//existingParams = `search/?`;
+			existingParams += `&username=${username}`;
+		}
+        if (email) {
+			existingParams += `&email=${email}`;
+        }
+		if(sort) {
+			if (sort == 0) {
+				const noSort = `&sort=0`;
+				existingParams = existingParams.replace(noSort, ``);
+			} else {
+				existingParams += `&sort=${sort}`;
+			}
+		}
+
+		if (totalPages > 1) {
+			// Left arrow
+			if(currentPage > 1) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Previous';
+				a.addEventListener('click', () => {
+					getUsers(`/users/dashboard/${existingParams}&page=${currentPage - 1}`).then(users => {
+						renderUsers(users);
+						currentPage = currentPage - 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+
+			// Number
+			for (let i = 1; i <= totalPages; i++) {
+				let li = document.createElement('li');
+				if (i !== currentPage) {
+					let a = document.createElement('a');
+						a.href = 'javascript:void(0);';
+						a.innerText = i;
+						a.addEventListener('click', () => {
+							getUsers(`/users/dashboard/${existingParams}&page=${i}`).then(users => {
+								renderProducts(users);
+								currentPage = i;
+							});
+						});
+					li.appendChild(a);
+				}else {
+					let span = document.createElement('span');
+					span.innerText = i;
+					li.appendChild(span);
+				}
+				paginator.appendChild(li);
+			}
+
+			// Right arrow
+			if(currentPage < totalPages) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Next';
+				a.addEventListener('click', () => {
+					getUsers(`/users/dashboard/${existingParams}&page=${currentPage + 1}`).then(users => {
+						renderUsers(users);
+						currentPage = currentPage + 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const searchUsernameForm = document.getElementById('search-username');
+		const searchEmailForm = document.getElementById('search-email');
+
+
+		searchUsernameForm.addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+			// Lấy giá trị tìm kiếm từ ô input
+			const searchTerm = document.getElementById('search-username-input').value.trim();
+			// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+			if (!searchTerm) {
+				window.location.href = `/users/dashboard/`;
+			}
+			else {
+				redirectPage(searchTerm, email, sort);
+			}
+
+		});
+
+		searchEmailForm.addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+			// Lấy giá trị tìm kiếm từ ô input
+			const searchTerm = document.getElementById('search-email-input').value.trim();
+			// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+			if (!searchTerm) {
+				window.location.href = `/users/dashboard/`;
+			}
+			else {
+				redirectPage(username, searchTerm, sort);
+			}
+
+		});
+
+
+		const searchInput = document.getElementById('search-username-input');
+		const searchEmailInput = document.getElementById('search-email-input');
+		const urlParams = new URLSearchParams(window.location.search);
+		const searchTermFromURL = urlParams.get('username');
+		const searchEmailFromURL = urlParams.get('email');
+
+		if (searchTermFromURL) {
+			searchInput.value = searchTermFromURL;
+		}
+
+		if (searchEmailFromURL) {
+			searchEmailInput.value = searchEmailFromURL;
+		}
+
+		const sortSelect = document.querySelector('#sort-by');
+		sortSelect.value = sort || 0;
+		sortSelect.addEventListener('change', () => {
+			redirectPage(username, email, sortSelect.value);
+		});
+		initialLoad();
+	});
+</script>
+{{/section}}

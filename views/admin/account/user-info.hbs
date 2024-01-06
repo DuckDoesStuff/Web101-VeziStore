@@ -1,37 +1,30 @@
 {{> spinner}}
 
-{{#with user_info}}
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">USER INFORMATION</h6>
         <div class="row mb-0">
-            <h6 class="col-sm-2 text-gray">ID</h6>
-            <div class="col-lg-10">
-                <h6 class="mb-4">{{id}}</h6>
-            </div>
-        </div>
-        <div class="row mb-0">
             <h6 class="col-sm-2 text-gray">Username</h6>
             <div class="col-lg-10">
-                <h6 class="mb-4">{{username}}</h6>
+                <h6 class="mb-4">{{userInfo.username}}</h6>
             </div>
         </div>
         <div class="row mb-0">
             <h6 class="col-sm-2 text-gray">Email</h6>
             <div class="col-lg-10">
-                <h6 class="mb-4">{{email}}</h6>
+                <h6 class="mb-4">{{userInfo.email}}</h6>
             </div>
         </div>
         <div class="row mb-0">
             <h6 class="col-sm-2 text-gray">Phone number</h6>
             <div class="col-lg-10">
-                <h6 class="mb-4">{{phone}}</h6>
+                <h6 class="mb-4">{{userInfo.phone}}</h6>
             </div>
         </div>
         <div class="row mb-0">
             <h6 class="col-sm-2 text-gray">Address</h6>
             <div class="col-lg-10">
-                <h6 class="mb-4">{{address}}</h6>
+                <h6 class="mb-4">{{userInfo.address}}</h6>
             </div>
         </div>
     </div>
@@ -72,4 +65,3 @@
         </div>
     </div>
 </div>
-{{/with}}
