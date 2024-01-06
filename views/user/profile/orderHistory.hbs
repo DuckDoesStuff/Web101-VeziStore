@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="assets/pages/css/profile.css" type="text/css"/>
+
+<div class="main">
+	<div class="container">
+		<!-- BEGIN SIDEBAR & CONTENT -->
+		<div class="row margin-bottom-40">
+			<!-- BEGIN SIDEBAR -->
+			<div class="sidebar col-md-3 col-sm-5">
+				<ul class="list-group margin-bottom-25 sidebar-menu">
+					<li class="list-group-item clearfix">
+						<a href="/user/profile"><i class="fa-solid fa-user"></i> Your profile</a>
+					</li>
+					<li class="list-group-item clearfix active">
+						<a href="/user/order"><i class="fa-solid fa-shirt"></i> Order history</a>
+					</li>
+					<li class="list-group-item clearfix">
+						<a href="/user/profile/change-password"><i class="fa-solid fa-key"></i> Change your password</a>
+					</li>
+				</ul>
+			</div>
+			<!-- END SIDEBAR -->
+
+			<!-- BEGIN CONTENT -->
+			<div class="col-md-9 col-sm-7">
+				<div class="content-page">
+					<table class="table table-responsive table-bordered">
+						<tbody>
+							<tr>
+								<th>Order ID</th>
+								<th>Date ordered</th>
+								<th>Status</th>
+								<th>Total</th>
+								<th>More detail</th>
+							</tr>
+						</tbody>
+						
+						<tbody id="order-table">
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- END CONTENT -->
+		</div>
+		<!-- END SIDEBAR & CONTENT -->
+	</div>
+</div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', async () => {
+		const result = await fetch('/user/order', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+
+		const table = document.querySelector('#order-table');
+
+		result.orders.forEach(order => {
+			const orderID = order._id.slice(-6).toUpperCase();
+			const date = new Date(order.createdAt).toLocaleDateString('vn-VN');
+			const status = order.status;
+			const total = order.total;
+
+			const row =
+			`
+				<tr>
+					<td><strong>${orderID}</strong></td>
+					<td>${date}</td>
+					<td>${status}</td>
+					<td>${total} $</td>
+					<td><strong><a href="/user/order/${order._id}">View</a></strong></td>
+				</tr>
+			`;
+			table.innerHTML += row;
+
+			console.log(orderID, date, status, total);
+		});
+	});
+</script>
