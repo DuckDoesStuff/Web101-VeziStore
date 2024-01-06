@@ -212,6 +212,7 @@
 			const address = document.querySelector('#address').value;
 			const shipping = document.querySelector('input[name="shipping"]:checked').value;
 			const payment = document.querySelector('input[name="payment"]:checked').value;
+			const cartId = cart._id;
 
 			const data = {
 				firstName,
@@ -220,7 +221,8 @@
 				phone,
 				address,
 				shipping,
-				payment
+				payment,
+				cartId
 			}
 
 			const result = await fetch('/user/order/create', {
@@ -235,8 +237,8 @@
 				showAlert('Order placed successfully!');
 				window.location.href = '/home';
 			}
-			else {
-				showAlert('Order failed!');
+			else if(result.error){
+				showAlert(result.message, 5000);
 				document.querySelector("#button-payment-address").classList.remove('disabled');
 			}
 		})

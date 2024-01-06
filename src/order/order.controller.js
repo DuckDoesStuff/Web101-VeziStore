@@ -1,0 +1,72 @@
+const express = require("express");
+const router = express.Router();
+const Order = require("./order.model");
+const Cart = require("../cart/cart.model");
+const User = require("../user/user.model");
+
+const createOrder = async (req, res, next) => {
+	const cart = await Cart.findById(req.body.cartId).populate("item.product");
+	const address = req.body.address;
+	const phone = req.body.phone;
+	const payment = req.body.payment;
+	const shipping = req.body.shipping;
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	const email = req.body.email;
+	const item = cart.item;
+	
+	let total = cart.total;
+	if(shipping == "slow"){
+		total += 3;
+	}else if(shipping == "fast") {
+		total += 6;
+	}
+
+	const newOrder = new Order({
+		user: req.user.id,
+		first_name: firstName,
+		last_name: lastName,
+		phone: phone,
+		email: email,
+		address: address,
+		shipping: shipping,
+		payment: payment,
+		total: total,
+		item: item,
+		status: "Pending",
+	});
+
+	let flag = false;
+	item.forEach((item) => {
+		if(flag) return;
+		if(item.product.availability < item.quantity || !item.product.availability){
+			flag = true;
+			return res.json({
+				error: "error",
+				message: "Some of your item doesn't have enough stock, please check your cart again",
+			});
+		}
+		item.product.availability -= item.quantity;
+	})
+	if(flag) return;
+
+	item.forEach((item) => {
+		item.product.save();
+	});
+	await newOrder.save();
+	User.findByIdAndUpdate(req.user.id, 
+		{$push: {order: newOrder._id}},
+		{new: true, useFindAndModify: false}
+	).then((user) => {
+		user.save();
+	});
+		
+	cart.item = [];
+	cart.total = 0;
+	cart.save();
+	return res.json({
+		success: "success",
+		message: "Order created",
+	});
+};
+exports.createOrder = createOrder;

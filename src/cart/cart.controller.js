@@ -1,6 +1,7 @@
 const categoryService = require("../category/category.service");
 const productService = require("../product/product.service");
 const cartService = require("./cart.service");
+const User = require("../user/user.model");
 
 const addToCart = async(req,res,next) => {
 	const productId = req.params.id;
@@ -63,15 +64,15 @@ const viewCheckout = async (req, res, next) => {
 	if(!req.user) {
 		return res.redirect("/auth/signin/?returnUrl=user/cart/checkout");
 	}
-	
+	const user = await User.findById(req.user.id).select("first_name last_name address email phone")
 	res.render("user/cart/checkout", {
 		title: "Checkout",
 		user: req.user,
-		firstName: req.user.first_name,
-		lastName: req.user.last_name,
-		address: req.user.address,
-		email: req.user.email,
-		phone: req.user.phone,
+		firstName: user.first_name,
+		lastName: user.last_name,
+		address: user.address,
+		email: user.email,
+		phone: user.phone,
 	});
 }
 exports.viewCheckout = viewCheckout;
