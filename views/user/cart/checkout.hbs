@@ -22,19 +22,19 @@
 									<h3>Your Personal Details</h3>
 									<div class="form-group">
 										<label for="firstname">First Name <span class="require">*</span></label>
-										<input type="text" id="firstname" class="form-control">
+										<input value="{{firstName}}" type="text" id="firstname" class="form-control" required>
 									</div>
 									<div class="form-group">
 										<label for="lastname">Last Name <span class="require">*</span></label>
-										<input type="text" id="lastname" class="form-control">
+										<input value="{{lastName}}" type="text" id="lastname" class="form-control" required>
 									</div>
 									<div class="form-group">
 										<label for="email">E-Mail <span class="require">*</span></label>
-										<input type="text" id="email" class="form-control">
+										<input value="{{email}}" type="text" id="email" class="form-control" required>
 									</div>
 									<div class="form-group">
 										<label for="telephone">Telephone <span class="require">*</span></label>
-										<input type="text" id="telephone" class="form-control">
+										<input value="{{phone}}" type="text" id="telephone" class="form-control" required>
 									</div>
 
 									
@@ -44,17 +44,33 @@
 									<h3>Your Address</h3>
 									<div class="form-group">
 										<label for="address">Address <span class="require">*</span></label>
-										<input type="text" id="address" class="form-control">
+										<input value="{{address}}" type="text" id="address" class="form-control" required>
 									</div>
 
+									<div class="col-md-6">
 									<h3>Shipping method</h3>
 									<div class="form-group">
 										<div class="radio-list">
 											<label>
-												<input class="form-control" type="radio" name="shipping" value="free" checked> 3-day shipping </label>
+												<input class="form-control" type="radio" name="shipping" value="slow" checked> 3-day shipping </label>
 											<label>
-												<input class="form-control" type="radio" name="shipping" value="local"> 1-day shipping </label>
+												<input class="form-control" type="radio" name="shipping" value="fast" > 1-day shipping </label>
 										</div>
+									</div>
+
+									</div>
+
+									<div class="col-md-6">
+									<h3>Payment method</h3>
+									<div class="form-group">
+										<div class="radio-list">
+											<label>
+												<input class="form-control" type="radio" name="payment" value="cod" checked> Cash on delivery (COD) </label>
+											<label>
+												<input class="form-control" type="radio" name="payment" value="vnpay" > VNPay </label>
+										</div>
+									</div>
+									
 									</div>
 
 								</div>
@@ -75,23 +91,15 @@
 												<ul>
 													<li>
 														<em>Sub total</em>
-														<strong class="price"><span>$</span>47.00</strong>
+														<strong id="total-order" class="price"><span>$</span>0</strong>
 													</li>
 													<li>
 														<em>Shipping cost</em>
-														<strong class="price"><span>$</span>3.00</strong>
-													</li>
-													<li>
-														<em>Eco Tax (-2.00)</em>
-														<strong class="price"><span>$</span>3.00</strong>
-													</li>
-													<li>
-														<em>VAT (17.5%)</em>
-														<strong class="price"><span>$</span>3.00</strong>
+														<strong id="shipping-cost" class="price"><span>$</span>3</strong>
 													</li>
 													<li class="checkout-total-price">
 														<em>Total</em>
-														<strong class="price"><span>$</span>56.00</strong>
+														<strong id="total" class="price"><span>$</span>0</strong>
 													</li>
 												</ul>
 											</div>
@@ -106,12 +114,12 @@
 								<hr>
 
 								<div class="col-md-12">
-									<button class="btn btn-primary  pull-right" type="submit" data-toggle="collapse"
+									<button class="btn btn-primary  pull-right disabled" type="submit" data-toggle="collapse"
 										data-parent="#checkout-page" data-target="#shipping-address-content"
 										id="button-payment-address">Continue</button>
 									<div class="checkbox pull-right">
 										<label>
-											<input type="checkbox"> I have read and agree to the <a title="Privacy Policy"
+											<input id="accept-box" type="checkbox"> I have read and agree to the <a title="Privacy Policy"
 												href="javascript:;">Privacy Policy</a> &nbsp;&nbsp;&nbsp;
 										</label>
 									</div>
@@ -135,6 +143,17 @@
 
 <script type="text/javascript">
 
+	const updateTotal = () => {
+		let shippingCost;
+		if(document.querySelector('input[name="shipping"]:checked').value == 'slow')
+			shippingCost = 3;
+		else
+			shippingCost = 6;
+		document.querySelector('#shipping-cost').innerHTML = `$${shippingCost}`;
+		let total = cart.total + shippingCost;
+		document.querySelector('#total').innerHTML = `$${total}`;
+	}
+
 	const loadCart = async () => {
 		const cartHtml = document.querySelector('#cart-items');
 		cartHtml.innerHTML = 
@@ -149,21 +168,22 @@
 		const cartItemHtml = await fetch('./assets/checkoutItem.html')
 		const cartItemTemplateSrc = await cartItemHtml.text();
 		const cartTemplate = Handlebars.compile(cartItemTemplateSrc);
-		let shippingCost = 3;
 		
 		cart.item.map(item => {
-			console.log(item);
 			cartHtml.innerHTML += cartTemplate(item);
 		});
 
 		document.querySelector('#total-order').innerHTML = `$${cart.total}`;
-		let total = cart.total + shippingCost;
-		document.querySelector('#total').innerHTML = `$${total}`;
+		updateTotal();
 	}
 
 	document.addEventListener('cartLoaded', () => {
-		if(cart.item.length > 0)
+		if(cart.item.length > 0) {
 			loadCart();
+			document.querySelectorAll('input[name="shipping"]').forEach(radio => {
+				radio.addEventListener('change', updateTotal);
+			});
+		}
 		else {
 			const cartHtml = document.querySelector('#cart-items');
 			cartHtml.innerHTML =
@@ -174,6 +194,53 @@
 			</h1>`
 		}
 	});
+
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelector('#accept-box').addEventListener('change', () => {
+			if(document.querySelector('#accept-box').checked)
+				document.querySelector('#button-payment-address').classList.remove('disabled');
+			else
+				document.querySelector('#button-payment-address').classList.add('disabled');
+		});
+
+		document.querySelector("#button-payment-address").addEventListener('click', async () => {
+			document.querySelector("#button-payment-address").classList.add('disabled');
+			const firstName = document.querySelector('#firstname').value;
+			const lastName = document.querySelector('#lastname').value;
+			const email = document.querySelector('#email').value;
+			const phone = document.querySelector('#telephone').value;
+			const address = document.querySelector('#address').value;
+			const shipping = document.querySelector('input[name="shipping"]:checked').value;
+			const payment = document.querySelector('input[name="payment"]:checked').value;
+
+			const data = {
+				firstName,
+				lastName,
+				email,
+				phone,
+				address,
+				shipping,
+				payment
+			}
+
+			const result = await fetch('/user/order/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data),
+			}).then(res => res.json());
+
+			if(result.success) {
+				showAlert('Order placed successfully!');
+				window.location.href = '/home';
+			}
+			else {
+				showAlert('Order failed!');
+				document.querySelector("#button-payment-address").classList.remove('disabled');
+			}
+		})
+	})
 
 </script>
 {{/section}}

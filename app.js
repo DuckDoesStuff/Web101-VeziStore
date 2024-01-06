@@ -137,7 +137,8 @@ const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect("auth/signin");
+
+    res.redirect("/auth/signin" + "?returnUrl=" + req.originalUrl);
 };
 
 const isAuthenticatedAdmin = (req, res, next) => {

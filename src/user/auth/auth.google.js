@@ -69,7 +69,7 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser((user, done) => {
-	done(null, { id: user.id, username: user.username });
+	done(null, { id: user.id, username: user.username, email: user.email });
 });
 
 passport.deserializeUser(async (user, done) => {
@@ -85,7 +85,7 @@ router.get('/', passport.authenticate('google', { scope: ['profile', 'email'] })
 router.get('/callback', 
   passport.authenticate('google', { failureRedirect: 'auth/signup' }),
   async (req, res) => {
-		res.redirect('/');
+		res.redirect(req.query.returnUrl || '/');
 	}
 );
 module.exports = router;

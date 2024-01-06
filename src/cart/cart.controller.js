@@ -61,12 +61,17 @@ exports.updateCart = updateCart;
 
 const viewCheckout = async (req, res, next) => {
 	if(!req.user) {
-		return res.redirect("/signin/?returnUrl=cart/checkout");
+		return res.redirect("/auth/signin/?returnUrl=user/cart/checkout");
 	}
-
+	
 	res.render("user/cart/checkout", {
 		title: "Checkout",
 		user: req.user,
+		firstName: req.user.first_name,
+		lastName: req.user.last_name,
+		address: req.user.address,
+		email: req.user.email,
+		phone: req.user.phone,
 	});
 }
 exports.viewCheckout = viewCheckout;
