@@ -65,6 +65,8 @@ const dashboard = async (req, res, next) => {
         subcategories: await categoryService.getAllSubcategory(),
         currentCategory: currentCategory,
         currentType: currentType,
+        showSideBar: true,
+        mode: false,
     });
 };
 

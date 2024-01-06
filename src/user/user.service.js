@@ -14,6 +14,7 @@ const getUsers = async (page, sort, username, email) => {
     if (email) {
         query.email = { $regex: new RegExp(email, "i") };
     }
+    query.role = "user";
     let users = await User.find(query).lean();
 
     users = sortUsers(users, sort);

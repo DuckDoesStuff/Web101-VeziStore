@@ -32,5 +32,7 @@ router.post('/add-thumbnail/:id', upload.array("image"), productController.addIm
 
 router.delete('/dashboard/api/delete/:id', productController.deleteProduct);
 
+router.get('/', productController.dashboard);
+
 
 module.exports = router;
