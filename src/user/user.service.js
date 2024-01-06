@@ -1,13 +1,20 @@
 const User = require("./user.model");
 
-const getUsers = async (page, sort, name, email) => {
+const getUserById = async (id) => {
+    const user = await User.findById(id).lean();
+    return user;
+};
+exports.getUserById = getUserById;
+
+const getUsers = async (page, sort, username, email) => {
     let query = {};
-    if (name) {
-        query.username = { $regex: new RegExp(name, "i") };
+    if (username) {
+        query.username = { $regex: new RegExp(username, "i") };
     }
     if (email) {
         query.email = { $regex: new RegExp(email, "i") };
     }
+    query.role = "user";
     let users = await User.find(query).lean();
 
     users = sortUsers(users, sort);
@@ -15,7 +22,7 @@ const getUsers = async (page, sort, name, email) => {
     users = users.slice((page - 1) * 9, (page - 1) * 9 + 9);
     return {
         users: users,
-        userCount: userCount,
+        userCount: usersCount,
     };
 };
 exports.getUsers = getUsers;
@@ -63,9 +70,8 @@ const sortUsersByEmailAsc = (userData) => {
 
 exports.sortUsersByEmailAsc = sortUsersByEmailAsc;
 
-
 const sortUsers = (userData, sort) => {
-    let users = [...usertData];
+    let users = [...userData];
     switch (sort) {
         case "1":
             users = sortUsersByTime(users);

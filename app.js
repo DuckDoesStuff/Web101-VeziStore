@@ -76,6 +76,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+admin.use(express.static(path.join(__dirname, "public")));
+
 
 admin.use(express.json());
 admin.use(express.urlencoded({ extended: true }));
@@ -90,9 +92,28 @@ app.use(
     })
 );
 
+const adminSession = require("express-session")
+
+// Express session setup
+admin.use(
+    adminSession({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: true,
+        store: MongoStore.create({ mongoUrl: process.env.ATLAS_URI }),
+        cookie: { maxAge: 12 * 60 * 60 * 1000 }, // 12h in ms
+    })
+);
+
 // Passport initialize and session
 app.use(passport.initialize());
 app.use(passport.session());
+
+const adminPassport = require("passport")
+
+// Passport initialize and session for admin
+admin.use(adminPassport.initialize());
+admin.use(adminPassport.session());
 
 // Normal router
 const homeRouter = require("./src");
@@ -104,6 +125,7 @@ const userRouter = require("./src/user");
 // const usersDashboardRouter = require("./routes/admin/account/user-dashboard");
 const adminProductRouter = require("./src/product/index-admin");
 const adminUserRouter = require("./src/user/index-admin");
+const adminAuthRouter = require("./src/user/auth-admin/index-admin");
 
 // const userInfoRouter = require("./routes/admin/account/user-info");
 // const orderInfoRouter = require("./routes/admin/order-info/order-info");
@@ -113,6 +135,16 @@ const adminUserRouter = require("./src/user/index-admin");
 // Normal routing
 const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("auth/signin");
+};
+
+const isAuthenticatedAdmin = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    if (req.path === "/auth/signin") {
         return next();
     }
     res.redirect("/auth/signin");
@@ -126,9 +158,11 @@ app.use("/user", isAuthenticated, userRouter);
 
 // Subdomain admin routing
 //admin.use("/", adminProductRouter);
+
+admin.use("/", isAuthenticatedAdmin, adminProductRouter);
 admin.use("/products", adminProductRouter);
 admin.use("/users", adminUserRouter);
-
+admin.use("/auth", adminAuthRouter);
 
 //admin.use("/", productRouter);
 // admin.use("/users-dashboard", usersDashboardRouter);

@@ -7,4 +7,6 @@ router.post('/dashboard/', userController.getUsers);
 
 router.get('/dashboard/', userController.dashboard);
 
+router.get('/:id', userController.userDetail);
+
 module.exports = router;
