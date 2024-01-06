@@ -31,7 +31,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-	done(null, { id: user.id, username: user.username, email: user.email, picture: user.picture, verified: user.verified });
+	done(null, { id: user.id, username: user.username, email: user.email, verified: user.verified });
 });
 
 passport.deserializeUser(async (user, done) => {

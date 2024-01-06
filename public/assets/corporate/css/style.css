@@ -3103,7 +3103,7 @@ Styler Panel
 	border-radius: 20px;
 	z-index: 100;
 
-	animation: fadeOut 2s ease-in-out;
+	transition: all ease-in-out 2s;
 	display:none;
 }
 
