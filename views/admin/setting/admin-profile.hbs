@@ -1,0 +1,140 @@
+{{> spinner}}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded h-100 p-4">
+        <form id="user-info" class="" action="">
+            <div class="row">
+                    <div class="col-md-4">
+                        <div id="thumbnail">
+                            <div class="image-container">
+								<div class="overlay">
+									<button onclick="openFileInput()" class="btn btn-primary">
+										<i class="fa-solid fa-pen"></i>
+									</button>
+								</div>
+                                <img style="width: 300px; height: 300px;" src="https://ucarecdn.com/{{picture}}/-/preview/500x500/-/format/auto/" alt="" id="img" onerror="this.src='https://ucarecdn.com/c64123e4-8e93-402d-805b-4e5fbae247ca/-/preview/500x500/-/format/auto/'">
+								<input class="hidden" type="file" id="fileInput" accept="image/*" onchange="handleImageChange()" name="picture">
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row mb-0">
+                            <label class="col-md-4 text-gray" for="product-name">Username</label>
+                            <div class="col-8">
+                                <h6 required id="product-name" type="text" class="mb-4" disabled value=""> {{user.username}}</h6>
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label class="col-md-4 text-gray">Fisrt name</label>
+                            <div class="col-8">
+                                <input required id="first-name" type="text" class="form-control mb-4" disabled value="{{first_name}}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label class="col-md-4 text-gray">Last name</label>
+                            <div class="col-8">
+                                <input required id="last-name" type="text" class="form-control mb-4" disabled value="{{last_name}}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label class="col-md-4 text-gray">Email</label>
+                            <div class="col-8">
+                                <input required id="email" type="type" class="form-control mb-4" disabled  value="{{email}}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <label class="col-md-4 text-gray">Phone</label>
+                            <div class="col-8">
+                                <input required id="phone" type="number" class="form-control mb-4" disabled value="{{phone}}"/>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <button class="btn btn-sm btn-detail col-3" id="edit">Update</button>
+                            <button class="btn btn-sm btn-primary col-3 hide" id="save">Save</button>
+                            <button class="btn btn-sm btn-detail col-3 hide" id="cancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+<script>
+	const openFileInput = () => {
+		document.querySelector("#fileInput").click();
+	}
+
+	const handleImageChange = () => {
+		const fileInput = document.querySelector("#fileInput")
+		const avatarImage = document.querySelector("#img")
+
+		const file = fileInput.files[0];
+
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onload = function (e) {
+				avatarImage.src = e.target.result;
+			};
+
+			reader.readAsDataURL(file);
+
+			const formData = new FormData();
+			formData.append("image", file);
+
+			fetch("/user/profile/upload-avatar", {
+				method: "POST",
+				body: formData
+			});
+		}
+	}
+
+	document.addEventListener("DOMContentLoaded", () => {
+		document.querySelector("#user-info").addEventListener("submit", (e) => {
+			e.preventDefault();
+		});
+		
+		document.querySelector("#edit").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.removeAttribute("disabled");
+			});
+
+			document.querySelector("#edit").classList.add("hide");
+			document.querySelector("#save").classList.remove("hide");
+			document.querySelector("#cancel").classList.remove("hide");
+		});
+
+		document.querySelector("#cancel").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.setAttribute("disabled", "");
+				input.value = input.getAttribute("value");
+			});
+
+			document.querySelector("#edit").classList.remove("hide");
+			document.querySelector("#save").classList.add("hide");
+			document.querySelector("#cancel").classList.add("hide");
+		});
+
+		document.querySelector("#save").addEventListener("click", () => {
+			document.querySelectorAll("input").forEach((input) => {
+				input.setAttribute("readonly", "");
+			});
+
+			const result = fetch("/setting/profile", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					first_name: document.querySelector("#first-name").value,
+					last_name: document.querySelector("#last-name").value,
+					email: document.querySelector("#email").value,
+					phone: document.querySelector("#phone").value,
+				}),
+			});
+
+			document.querySelector("#edit").classList.remove("hide");
+			document.querySelector("#save").classList.add("hide");
+			document.querySelector("#cancel").classList.add("hide");
+		});
+	});
+</script>
