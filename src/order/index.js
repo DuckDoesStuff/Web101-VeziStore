@@ -3,8 +3,10 @@ const router = express.Router();
 const orderController = require("./order.controller");
 
 router.post("/create", orderController.createOrder);
-router.get("/:id", orderController.orderDetail);
+router.post("/:id", orderController.getOrder);
+
+
 router.get("/", orderController.viewOrder);
-router.post("/", orderController.getOrder);
+router.post("/", orderController.getOrderHistory);
 
 module.exports = router;
