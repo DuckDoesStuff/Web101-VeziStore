@@ -3,6 +3,8 @@ const router = express.Router();
 const Order = require("./order.model");
 const Cart = require("../cart/cart.model");
 const User = require("../user/user.model");
+const userService = require("../user/user.service");
+const orderService = require("../order/order.service")
 
 const createOrder = async (req, res, next) => {
 	const cart = await Cart.findById(req.body.cartId).populate("item.product");
@@ -71,6 +73,20 @@ const createOrder = async (req, res, next) => {
 };
 exports.createOrder = createOrder;
 
+const dashboard = async (req, res, next) => {
+    const user = await userService.getUserById(req.user.id);
+    res.render("admin/order/order-dashboard", {
+        title:
+            "Vezi Store | Order Dashboard",
+        showSideBar: true,
+        user: req.user,
+        picture: user.picture,
+        mode: false,
+    });
+};
+
+exports.dashboard = dashboard;
+
 const viewOrder = async (req, res, next) => {
 	return res.render("user/profile/orderHistory", {
 		title: "Order history",
@@ -94,3 +110,18 @@ const getOrder = async (req, res, next) => {
 	});
 }
 exports.getOrder = getOrder;
+
+const getOrders = async (req, res, next) => {
+	const page = req.query.page || 1;
+    const filter = req.query.filter || 0;
+    const orderID = req.query.orderID || "";
+
+    res.json(
+        await orderService.getOrders(
+            page,
+            filter,
+			orderID,
+        )
+    );
+}
+exports.getOrders = getOrders;

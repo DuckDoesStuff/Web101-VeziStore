@@ -1,0 +1,254 @@
+{{> spinner}}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">ORDERS LIST</h6>
+        </div>
+        <div class="row d-flex align-items-center justify-content-between mb-4">
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+            			<form action="" method="" id="search-order-id">
+                        	<input type="text" placeholder="Order ID" class="form-control" id="search-order-input" name="search-order-input">	
+						</form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+                        <select required class="form-select form-control"
+                            aria-label="Floating label select example" name="sort-by" id="filter-by">
+                            <option value="0">Default</option>
+                            <option value="1">Pending</option>
+                            <option value="2">Shipping</option>
+                            <option value="3">Done</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-dashboard">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{#section "scripts"}}
+<script>
+	let orderTemplate;
+	let currentPage = 1;
+	let totalPages = 1;
+
+	const urlParams = new URLSearchParams(window.location.search);
+
+	const orderID = urlParams.get('orderID')
+	const filter = urlParams.get('filter');
+
+	function redirectPage(orderID, filter) {
+		let existingParams = `?`;
+		if (orderID) {
+			//existingParams = `search/?`;
+			existingParams += `&orderID=${orderID}`;
+		}
+		if(filter) {
+			if (filter == 0) {
+				const noFilter = `&filter=0`;
+				existingParams = existingParams.replace(noFilter, ``);
+			} else {
+				existingParams += `&filter=${filter}`;
+			}
+		}
+		window.location.href = '/orders/dashboard/' + existingParams;
+	}
+
+	//Client
+	async function getOrders(apiURL) {
+		apiURL = apiURL.replace('/search', '');
+		const result = await fetch(apiURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+		return result;
+	}
+
+	async function renderOrders(orders) {
+		const orderItemHtml = await fetch('./assets/orderDashboard.html')
+		const orderTemplateSrc = await orderItemHtml.text();
+		orderTemplate = Handlebars.compile(orderTemplateSrc);
+		const orderContainer = document.getElementById('orders-dashboard');
+		orderContainer.innerHTML = '';
+
+		orders.orders.forEach(order => {
+			const orderID = order._id.slice(-6).toUpperCase();
+			const date = new Date(order.createdAt).toLocaleDateString('vn-VN');
+			const status = order.status;
+			const total = order.total;
+			const id = order._id;
+			let row;
+			
+			if (order.status == 'Pending') {
+				row = 
+				`
+					<tr>
+						<td><strong>${orderID}</strong></td>
+						<td>${date}</td>
+						<td>${status}</td>
+						<td>${total} $</td>
+						<td><a class="btn btn-sm btn-detail" href="/orders/${id}">Detail</a> <button id="${id}" class="btn btn-sm btn-primary">Turn shipping</button></td>
+					</tr>
+				`;
+			} else {
+				row = 
+				`
+					<tr>
+						<td><strong>${orderID}</strong></td>
+						<td>${date}</td>
+						<td>${status}</td>
+						<td>${total} $</td>
+						<td><a class="btn btn-sm btn-detail" href="/orders/${id}">Detail</a></td>
+					</tr>
+				`;
+			}
+			orderContainer.innerHTML += row;
+		});
+		generatePagination();
+		window.scrollTo({
+			top: 200,
+			behavior: 'smooth'
+		});
+	}
+
+	async function initialLoad() {
+		const apiURL = '/orders/dashboard/' + window.location.search;
+		const orders = await getOrders(apiURL);
+		totalPages = Math.ceil(orders.orderCount / 9);
+		renderOrders(orders);
+	}
+
+	function generatePagination() {
+		let paginator = document.getElementById('paginator');
+		paginator.innerHTML = '';
+		let existingParams = `?`;
+		if (orderID) {
+			//existingParams = `search/?`;
+			existingParams += `&orderID=${orderID}`;
+		}
+		if(filter) {
+			if (filter == 0) {
+				const noFilter = `&filter=0`;
+				existingParams = existingParams.replace(noFilter, ``);
+			} else {
+				existingParams += `&filter=${filter}`;
+			}
+		}
+
+		if (totalPages > 1) {
+			// Left arrow
+			if(currentPage > 1) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Previous';
+				a.addEventListener('click', () => {
+					getOrders(`/orders/dashboard/${existingParams}&page=${currentPage - 1}`).then(orders => {
+						renderOrders(orders);
+						currentPage = currentPage - 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+
+			// Number
+			for (let i = 1; i <= totalPages; i++) {
+				let li = document.createElement('li');
+				if (i !== currentPage) {
+					let a = document.createElement('a');
+						a.href = 'javascript:void(0);';
+						a.innerText = i;
+						a.addEventListener('click', () => {
+							getOrders(`/orders/dashboard/${existingParams}&page=${i}`).then(orders => {
+								renderOrders(orders);
+								currentPage = i;
+							});
+						});
+					li.appendChild(a);
+				}else {
+					let span = document.createElement('span');
+					span.innerText = i;
+					li.appendChild(span);
+				}
+				paginator.appendChild(li);
+			}
+
+			// Right arrow
+			if(currentPage < totalPages) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Next';
+				a.addEventListener('click', () => {
+					getOrders(`/orders/dashboard/${existingParams}&page=${currentPage + 1}`).then(orders => {
+						renderOrders(orders);
+						currentPage = currentPage + 1;
+					});
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+		}
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		const searchOrderIDForm = document.getElementById('search-order-id');
+
+
+		searchOrderIDForm.addEventListener('submit', function (event) {
+			event.preventDefault(); // Ngăn chặn hành động mặc định của biểu mẫu
+
+			// Lấy giá trị tìm kiếm từ ô input
+			const searchTerm = document.getElementById('search-order-input').value.trim();
+			// Kiểm tra nếu người dùng không nhập gì thì bỏ qua
+			if (!searchTerm) {
+				window.location.href = `/orders/dashboard/`;
+			}
+			else {
+				redirectPage(searchTerm, filter);
+			}
+
+		});
+
+
+		const searchInput = document.getElementById('search-order-input');
+		const urlParams = new URLSearchParams(window.location.search);
+		const searchTermFromURL = urlParams.get('orderID');
+
+		if (searchTermFromURL) {
+			searchInput.value = searchTermFromURL;
+		}
+
+		const filterSelect = document.querySelector('#filter-by');
+		filterSelect.value = filter || 0;
+		filterSelect.addEventListener('change', () => {
+			redirectPage(orderID, filterSelect.value);
+		});
+		initialLoad();
+	});
+</script>
+{{/section}}
