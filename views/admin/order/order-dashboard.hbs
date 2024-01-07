@@ -114,7 +114,7 @@
 					<tr>
 						<td><strong>${orderID}</strong></td>
 						<td>${date}</td>
-						<td>${status}</td>
+						<td id="status">${status}</td>
 						<td>${total} $</td>
 						<td><a class="btn btn-sm btn-detail" href="/orders/${id}">Detail</a> <button id="${id}" class="btn btn-sm btn-primary">Turn shipping</button></td>
 					</tr>
@@ -125,13 +125,50 @@
 					<tr>
 						<td><strong>${orderID}</strong></td>
 						<td>${date}</td>
-						<td>${status}</td>
+						<td id="status"> ${status}</td>
 						<td>${total} $</td>
 						<td><a class="btn btn-sm btn-detail" href="/orders/${id}">Detail</a></td>
 					</tr>
 				`;
 			}
 			orderContainer.innerHTML += row;
+		});
+		orderContainer.querySelectorAll("button").forEach((button) => {
+			button.addEventListener('click', async () => {
+				if (confirm("Are you sure you want to turn shipping this order?")) {
+					if (filter) {
+						if (filter == "1") {
+							button.closest("tr").classList.add("hide");
+						}
+					} else {
+						const orderRow = button.closest("tr");
+						orderRow.querySelector('#status').textContent = "Shipping";
+						button.classList.add("hide");
+					}
+					fetch(`/orders/dashboard/api/change-status/${button.id}`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error(`HTTP error! Status: ${response.status}`);
+						}
+						return response.json();
+					})
+					.then(data => {
+						// Xử lý sau khi xóa thành công, có thể là làm mới trang hoặc cập nhật danh sách sản phẩm
+						console.log('Change successfully!:', data);
+						// Gọi lại hàm nạp lại sản phẩm
+					})
+					.catch(error => {
+						console.error('Error changing order status:', error);
+						// Xử lý khi xóa thất bại, nếu cần thiết
+					});
+					
+				}
+			});
 		});
 		generatePagination();
 		window.scrollTo({

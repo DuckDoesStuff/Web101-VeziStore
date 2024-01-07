@@ -125,3 +125,11 @@ const getOrders = async (req, res, next) => {
     );
 }
 exports.getOrders = getOrders;
+
+const changeOrderStatus = async (req, res, next) => {
+	const order = await Order.findById(req.params.id);
+	order.status = "Shipping";
+	await order.save();
+	res.status(200).json({ message: 'Change status succesfully'});
+}
+exports.changeOrderStatus = changeOrderStatus;
