@@ -66,10 +66,16 @@ const createOrder = async (req, res, next) => {
 	cart.item = [];
 	cart.total = 0;
 	cart.save();
-	return res.json({
-		success: "success",
-		message: "Order created",
-	});
+
+	console.log("newOrder", newOrder);
+
+	if(payment == "vnpay")
+		next();
+	else
+		return res.json({
+			success: "success",
+			message: "Order created",
+		});
 };
 exports.createOrder = createOrder;
 
