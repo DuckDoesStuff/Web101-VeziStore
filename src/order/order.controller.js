@@ -73,26 +73,24 @@ exports.createOrder = createOrder;
 
 const viewOrder = async (req, res, next) => {
 	return res.render("user/profile/orderHistory", {
-		title: "Order",
+		title: "Order history",
 		user: req.user,
 	});
 }
 exports.viewOrder = viewOrder;
 
-const getOrder = async (req, res, next) => {
+const getOrderHistory = async (req, res, next) => {
 	const orders = await Order.find({user: req.user.id}).sort({createdAt: -1});
 	return res.json({
 		orders: orders,
 	});
 }
-exports.getOrder = getOrder;
+exports.getOrderHistory = getOrderHistory;
 
-const orderDetail = async (req, res, next) => {
+const getOrder = async (req, res, next) => {
 	const order = await Order.findById(req.params.id).populate("item.product");
-	return res.render("user/profile/orderDetail", {
-		title: "Order Detail",
-		user: req.user,
+	return res.json({
 		order: order,
 	});
 }
-exports.orderDetail = orderDetail;
+exports.getOrder = getOrder;
