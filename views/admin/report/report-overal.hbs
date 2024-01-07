@@ -1,0 +1,88 @@
+{{> spinner}}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">REPORT OVERALL</h6>
+            <form action="" method="" id="date-info">
+            <div class="row justify-content-between mb-4">
+
+                <div class="col-sm-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                                <label>Start</label>
+                                <input type="date" required placeholder="Start" class="form-control" id="start-input" name="start">	
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                                <label>End</label>
+                                <input type="date" required placeholder="Start" class="form-control" id="end-input" name="end">	
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row mb-4 mt-3">
+                        <button class="btn btn-success col-4 align-self-center" id="submit"> Submit </button>
+                    </div>
+                </div>
+                
+            </div>
+            </form>
+        <div class="row mb-0">
+            <h6 class="col-sm-2 text-gray">Number of order: </h6>
+            <div class="col-lg-10">
+                <h6 class="mb-4" id="order-count" value="Input date."></h6>
+            </div>
+        </div>
+        <div class="row mb-0">
+            <h6 class="col-sm-2 text-gray" >Number of total cost:</h6>
+            <div class="col-lg-10">
+                <h6 class="mb-4" id="cost" value="Input date."></h6>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const startDate = urlParams.get('start');
+const endDate = urlParams.get('end');
+
+function redirectPage(startDate, endDate) {
+	let existingParams = `?`;
+    if (startDate) {
+			//existingParams = `search/?`;
+		existingParams += `&start=${startDate}`;
+	}
+    if (endDate) {
+		existingParams += `&end=${endDate}`;
+    }
+    window.location.href = '/reports/overall/' + existingParams;
+}
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+    document.querySelector('#date-info').addEventListener("submit", (e) => {
+        e.preventDefault();
+    });
+    document.querySelector('#submit').addEventListener("click", async () => {
+        const startSelect = document.querySelector('#start-input');
+            const endSelect = document.querySelector('#end-input');
+
+            const startDate = startSelect.value;
+            const endDate = endSelect.value;
+
+            // Gửi yêu cầu AJAX đến server
+            const response = await fetch(`/reports/overall/api/?start=${startDate}&end=${endDate}`);
+            const data = await response.json();
+
+            // Hiển thị số lượng đơn hàng và tổng chi phí
+            const orderCountElement = document.querySelector('#order-count');
+            orderCountElement.textContent = data.orderCount;
+
+            const costElement = document.querySelector('#cost');
+            costElement.textContent = `$${data.totalCost}`;
+        });
+    });
+</script>

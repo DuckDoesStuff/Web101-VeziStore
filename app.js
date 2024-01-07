@@ -135,6 +135,8 @@ const adminUserRouter = require("./src/user/index-admin");
 const adminAuthRouter = require("./src/user/auth-admin/index-admin");
 const adminSettingRouter = require("./src/user/setting-admin");
 const adminOrderRouter = require("./src/order/index-admin")
+const adminReportRouter = require("./src/order/report")
+
 
 
 // const userInfoRouter = require("./routes/admin/account/user-info");
@@ -177,6 +179,8 @@ admin.use("/users", adminUserRouter);
 admin.use("/auth", adminAuthRouter);
 admin.use("/setting", adminSettingRouter);
 admin.use("/orders", adminOrderRouter);
+admin.use("/reports", adminReportRouter);
+
 
 //admin.use("/", productRouter);
 // admin.use("/users-dashboard", usersDashboardRouter);
