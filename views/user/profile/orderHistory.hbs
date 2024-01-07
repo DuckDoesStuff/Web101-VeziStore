@@ -129,6 +129,22 @@
 		document.querySelector('#total').innerHTML = `$${result.order.total + shippingCost}`;
 		document.querySelector('#shipping').innerHTML = result.order.status;
 	}
+	const sendPostRequest = (id, button) => {
+		fetch(`/user/order/done/${id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json())
+      .then(data => {
+        // Update the button text to "Done" after successful POST
+        button = 'Done';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle errors if necessary
+      });
+	}
 	document.addEventListener('DOMContentLoaded', async () => {
 		const result = await fetch('/user/order', {
 			method: 'POST',
@@ -139,18 +155,27 @@
 
 		const table = document.querySelector('#order-table');
 
+
+
 		result.orders.forEach(order => {
 			const orderID = order._id.slice(-6).toUpperCase();
 			const date = new Date(order.createdAt).toLocaleDateString('vn-VN');
 			const status = order.status;
 			const total = order.total;
 
-			const row =
+			let statusRow;
+			if(status != "Shipping")
+				statusRow = `<td>${status}</td>`
+			else {
+				statusRow = `<td><button class="btn btn-primary" onclick="sendPostRequest('${order._id}', this)">Received</button></td>`
+			}
+
+			const row = 
 			`
 				<tr>
 					<td><strong>${orderID}</strong></td>
 					<td>${date}</td>
-					<td>${status}</td>
+					${statusRow}
 					<td>${total} $</td>
 					<td><strong><a onclick="loadOrderDetail('${order._id}')">View</a></strong></td>
 				</tr>

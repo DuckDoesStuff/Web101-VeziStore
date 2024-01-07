@@ -100,3 +100,14 @@ const getOrder = async (req, res, next) => {
 	});
 }
 exports.getOrder = getOrder;
+
+const completeOrder = async (req, res, next) => {
+	const order = await Order.findById(req.params.id);
+	order.status = "Done";
+	order.save();
+	return res.json({
+		success: "success",
+		message: "Order completed",
+	});
+}
+exports.completeOrder = completeOrder;

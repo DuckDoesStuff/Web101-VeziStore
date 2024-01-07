@@ -4,6 +4,7 @@ const orderController = require("./order.controller");
 const paymentController = require("../payment/payment.controller");
 
 router.post("/create", orderController.createOrder, paymentController.paymentProcess);
+router.post("/done/:id", orderController.completeOrder)
 router.post("/:id", orderController.getOrder);
 
 
