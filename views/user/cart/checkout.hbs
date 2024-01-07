@@ -233,6 +233,10 @@
 				body: JSON.stringify(data),
 			}).then(res => res.json());
 
+			if(result.url) {
+				window.location.href = result.url;
+			}
+
 			if(result.success) {
 				showAlert('Order placed successfully!');
 				window.location.href = '/home';

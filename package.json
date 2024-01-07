@@ -16,6 +16,7 @@
     "body-parser": "^1.20.2",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "~1.4.4",
+    "crypto": "^1.0.1",
     "datatables.net-dt": "^1.13.7",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
