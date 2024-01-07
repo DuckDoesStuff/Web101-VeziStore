@@ -4,7 +4,8 @@ const Order = require("./order.model");
 const Cart = require("../cart/cart.model");
 const User = require("../user/user.model");
 const userService = require("../user/user.service");
-const orderService = require("../order/order.service")
+const orderService = require("../order/order.service");
+const productService = require("../product/product.service");
 
 const createOrder = async (req, res, next) => {
 	const cart = await Cart.findById(req.body.cartId).populate("item.product");
@@ -139,3 +140,33 @@ const changeOrderStatus = async (req, res, next) => {
 	res.status(200).json({ message: 'Change status succesfully'});
 }
 exports.changeOrderStatus = changeOrderStatus;
+
+const orderDetail = async (req, res, next) => {
+	const user = await userService.getUserById(req.user.id);
+    const orderDetail = await Order.findById(req.params.id).lean();
+	let products = [];
+	for (const product of orderDetail.item) {
+		let query = {};
+		const tempProduct = await productService.getProductById(product.product);
+		console.log(tempProduct);
+
+		query.id = tempProduct._id;
+		query.name = tempProduct.name;
+		query.price = tempProduct.price;
+		query.amount = product.quantity;
+		query.total = product.total;
+		products.push(query);
+	}
+	console.log(products);
+    res.render("admin/order/order-info", {
+        title:
+            "Vezi Store | " ,
+        orderDetail: orderDetail,
+		products: products,
+        showSideBar: true,
+        user: req.user,
+        picture: user.picture,
+        mode: false,
+    });
+}
+exports.orderDetail = orderDetail;

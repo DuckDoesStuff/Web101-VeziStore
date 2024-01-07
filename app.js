@@ -61,7 +61,7 @@ const adminHbs = exphbs.create({
             return array.includes(value);
         },
         renOrderID: function (str) {
-            return str.slice(-6).toUpperCase();
+            return str.toString().slice(-6).toUpperCase();
         },
         renDate: function (date) {
             return new Date(date).toLocaleDateString('vn-VN');
