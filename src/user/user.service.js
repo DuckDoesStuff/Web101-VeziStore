@@ -6,6 +6,12 @@ const getUserById = async (id) => {
 };
 exports.getUserById = getUserById;
 
+const findUserById = async (id) => {
+    const user = await User.findById(id);
+    return user;
+};
+exports.findUserById = findUserById;
+
 const getUsers = async (page, sort, username, email) => {
     let query = {};
     if (username) {

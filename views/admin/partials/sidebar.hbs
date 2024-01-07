@@ -7,14 +7,14 @@
                 
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="assets/admin/img/user.jpg" alt=""
+                        <img class="rounded-circle" src="https://ucarecdn.com/{{picture}}/-/preview/500x500/-/format/auto/" alt=""
                             style="width: 40px; height: 40px;">
                         <div
                             class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
                         </div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                        <h6 class="mb-0">{{user.username}}</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -35,8 +35,8 @@
                             <a href="/" class="dropdown-item">Update</a>
                         </div>
                     </div>
-                    <a href="/" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Orders manage</a>
-                    <a href="/" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Reports</a>
+                    <a href="/orders/dashboard/" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Orders manage</a>
+                    <a href="/reports/overall/" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Reports</a>
                     <a href="/auth/logout/" class="nav-item nav-link"><i class="fa-solid fa-right-from-bracket me-2"></i>Log
                         out</a>
 

@@ -29,39 +29,3 @@
         </div>
     </div>
 </div>
-<div class="container-fluid pt-4 px-4">
-    <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">LIST OF ORDERED ITEMS</h6>
-            <a href="">Show All</a>
-        </div>
-        <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0">
-                <thead>
-                    <tr class="text-dark">
-                        <th scope="col">Orders ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Payment Status</th>
-                        <th scope="col">Ship status</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each ordered}}
-                    {{#with this}}
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{date}}</td>
-                        <td>${{total}}</td>
-                        <td>{{payment_status}}</td>
-                        <td>{{ship_status}}</td>
-                        <td><a class="btn btn-sm btn-detail" href="/order-info">Detail</a></td>
-                    </tr>
-                    {{/with}}
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>

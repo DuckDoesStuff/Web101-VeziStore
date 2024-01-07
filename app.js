@@ -60,6 +60,12 @@ const adminHbs = exphbs.create({
         contains: function (array, value) {
             return array.includes(value);
         },
+        renOrderID: function (str) {
+            return str.toString().slice(-6).toUpperCase();
+        },
+        renDate: function (date) {
+            return new Date(date).toLocaleDateString('vn-VN');
+        },
     },
 });
 express_handlebars_sections(adminHbs);
@@ -127,6 +133,11 @@ const paymentRouter = require("./src/payment");
 const adminProductRouter = require("./src/product/index-admin");
 const adminUserRouter = require("./src/user/index-admin");
 const adminAuthRouter = require("./src/user/auth-admin/index-admin");
+const adminSettingRouter = require("./src/user/setting-admin");
+const adminOrderRouter = require("./src/order/index-admin")
+const adminReportRouter = require("./src/order/report")
+
+
 
 // const userInfoRouter = require("./routes/admin/account/user-info");
 // const orderInfoRouter = require("./routes/admin/order-info/order-info");
@@ -166,6 +177,10 @@ admin.use("/", isAuthenticatedAdmin, adminProductRouter);
 admin.use("/products", adminProductRouter);
 admin.use("/users", adminUserRouter);
 admin.use("/auth", adminAuthRouter);
+admin.use("/setting", adminSettingRouter);
+admin.use("/orders", adminOrderRouter);
+admin.use("/reports", adminReportRouter);
+
 
 //admin.use("/", productRouter);
 // admin.use("/users-dashboard", usersDashboardRouter);

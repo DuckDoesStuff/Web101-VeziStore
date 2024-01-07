@@ -130,6 +130,7 @@ const register = async (req, res, next) => {
 	
 	// Save the cart and associate it with the user
 	newUser.cart = newCart._id;
+	newUser.role = "admin";
 	await newUser.save();
 
 	// Generate an activation token
@@ -139,11 +140,10 @@ const register = async (req, res, next) => {
 	authService.sendActivationEmail(email, token);
 
 	// Log in the newly registered user
-	req.login(newUser, (err) => {
-		return res.json({
-			success: "success",
-			redirect: req.query.returnUrl || "/",
-		});
+	return res.json({
+		success: "success",
+		message: "Create successfully.",
+		redirect: "/auth/signup",
 	});
 };
 exports.register = register;

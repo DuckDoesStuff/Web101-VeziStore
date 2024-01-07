@@ -1,5 +1,6 @@
 const productService = require("./product.service");
 const categoryService = require("../category/category.service");
+const userService = require("../user/user.service");
 
 const { UploadClient } = require("@uploadcare/upload-client");
 const uploadcare = new UploadClient({
@@ -48,6 +49,7 @@ const catalog = async (req, res, next) => {
 exports.catalog = catalog;
 
 const dashboard = async (req, res, next) => {
+    const user = await userService.getUserById(req.user.id);
     const currentCategory = req.query.cate
         ? req.query.cate.charAt(0).toUpperCase() + req.query.cate.slice(1)
         : "";
@@ -66,6 +68,8 @@ const dashboard = async (req, res, next) => {
         currentCategory: currentCategory,
         currentType: currentType,
         showSideBar: true,
+        user: req.user,
+        picture: user.picture,
         mode: false,
     });
 };
@@ -162,6 +166,7 @@ const getSubByCate = async (req, res, next) => {
 exports.getSubByCate = getSubByCate;
 
 const productDetailAdmin = async (req, res, next) => {
+    const user = await userService.getUserById(req.user.id);
     const productDetail = await productService.getProductById(req.params.id);
     res.render("admin/product/product-info", {
         title:
@@ -173,12 +178,20 @@ const productDetailAdmin = async (req, res, next) => {
         currentCategory: productDetail.category[0],
         currentType: productDetail.subcategory[0],
         productDetail: productDetail,
+        showSideBar: true,
+        user: req.user,
+        picture: user.picture,
+        mode: false,
     });
 };
 exports.productDetailAdmin = productDetailAdmin;
 
 const productCreateDirect = async (req, res, next) => {
-    res.render("admin/product/product-create");
+    const user = await userService.getUserById(req.user.id);
+    res.render("admin/product/product-create", {showSideBar: true,
+        user: req.user,
+        picture: user.picture,
+        mode: false,});
 };
 exports.productCreateDirect = productCreateDirect;
 
