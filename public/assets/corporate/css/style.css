@@ -3116,3 +3116,9 @@ Styler Panel
 	color: #fff;
 	font-size: 1.5em;
 }
+
+.img-profile {
+	width: 250px;
+	height: 250px;
+	object-fit: cover;
+}

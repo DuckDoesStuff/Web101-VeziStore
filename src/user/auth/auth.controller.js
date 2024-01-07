@@ -31,7 +31,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-	done(null, { id: user.id, username: user.username, email: user.email, verified: user.verified });
+	done(null, { id: user.id, username: user.username, email: user.email });
 });
 
 passport.deserializeUser(async (user, done) => {
@@ -153,12 +153,6 @@ const activate = async (req, res, next) => {
 	}
 
 	const result = await Token.findOne({ token: token });
-	if(!result.email || result.email !== req.user.email) {
-		return res.json({
-			msg: "Invalid token.",
-		});
-	}
-
 	const user = await User.findOne({ email: result.email });
 	user.verified = true;
 	await user.save();

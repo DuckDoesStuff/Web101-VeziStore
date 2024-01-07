@@ -25,62 +25,78 @@ const createOrder = async (req, res, next) => {
         total += 6;
     }
 
-    const newOrder = new Order({
-        user: req.user.id,
-        first_name: firstName,
-        last_name: lastName,
-        phone: phone,
-        email: email,
-        address: address,
-        shipping: shipping,
-        payment: payment,
-        total: total,
-        item: item,
-        status: "Pending",
-    });
+    const user = await User.findById(req.user.id);
+    if(!user.verified) {
+        return res.json({
+            error: "error",
+            message: "Please verify your email before ordering",
+        })
+    }
 
-    let flag = false;
-    item.forEach((item) => {
+    let newOrder;
+    try {
+        newOrder = new Order({
+            user: req.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            phone: phone,
+            email: email,
+            address: address,
+            shipping: shipping,
+            payment: payment,
+            total: total,
+            item: item,
+            status: "Pending",
+        });
+
+        let flag = false;
+        item.forEach((item) => {
+            if (flag) return;
+            if (
+                item.product.availability < item.quantity ||
+                !item.product.availability
+            ) {
+                flag = true;
+                return res.json({
+                    error: "error",
+                    message:
+                        "Some of your item doesn't have enough stock, please check your cart again",
+                });
+            }
+            item.product.availability -= item.quantity;
+        });
         if (flag) return;
-        if (
-            item.product.availability < item.quantity ||
-            !item.product.availability
-        ) {
-            flag = true;
-            return res.json({
-                error: "error",
-                message:
-                    "Some of your item doesn't have enough stock, please check your cart again",
-            });
-        }
-        item.product.availability -= item.quantity;
-    });
-    if (flag) return;
+        await newOrder.save();
+    }
+    catch (err) {
+        console.log(err);
+        return res.json({
+            error: "error",
+        })
+    }
 
     item.forEach((item) => {
         item.product.save();
     });
-    await newOrder.save();
-    User.findByIdAndUpdate(
-        req.user.id,
-        { $push: { order: newOrder._id } },
-        { new: true, useFindAndModify: false }
-    ).then((user) => {
-        user.save();
-    });
+    user.order.push(newOrder._id);
+    user.save();
 
     cart.item = [];
     cart.total = 0;
     cart.save();
 
-    console.log("newOrder", newOrder);
-
-    if (payment == "vnpay") next();
+    if (payment == "vnpay") {
+        res.locals.amount = total;
+        res.locals.bankCode = "";
+        res.locals.locale = "vn";
+        next();
+    }
     else
         return res.json({
             success: "success",
-            message: "Order created",
+            url: "/user/order",
         });
+
 };
 exports.createOrder = createOrder;
 
@@ -106,11 +122,18 @@ const viewOrder = async (req, res, next) => {
 exports.viewOrder = viewOrder;
 
 const getOrderHistory = async (req, res, next) => {
+    const page = req.query.page || 1;
     const orders = await Order.find({ user: req.user.id }).sort({
         createdAt: -1,
     });
+    const ordersPerPage = 5;
+    const numOfOrders = orders.length;
+    const numOfPages = Math.ceil(numOfOrders / ordersPerPage);
+
     return res.json({
-        orders: orders,
+        orders: orders.slice((page - 1) * ordersPerPage, (page - 1) * ordersPerPage + ordersPerPage),
+        totalPages: numOfPages,
+        currentPage: page,
     });
 };
 exports.getOrderHistory = getOrderHistory;
@@ -199,12 +222,11 @@ const overallData = async (req, res, next) => {
     const startDate = req.query.start;
     const endDate = req.query.end;
 
-    const orderCount = await Order.countDocuments({
-        createdAt: { $gte: startDate, $lte: endDate },
-    });
 	const ordersInDateRange = await Order.find({
-		createdAt: { $gte: startDate, $lte: endDate },
-	  });
+        createdAt: { $gte: startDate, $lte: endDate },
+        status: "Done",
+    });
+    const orderCount = ordersInDateRange.length;
 	let totalCost = 0;
     for (const order of ordersInDateRange) {
       totalCost += order.total;

@@ -22,7 +22,7 @@
 
 			<!-- BEGIN CONTENT -->
 			<div class="col-md-9 col-sm-7">
-				<div class="content-page">
+				<div class="content-page row">
 					<table class="table table-responsive table-bordered">
 						<tbody>
 							<tr>
@@ -38,6 +38,10 @@
 
 						</tbody>
 					</table>
+
+					<ul class="pagination pull-right" id="paginator">
+						
+					</ul>
 				</div>
 			</div>
 			<!-- END CONTENT -->
@@ -88,6 +92,118 @@
 </div>
 
 <script>
+	let totalPages = 1;
+	let currentPage = 1;
+	function generatePagination() {
+		let paginator = document.getElementById('paginator');
+		paginator.innerHTML = '';
+
+		if (totalPages > 1) {
+			// Left arrow
+			if(currentPage > 1) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Previous';
+				a.addEventListener('click', () => {
+					loadOrder(currentPage - 1);
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+
+			// Number
+			for (let i = 1; i <= totalPages; i++) {
+				let li = document.createElement('li');
+				if (i !== currentPage) {
+					let a = document.createElement('a');
+						a.href = 'javascript:void(0);';
+						a.innerText = i;
+						a.addEventListener('click', () => {
+							loadOrder(i);
+						});
+					li.appendChild(a);
+				}else {
+					let span = document.createElement('span');
+					span.innerText = i;
+					li.appendChild(span);
+				}
+				paginator.appendChild(li);
+			}
+
+			// Right arrow
+			if(currentPage < totalPages) {
+				let li = document.createElement('li');
+				let a = document.createElement('a');
+				a.href = 'javascript:void(0);';
+				a.innerText = 'Next';
+				a.addEventListener('click', () => {
+					loadOrder(currentPage + 1);
+				});
+				li.appendChild(a);
+				paginator.appendChild(li);
+			}
+		}
+	}
+	
+	const sendPostRequest = (id, button) => {
+		fetch(`/user/order/done/${id}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json())
+      .then(data => {
+        // Update the button text to "Done" after successful POST
+        button.outerHTML = 'Done';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle errors if necessary
+      });
+	}
+	
+	const loadOrder = async (page = 1) => {
+		const result = await fetch('/user/order?page=' + page, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+		totalPages = result.totalPages;
+		currentPage = result.currentPage;
+		
+		const table = document.querySelector('#order-table');
+		table.innerHTML = '';
+
+		result.orders.forEach(order => {
+			const orderID = order._id.slice(-6).toUpperCase();
+			const date = new Date(order.createdAt).toLocaleDateString('vn-VN');
+			const status = order.status;
+			const total = order.total;
+
+			let statusRow;
+			if(status != "Shipping")
+				statusRow = `<td>${status}</td>`
+			else {
+				statusRow = `<td><button class="btn btn-primary" onclick="sendPostRequest('${order._id}', this)">Received</button></td>`
+			}
+
+			const row = 
+			`
+				<tr>
+					<td><strong>${orderID}</strong></td>
+					<td>${date}</td>
+					${statusRow}
+					<td>${total} $</td>
+					<td><strong><a onclick="loadOrderDetail('${order._id}')">View</a></strong></td>
+				</tr>
+			`;
+			table.innerHTML += row;
+			generatePagination();
+		});
+	}
+
 	const loadOrderDetail = async (id) => {
 		const orderDetailContainer = document.querySelector('#order-detail-container');
 		orderDetailContainer.style.display = 'block';
@@ -98,7 +214,6 @@
 				'Content-Type': 'application/json'
 			}
 		}).then(res => res.json());
-		console.log(result);
 
 		const products = result.order.item;
 		const cartHtml = document.querySelector('#cart-items');
@@ -129,58 +244,8 @@
 		document.querySelector('#total').innerHTML = `$${result.order.total + shippingCost}`;
 		document.querySelector('#shipping').innerHTML = result.order.status;
 	}
-	const sendPostRequest = (id, button) => {
-		fetch(`/user/order/done/${id}`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then(res => res.json())
-      .then(data => {
-        // Update the button text to "Done" after successful POST
-        button.outerHTML = 'Done';
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        // Handle errors if necessary
-      });
-	}
+	
 	document.addEventListener('DOMContentLoaded', async () => {
-		const result = await fetch('/user/order', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then(res => res.json());
-
-		const table = document.querySelector('#order-table');
-
-
-
-		result.orders.forEach(order => {
-			const orderID = order._id.slice(-6).toUpperCase();
-			const date = new Date(order.createdAt).toLocaleDateString('vn-VN');
-			const status = order.status;
-			const total = order.total;
-
-			let statusRow;
-			if(status != "Shipping")
-				statusRow = `<td>${status}</td>`
-			else {
-				statusRow = `<td><button class="btn btn-primary" onclick="sendPostRequest('${order._id}', this)">Received</button></td>`
-			}
-
-			const row = 
-			`
-				<tr>
-					<td><strong>${orderID}</strong></td>
-					<td>${date}</td>
-					${statusRow}
-					<td>${total} $</td>
-					<td><strong><a onclick="loadOrderDetail('${order._id}')">View</a></strong></td>
-				</tr>
-			`;
-			table.innerHTML += row;
-		});
+		loadOrder(1);
 	});
 </script>

@@ -16,6 +16,7 @@
 								</a>
 							</h2>
 						</div>
+						<form id="checkout-form">
 						<div id="payment-address-content" class="panel-collapse collapse in">
 							<div class="panel-body row">
 								<div class="col-md-6 col-sm-6">
@@ -127,6 +128,7 @@
 								
 							</div>
 						</div>
+						</form>
 					</div>
 					<!-- END PAYMENT ADDRESS -->
 
@@ -196,6 +198,9 @@
 	});
 
 	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelector('#checkout-form').addEventListener('submit', e => {
+			e.preventDefault();
+		});
 		document.querySelector('#accept-box').addEventListener('change', () => {
 			if(document.querySelector('#accept-box').checked)
 				document.querySelector('#button-payment-address').classList.remove('disabled');
@@ -239,11 +244,15 @@
 
 			if(result.success) {
 				showAlert('Order placed successfully!');
-				window.location.href = '/home';
 			}
 			else if(result.error){
-				showAlert(result.message, 5000);
 				document.querySelector("#button-payment-address").classList.remove('disabled');
+				if(result.message)
+					showAlert(result.message, 5000);
+			}
+
+			if(result.url) {
+				window.location.href = result.url;
 			}
 		})
 	})

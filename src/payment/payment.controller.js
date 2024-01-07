@@ -6,7 +6,6 @@ dotenv.config();
 
 
 const paymentProcess = async (req, res, next) => {
-	console.log("here")
 	process.env.TZ = 'Asia/Ho_Chi_Minh';
     
 	let date = new Date();
@@ -20,12 +19,12 @@ const paymentProcess = async (req, res, next) => {
 	let tmnCode = process.env.VNP_TMN_CODE;
 	let secretKey = process.env.VNP_HASH_SECRET;
 	let vnpUrl = process.env.VNP_URL;
-	let returnUrl = "http://localhost:3000";
+	let returnUrl = "http://localhost:3000/user/order";
 	let orderId = moment(date).format('DDHHmmss');
 
-	let amount = 100000;
-	let bankCode = "";
-	let locale = "";
+	let amount = res.locals.amount * 1000;
+	let bankCode = res.locals.bankCode || "";
+	let locale = res.locals.locale || "";
 	if(locale === null || locale === ''){
 			locale = 'vn';
 	}
