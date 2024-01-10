@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const crypto = require('crypto');
-const dotenv = require("dotenv");
-dotenv.config();
 
 router.get("/vnp-ipn", (req, res, next) => {
 	const vnp_Params = req.query;

@@ -9,10 +9,13 @@ const db = require("./src/db");
 const session = require("express-session");
 const passport = require("passport");
 const MongoStore = require("connect-mongo");
-const dotenv = require("dotenv");
 const setLayout = require("./src/middleware");
 const express_handlebars_sections = require("express-handlebars-sections");
-dotenv.config();
+
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 db();
 

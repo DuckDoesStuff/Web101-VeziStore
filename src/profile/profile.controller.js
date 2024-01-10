@@ -2,9 +2,7 @@ const User = require("../user/user.model");
 const authService = require("../user/auth/auth.service");
 const Token = require("../user/auth/auth.token");
 
-const dotenv = require("dotenv");
 const { UploadClient } = require("@uploadcare/upload-client");
-dotenv.config();
 const uploadcare = new UploadClient({
     publicKey: process.env.UPLOADCARE_PUBLIC_KEY,
 });

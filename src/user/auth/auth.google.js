@@ -4,8 +4,6 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../user.model');
 const Cart = require('../../cart/cart.model');
-const dotenv = require('dotenv');
-dotenv.config();
 
 const { UploadClient } = require("@uploadcare/upload-client");
 const uploadcare = new UploadClient({

@@ -1,7 +1,5 @@
 const crypto = require('crypto');
-const dotenv = require("dotenv");
 const moment = require('moment');
-dotenv.config();
 
 
 

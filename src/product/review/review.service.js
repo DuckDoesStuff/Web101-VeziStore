@@ -1,5 +1,4 @@
 const Review = require('./review.model');
-const productService = require('../product.service');
 const Product = require('../product.model');
 const moment = require('moment');
 

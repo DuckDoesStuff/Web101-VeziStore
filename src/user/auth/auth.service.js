@@ -1,8 +1,6 @@
 const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
-dotenv.config();
 
 const siteURL = process.env.NODE_ENV === 'production' ? 'https://vezi.store' : 'http://localhost:3000';
 
