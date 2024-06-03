@@ -50,7 +50,7 @@ VeziStore is a comprehensive e-commerce platform designed to facilitate the buyi
     EMAIL_PASSWORD=
     VNP_TMN_CODE=
     VNP_HASH_SECRET=
-    VNP_URL
+    VNP_URL=
     ```
 
 4. **Run the application:**
