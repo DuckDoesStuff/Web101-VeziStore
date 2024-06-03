@@ -1,15 +1,16 @@
 
+
 # VeziStore
 
 VeziStore is a comprehensive e-commerce platform designed to facilitate the buying and selling of products. It includes an admin site for managing products and orders, as well as a user site for browsing, purchasing, and managing orders.
 
 ## Features
 
-### Admin Site
+### Admin Site: [admin.vezi.store](admin.vezi.store)
 - **Product Management**: Create, update, and delete products to be sold on the platform.
 - **Order Management**: View and manage customer orders, including order status updates and tracking.
 
-### User Site
+### User Site: [vezi.store](vezi.store)
 - **Product Browsing**: Browse through a variety of products with detailed descriptions and images.
 - **Product Categorization**: Browse different products in different categories.
 - **Shopping Cart**: Add products to a cart for a seamless shopping experience.
