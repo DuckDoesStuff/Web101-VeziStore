@@ -6,11 +6,11 @@ VeziStore is a comprehensive e-commerce platform designed to facilitate the buyi
 
 ## Features
 
-### Admin Site: [admin.vezi.store](https://admin.vezi.store/auth/signin)
+### Admin Site (DOMAIN IS DOWN): [admin.vezi.store](https://admin.vezi.store/auth/signin)
 - **Product Management**: Create, update, and delete products to be sold on the platform.
 - **Order Management**: View and manage customer orders, including order status updates and tracking.
 
-### User Site: [vezi.store](https://www.vezi.store/)
+### User Site (DOMAIN IS DOWN): [vezi.store](https://www.vezi.store/)
 - **Product Browsing**: Browse through a variety of products with detailed descriptions and images.
 - **Product Categorization**: Browse different products in different categories.
 - **Shopping Cart**: Add products to a cart for a seamless shopping experience.
